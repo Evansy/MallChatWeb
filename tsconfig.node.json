@@ -3,6 +3,7 @@
   "include": ["vite.config.*", "vitest.config.*", "cypress.config.*", "playwright.config.*"],
   "compilerOptions": {
     "composite": true,
-    "types": ["node"]
+    "types": ["node", "element-plus/global"],
+    "allowJs": true
   }
 }
