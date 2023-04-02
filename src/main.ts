@@ -8,7 +8,7 @@ import router from './router'
 
 import '@/utils/websocket'
 
-import './assets/main.css'
+import './styles/main.css'
 
 const app = createApp(App)
 

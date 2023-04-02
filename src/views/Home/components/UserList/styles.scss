@@ -1,0 +1,36 @@
+.user-list {
+  list-style-type: none;
+  margin-top: 8px;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  overflow: hidden;
+  overflow-y: auto;
+
+  &-item {
+    display: flex;
+    align-items: center;
+  }
+
+  .item-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid #fff;
+    margin-right: 8px;
+  }
+
+  &-wrapper {
+    width: 200px;
+    height: 100%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background-color: #323644;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-header {
+    padding-bottom: 8px;
+  }
+}

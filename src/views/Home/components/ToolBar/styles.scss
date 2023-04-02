@@ -1,5 +1,17 @@
 .side_toolbar {
   color: #fff;
   width: 100px;
+  padding: 20px 0;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.icon-github {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  background-image: url(@/assets/github.svg);
+  margin-top: auto;
 }
