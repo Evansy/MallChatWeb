@@ -5,10 +5,15 @@ import ChatBox from './components/ChatBox/index.vue'
 </script>
 
 <template>
-  <main class="wrapper">
-    <ToolBar />
-    <SideBar />
-    <ChatBox />
+  <main class="home">
+    <div class="wrapper">
+      <ToolBar />
+      <SideBar />
+      <ChatBox />
+    </div>
+    <footer class="footer">
+      <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">闽ICP备2023004110号</a>
+    </footer>
   </main>
 </template>
 

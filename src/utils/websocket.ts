@@ -1,33 +1,7 @@
 import { useWsLoginStore, LoginStatus } from '@/stores/ws'
 import { useUserStore } from '@/stores/user'
-
-// 1.登录返回二维码 2.用户扫描成功等待授权 3.用户登录成功返回用户信息 4.收到消息 5.上下线推送 6.前端token失效
-export enum MessageType {
-  /**
-   * 1.登录返回二维码
-   */
-  LoginQrCode = 1,
-  /**
-   * 2.用户扫描成功等待授权
-   */
-  WaitingAuthorize,
-  /**
-   * 3.用户登录成功返回用户信息
-   */
-  LoginSuccess,
-  /**
-   * 4.收到消息
-   */
-  ReceiveMessage,
-  /**
-   * 5.上下线推送
-   */
-  OnOffLine,
-  /**
-   * 6.前端token失效
-   */
-  TokenExpired
-}
+import { MessageType } from './wsType'
+import type { LoginSuccessResType, LoginInitResType } from './wsType'
 
 class WS {
   connection: WebSocket | null
@@ -58,12 +32,13 @@ class WS {
   }
 
   onMessage = (e: MessageEvent) => {
-    const params: { type: MessageType; data: { loginUrl: string } } = JSON.parse(e.data)
+    const params: { type: MessageType; data: unknown } = JSON.parse(e.data)
     const loginStore = useWsLoginStore()
     const userStore = useUserStore()
     switch (params.type) {
       case MessageType.LoginQrCode: {
-        loginStore.loginQrCode = params.data.loginUrl
+        const data = params.data as LoginInitResType
+        loginStore.loginQrCode = data.loginUrl
         break
       }
       case MessageType.WaitingAuthorize: {
@@ -78,7 +53,10 @@ class WS {
         //   "token": "10000",
         //   "name": "🐳 康康"
         // }
-        userStore.userInfo = params.data
+        const { token, ...rest } = params.data as LoginSuccessResType
+        userStore.userInfo = rest
+        localStorage.setItem('USER_INFO', JSON.stringify(rest))
+        localStorage.setItem('TOKEN', token)
         loginStore.loginStatus = LoginStatus.Success
         break
       }

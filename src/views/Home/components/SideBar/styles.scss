@@ -15,7 +15,7 @@
   padding: 0 24px;
 
   &:hover {
-    background-color: #1d90f5;
+    background-color: var(--color-primary);
     transition: .3s;
     box-shadow: 0 0 10px 0 #08f;
   }
