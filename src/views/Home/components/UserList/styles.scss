@@ -12,7 +12,7 @@
   overflow: hidden;
   overflow-y: auto;
 
-  :deep .el-loading-mask {
+  :deep(.el-loading-mask) {
     background-color: var(--color-background-black-mute);
   }
 

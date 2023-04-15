@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted, computed } from 'vue'
 import { useWsLoginStore, LoginStatus } from '@/stores/ws'
-import { SuccessFilled } from '@element-plus/icons-vue'
 import QrCode from 'qrcode.vue'
 const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue'])
@@ -35,7 +34,7 @@ onMounted(() => {
       </div>
 
       <p class="login_desc" v-if="loginStatus === LoginStatus.Waiting">
-        <ElIcon :size="32" class="login_desc_icon" color="#67c23a"><SuccessFilled /></ElIcon>
+        <ElIcon :size="32" class="login_desc_icon" color="#67c23a"><IEpSuccessFilled /></ElIcon>
         扫码成功~，点击“登录”继续登录
       </p>
       <p class="login_desc" v-if="loginStatus === LoginStatus.Init">扫描二维码登录~</p>

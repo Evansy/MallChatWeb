@@ -2,7 +2,6 @@
 import { useRequest } from 'alova'
 // import { OnlineStatus } from '@/services/types'
 import apis from '@/services/apis'
-import { ChatDotRound } from '@element-plus/icons-vue'
 import UserList from '../UserList/index.vue'
 import { ref } from 'vue'
 const isSelect = ref(false)
@@ -15,7 +14,7 @@ const { loading, data } = useRequest(getList())
   <div class="chat-box">
     <div class="chat-wrapper">
       <template v-if="isSelect">
-        <el-icon :size="160" color="#999"><ChatDotRound /></el-icon>
+        <el-icon :size="160" color="#999"><IEpChatDotRound /></el-icon>
       </template>
       <template v-else>
         <div class="chat">
