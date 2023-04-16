@@ -2,6 +2,7 @@
 import ToolBar from './components/ToolBar/index.vue'
 import SideBar from './components/SideBar/index.vue'
 import ChatBox from './components/ChatBox/index.vue'
+// import LoginBox from '@/components/LoginBox/index.vue'
 </script>
 
 <template>
@@ -14,6 +15,8 @@ import ChatBox from './components/ChatBox/index.vue'
     <footer class="footer">
       <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">闽ICP备2023004110号</a>
     </footer>
+
+    <LoginBox />
   </main>
 </template>
 

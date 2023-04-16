@@ -2,6 +2,20 @@ import { createAlova } from 'alova'
 import GlobalFetch from 'alova/GlobalFetch'
 import VueHook from 'alova/vue'
 
+function getToken() {
+  let tempToken = ''
+  return () => {
+    if (tempToken) return tempToken
+    const token = localStorage.getItem('TOKEN')
+    if (token) {
+      tempToken = token
+    }
+    return tempToken
+  }
+}
+
+const token = getToken()
+
 export const alovaIns = createAlova({
   // 假设我们需要与这个域名的服务器交互
   baseURL: '',
@@ -15,7 +29,9 @@ export const alovaIns = createAlova({
   // 设置全局的请求拦截器，与axios相似
   beforeRequest({ config }) {
     // 假设我们需要添加token到请求头
-    config.headers.token = 'token'
+    config.headers.Authorization = `Bearer ${token()}`
+
+    config.headers['Content-Type'] = 'application/json; charset=utf-8'
   },
 
   // 响应拦截器，也与axios类似

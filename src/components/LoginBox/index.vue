@@ -2,19 +2,17 @@
 import { onMounted, computed } from 'vue'
 import { useWsLoginStore, LoginStatus } from '@/stores/ws'
 import QrCode from 'qrcode.vue'
-const props = defineProps(['modelValue'])
-const emit = defineEmits(['update:modelValue'])
 
+const loginStore = useWsLoginStore()
 const visible = computed({
   get() {
-    return props.modelValue
+    return loginStore.showLogin
   },
   set(value) {
-    emit('update:modelValue', value)
+    loginStore.showLogin = value
   },
 })
 
-const loginStore = useWsLoginStore()
 const loginInfo = computed(() => loginStore.loginQrCode)
 const loginStatus = computed(() => loginStore.loginStatus)
 
@@ -25,7 +23,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <ElDialog class="login-box" v-model="visible" center>
+  <ElDialog class="login_box_modal" :width="376" v-model="visible" center>
     <div class="login_box">
       <h2 class="login_title">MallChat</h2>
       <p class="login_slogan">边聊边买，岂不快哉~</p>

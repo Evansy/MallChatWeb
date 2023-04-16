@@ -96,6 +96,10 @@ export type MessageItemType = {
      * 用户名称
      */
     username: string
+    /**
+     * 用户ID
+     */
+    uid: number
   }
   /**
    * 消息详情
