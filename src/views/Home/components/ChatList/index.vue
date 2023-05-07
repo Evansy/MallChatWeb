@@ -3,7 +3,6 @@ import { watchEffect, ref, onMounted, nextTick, computed } from 'vue'
 import { useChatStore, pageSize } from '@/stores/chat'
 
 const chatListElRef = ref<HTMLDivElement>()
-const msgLength = ref(0)
 const chatListLastElRef = ref<HTMLDivElement>()
 
 // 获取消息列表
@@ -23,12 +22,13 @@ const myId = computed(() => {
 watchEffect(
   () => {
     // 滚动到最新消息
-    if (
-      (chatStore.chatMessageList?.length <= pageSize && chatListElRef.value) ||
-      chatStore.chatMessageList?.length !== msgLength.value
-    ) {
-      chatListElRef.value?.scrollTo({ left: 0, top: chatListElRef.value.scrollHeight })
-      msgLength.value = chatStore.chatMessageList?.length
+    if (chatStore.chatMessageList?.length <= pageSize && chatListElRef.value) {
+      // 加载列表了
+      chatStore.chatListToBottomAction?.()
+      // 加载完列表再把加载更多放出来(一开始就放出来的话，会触发 2 次加载列表)
+      setTimeout(() => {
+        chatListLastElRef.value && (chatListLastElRef.value.style.display = 'block')
+      }, 0)
     }
   },
   { flush: 'post' },
@@ -37,10 +37,14 @@ watchEffect(
 onMounted(() => {
   nextTick(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
+      async (entries) => {
         if (entries?.[0]?.isIntersecting) {
+          // 获取第一条消息的位置
+          const firstMsgRef = document.querySelector('.msg-item') as HTMLDivElement
           // 加载更多
-          chatStore.loadMore()
+          await chatStore.loadMore()
+          // 保持滚动条位置。
+          chatListElRef.value?.scrollTo({ left: 0, top: firstMsgRef?.offsetTop - 20 || 0 })
         }
       },
       {
@@ -49,7 +53,13 @@ onMounted(() => {
         threshold: 0.1,
       },
     )
+
     chatListLastElRef.value && observer.observe(chatListLastElRef.value)
+
+    chatStore.chatListToBottomAction = () => {
+      // 聊天列表滚动到底部
+      chatListElRef.value?.scrollTo({ left: 0, top: chatListElRef.value.scrollHeight })
+    }
   })
 })
 </script>
@@ -69,7 +79,7 @@ onMounted(() => {
       >
         <img class="msg-item-avatar" :src="msg.fromUser.avatar" />
         <div class="msg-item-box">
-          <div class="msg-item-name">{{ msg.fromUser.username }}, msgId:{{ msg.message.id }}</div>
+          <div class="msg-item-name">{{ msg.fromUser.username }}</div>
           <div class="msg-item-info">
             {{ msg.message.content }}
           </div>

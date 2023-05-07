@@ -8,12 +8,13 @@ export const pageSize = 20
 
 export const useChatStore = defineStore('chat', () => {
   const chatMessageList = ref<MessageItemType[]>([])
+  const chatListToBottomAction = ref<() => void>()
   const isLast = ref(false)
   const loading = ref(true)
   const cursor = ref()
 
   const getList = (cursor?: string) => apis.getMsgList({ params: { pageSize, cursor, roomId: 1 } })
-  const { send, onSuccess } = useRequest(getList, { immediate: false })
+  const { send, onSuccess } = useRequest(getList, { immediate: true })
 
   onSuccess(({ data }) => {
     chatMessageList.value = [...data.list, ...chatMessageList.value]
@@ -24,12 +25,17 @@ export const useChatStore = defineStore('chat', () => {
 
   const pushMsg = (msg: MessageItemType) => {
     chatMessageList.value.push(msg)
+
+    // 聊天列表滚动到底部
+    setTimeout(() => {
+      chatListToBottomAction.value?.()
+    }, 0)
   }
 
-  const loadMore = () => {
+  const loadMore = async () => {
     if (isLast.value) return
-    send(cursor.value)
+    await send(cursor.value)
   }
 
-  return { chatMessageList, pushMsg, loading, isLast, loadMore }
+  return { chatMessageList, pushMsg, chatListToBottomAction, loading, isLast, loadMore }
 })
