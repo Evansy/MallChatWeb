@@ -16,6 +16,9 @@ dependencies:
   gsap:
     specifier: ^3.11.5
     version: registry.npmmirror.com/gsap@3.11.5
+  lodash:
+    specifier: ^4.17.21
+    version: registry.npmmirror.com/lodash@4.17.21
   pinia:
     specifier: ^2.0.35
     version: registry.npmmirror.com/pinia@2.0.35(typescript@4.8.4)(vue@3.2.47)
@@ -36,6 +39,9 @@ devDependencies:
   '@rushstack/eslint-patch':
     specifier: ^1.2.0
     version: registry.npmmirror.com/@rushstack/eslint-patch@1.2.0
+  '@types/lodash':
+    specifier: ^4.14.194
+    version: registry.npmmirror.com/@types/lodash@4.14.194
   '@types/node':
     specifier: ^18.16.5
     version: registry.npmmirror.com/@types/node@18.16.5
@@ -981,7 +987,6 @@ packages:
     resolution: {integrity: sha512-r22s9tAS7imvBt2lyHC9B8AGwWnXaYb1tY09oyLkXDs4vArpYJzw09nj8MLx5VfciBPGIb+ZwG0ssYnEPJxn/g==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/lodash/-/lodash-4.14.194.tgz}
     name: '@types/lodash'
     version: 4.14.194
-    dev: false
 
   registry.npmmirror.com/@types/node@18.16.5:
     resolution: {integrity: sha512-seOA34WMo9KB+UA78qaJoCO20RJzZGVXQ5Sh6FWu0g/hfT44nKXnej3/tCQl7FL97idFpBhisLYCTB50S0EirA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/node/-/node-18.16.5.tgz}

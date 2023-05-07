@@ -18,6 +18,7 @@ declare module '@vue/runtime-core' {
     IconEcosystem: typeof import('./components/icons/IconEcosystem.vue')['default']
     IconSupport: typeof import('./components/icons/IconSupport.vue')['default']
     IconTooling: typeof import('./components/icons/IconTooling.vue')['default']
+    IEpArrowDownBold: typeof import('~icons/ep/arrow-down-bold')['default']
     IEpChatDotRound: typeof import('~icons/ep/chat-dot-round')['default']
     IEpLoading: typeof import('~icons/ep/loading')['default']
     IEpLock: typeof import('~icons/ep/lock')['default']
