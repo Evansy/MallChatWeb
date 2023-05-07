@@ -2,10 +2,13 @@
 import { ref, computed } from 'vue'
 import { useWsLoginStore } from '@/stores/ws'
 import { useUserStore } from '@/stores/user'
+import { useChatStore } from '@/stores/chat'
 import apis from '@/services/apis'
 
 import UserList from '../UserList/index.vue'
 import ChatList from '../ChatList/index.vue'
+
+const chatStore = useChatStore()
 
 const isSelect = ref(false)
 
@@ -17,7 +20,15 @@ const sendMsgHandler = () => {
   }
 
   // 发送消息
-  apis.sendMsg({ content: inputMsg.value, roomId: 1 }).send()
+  apis
+    .sendMsg({ content: inputMsg.value, roomId: 1 })
+    .send()
+    .then((res) => {
+      // 消息列表新增一条消息
+      chatStore.pushMsg(res)
+      // 清空输入列表
+      inputMsg.value = ''
+    })
 }
 
 // 显示登录框

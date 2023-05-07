@@ -24,6 +24,8 @@
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
+  // content-visibility: auto;
+  // contain-intrinsic-size: 88.5px;
 
   &-me {
     align-self: flex-end;
@@ -32,6 +34,10 @@
     .msg-item-avatar {
       margin-left: 12px;
       margin-right: 0
+    }
+
+    .msg-item-box {
+      align-items: flex-end;
     }
 
     .msg-item-info {
@@ -51,7 +57,11 @@
     margin-right: 12px;
   }
 
-  // &-box {}
+  &-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
   &-name {
     font-size: 12px;
@@ -81,6 +91,30 @@
   width: 100%;
   height: 10px;
   z-index: 10;
-  background-color: #fff;
+  // background-color: #fff;
   pointer-events: none;
+}
+
+.loading-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 14px;
+  line-height: 1;
+  color: #999;
+
+  &-icon {
+    @keyframes rotate {
+      from {
+        transform: rotate(0);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    animation: rotate 2s linear infinite;
+  }
 }

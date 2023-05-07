@@ -19,6 +19,7 @@ declare module '@vue/runtime-core' {
     IconSupport: typeof import('./components/icons/IconSupport.vue')['default']
     IconTooling: typeof import('./components/icons/IconTooling.vue')['default']
     IEpChatDotRound: typeof import('~icons/ep/chat-dot-round')['default']
+    IEpLoading: typeof import('~icons/ep/loading')['default']
     IEpLock: typeof import('~icons/ep/lock')['default']
     IEpSuccessFilled: typeof import('~icons/ep/success-filled')['default']
     LoginBox: typeof import('./components/LoginBox/index.vue')['default']

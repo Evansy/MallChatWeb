@@ -48,7 +48,7 @@ export default defineConfig({
       // '/foo': 'http://localhost:4567/foo',
       // with options
       '/capi': {
-        target: 'http://101.33.251.36',
+        target: 'https://api.mallchat.cn',
         changeOrigin: true,
         // rewrite: path => path.replace(/^\/api/, '')
       },

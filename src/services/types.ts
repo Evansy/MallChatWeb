@@ -91,7 +91,7 @@ export type MessageItemType = {
        * 徽章图像
        */
       img: string
-    }
+    } | null
     /**
      * 用户名称
      */
@@ -120,7 +120,7 @@ export type MessageItemType = {
       /**
        * 举报数
        */
-      banCount: number
+      banCount?: number
       /**
        * 点赞数
        */
@@ -128,11 +128,19 @@ export type MessageItemType = {
       /**
        * 该用户是否已经举报 0否 1是
        */
-      userBan: 0 | 1
+      userBan?: 0 | 1
       /**
        * 该用户是否已经点赞 0否 1是
        */
       userLike: 0 | 1
+      /**
+       * 点赞数
+       */
+      dislikeCount: number
+      /**
+       * 到赞数
+       */
+      userDislike: number
     }
     /**
      * 父消息，如果没有父消息，返回的是null
@@ -158,11 +166,11 @@ export type MessageItemType = {
        * 用户名称
        */
       username: string
-    }
+    } | null
     /**
      * 消息发送时间
      */
-    sendTime: string
+    sendTime: number
     /**
      * 消息类型 1正常文本 2.爆赞 （点赞超过10）3.危险发言（举报超5）
      */

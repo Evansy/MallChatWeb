@@ -1,7 +1,9 @@
 import { useWsLoginStore, LoginStatus } from '@/stores/ws'
 import { useUserStore } from '@/stores/user'
+import { useChatStore } from '@/stores/chat'
 import { WsResponseMessageType, WsRequestMsgType } from './wsType'
 import type { LoginSuccessResType, LoginInitResType, WsReqMsgContentType } from './wsType'
+import type { MessageItemType } from '@/services/types'
 
 class WS {
   connection: WebSocket | null
@@ -91,6 +93,7 @@ class WS {
     const params: { type: WsResponseMessageType; data: unknown } = JSON.parse(e.data)
     const loginStore = useWsLoginStore()
     const userStore = useUserStore()
+    const chatStore = useChatStore()
     switch (params.type) {
       case WsResponseMessageType.LoginQrCode: {
         const data = params.data as LoginInitResType
@@ -117,6 +120,10 @@ class WS {
         localStorage.removeItem('USER_INFO')
         localStorage.removeItem('TOKEN')
         loginStore.loginStatus = LoginStatus.Init
+        break
+      }
+      case WsResponseMessageType.ReceiveMessage: {
+        chatStore.pushMsg(params.data as MessageItemType)
         break
       }
       default: {
