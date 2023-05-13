@@ -43,6 +43,12 @@
     user-select: none;
   }
 
+  .login-link {
+    margin-left: 4px;
+    margin-right: 4px;
+    color: var(--color-primary);
+  }
+
   .msg-input-wrapper {
     position: relative;
     flex: 1;

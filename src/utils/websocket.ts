@@ -13,7 +13,7 @@ class WS {
   #connectionReady: boolean = false
 
   constructor() {
-    this.connection = new WebSocket('ws://101.33.251.36:8090')
+    this.connection = new WebSocket('wss://api.mallchat.cn/websocket')
     // 收到消息
     this.connection.addEventListener('message', this.onMessage)
     // 建立链接

@@ -1,0 +1,48 @@
+name: build and deploy MallChat
+# 触发脚本的条件，develop分支push代码的时候
+on:
+  push:
+    branches:
+      - main
+# 要执行的任务
+jobs:
+  # 任务名称
+  build:
+    # runs-on 指定job任务运行所需要的虚拟机环境（必填）
+    runs-on: ubuntu-latest
+    # 任务步骤
+    steps:
+      # 获取源码
+      - name: 迁出代码
+        # 使用action库  actions/checkout获取源码
+        uses: actions/checkout@v3 # 使用的工具
+      # 使用 pnpm
+      - name: 使用 pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8.5.0
+      # 安装node
+      - name: 安装node.js
+        # 使用action库 actions/setup-node 安装node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.18.1
+          cache: 'pnpm'
+      # 安装
+      - name: 安装依赖
+        run: pnpm install
+      # 打包
+      - name: 打包
+        run: pnpm build
+      # 上传打包文件到远程服务器
+      - name: 上传文件到远程服务器
+        uses: zhenyuWang/Upload-File-Action@v1.0.1
+        with:
+          username: 'root'
+          server: ${{ secrets.DEPLOY_SERVER_HOST }}
+          port: ${{ secrets.DEPLOY_SERVER_PORT }}
+          ssh_private_key: ${{ secrets.DEPLOY_KEY}}
+          # 要上传文件所在目录
+          local_path: './dist/*'
+          # 远程服务器目标路径
+          target_path: '/www/wwwroot/www.mallchat.cn'

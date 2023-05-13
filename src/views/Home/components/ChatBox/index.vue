@@ -53,8 +53,8 @@ const isSign = computed(() => userStore.isSign)
             <div class="msg-input-wrapper">
               <input class="msg-input" type="text" v-model="inputMsg" @keyup.enter="sendMsgHandler" />
               <div class="chat-not-login-mask" :hidden="isSign">
-                <ElIcon class="icon-lock"><IEpLock /></ElIcon
-                ><a class="login-link" @click="onShowLoginBoxHandler">点我登录</a>之后再发言~
+                <ElIcon class="icon-lock"><IEpLock /></ElIcon>
+                <a class="login-link" @click="onShowLoginBoxHandler">点我登录</a>之后再发言~
               </div>
             </div>
             <button class="send-button" :disabled="!inputMsg.length" @click="sendMsgHandler">🚀</button>
