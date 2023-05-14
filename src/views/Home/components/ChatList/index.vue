@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { watchEffect, ref, onMounted, nextTick, computed } from 'vue'
+import apis from '@/services/apis'
 import { useChatStore, pageSize } from '@/stores/chat'
 import { useUserStore } from '@/stores/user'
+import { ActType, MarkType, IsYet } from '@/services/types'
+import type { MessageItemType } from '@/services/types'
 import throttle from 'lodash/throttle'
 
 const chatListElRef = ref<HTMLDivElement>()
@@ -13,6 +16,7 @@ const chatStore = useChatStore()
 const userStore = useUserStore()
 
 const myId = computed(() => userStore?.userInfo.uid)
+const isSign = computed(() => userStore.isSign)
 
 const onChangeListScroll = throttle(
   () => {
@@ -69,6 +73,22 @@ onMounted(() => {
     chatListLastElRef.value && observer.observe(chatListLastElRef.value)
   })
 })
+
+// click like
+const onLikeMsg = async (actType: ActType, msg: MessageItemType['message']) => {
+  await apis.markMsg({ actType, markType: MarkType.Like, msgId: msg.id }).send()
+  msg.messageMark.userLike = actType === ActType.Confirm ? IsYet.Yes : IsYet.No
+}
+// 倒赞
+const onDisLikeMsg = async (actType: ActType, msg: MessageItemType['message']) => {
+  await apis.markMsg({ actType, markType: MarkType.DisLike, msgId: msg.id }).send()
+  msg.messageMark.userDislike = actType === ActType.Confirm ? IsYet.Yes : IsYet.No
+}
+// 回复消息
+const onReplyMsg = async (msgFromUser: MessageItemType) => {
+  if (!msgFromUser) return
+  chatStore.currentMsgReply = msgFromUser
+}
 </script>
 
 <template>
@@ -81,16 +101,55 @@ onMounted(() => {
       <template v-if="chatStore.chatMessageList?.length">
         <div
           class="msg-item"
-          :class="myId && myId === msg.fromUser.uid ? 'msg-item-me' : ''"
+          :class="isSign ? 'is-can' : ''"
           v-for="msg of chatStore.chatMessageList"
           :key="msg.message.id"
         >
-          <img class="msg-item-avatar" :src="msg.fromUser.avatar" />
-          <div class="msg-item-box">
-            <div class="msg-item-name">{{ msg.fromUser.username }}</div>
-            <div class="msg-item-info">
-              {{ msg.message.content }}
+          <div class="msg-item-inner" :class="myId && myId === msg.fromUser.uid ? 'msg-item-me' : ''">
+            <img class="msg-item-avatar" :src="msg.fromUser.avatar" />
+            <div class="msg-item-box">
+              <div class="msg-item-name">{{ msg.fromUser.username }}</div>
+              <div class="msg-item-info">
+                {{ msg.message.content }}
+              </div>
             </div>
+            <div class="option-icons">
+              <i class="chat_item_icon icon_reply" @click="onReplyMsg(msg)" />
+              <span class="chat_item_icon_wrapper">
+                <i
+                  class="chat_item_icon"
+                  :class="msg.message.messageMark.userLike === IsYet.Yes ? 'icon_like_active' : 'icon_like'"
+                  @click="
+                    onLikeMsg(
+                      msg.message.messageMark.userLike === IsYet.Yes ? ActType.Cancel : ActType.Confirm,
+                      msg.message,
+                    )
+                  "
+                />
+                {{ msg.message.messageMark.likeCount }}
+              </span>
+              <span class="chat_item_icon_wrapper">
+                <i
+                  class="chat_item_icon icon_dislike"
+                  :class="msg.message.messageMark.userDislike === IsYet.Yes ? 'icon_dislike_active' : 'icon_dislike'"
+                  @click="
+                    onDisLikeMsg(
+                      msg.message.messageMark.userDislike === IsYet.Yes ? ActType.Cancel : ActType.Confirm,
+                      msg.message,
+                    )
+                  "
+                />
+                {{ msg.message.messageMark.likeCount }}
+              </span>
+            </div>
+          </div>
+          <!-- TODO 点击回复消息跳转 -->
+          <div
+            class="msg-item-reply"
+            :class="myId && myId === msg.fromUser.uid ? 'msg-item-me' : ''"
+            v-if="msg.message.reply"
+          >
+            @{{ msg.message.reply.username }}: {{ msg.message.reply.content }}
           </div>
         </div>
       </template>

@@ -11,10 +11,10 @@ import UserList from '../UserList/index.vue'
 import ChatList from '../ChatList/index.vue'
 
 const chatStore = useChatStore()
-
 const isSelect = ref(false)
-
 const inputMsg = ref('')
+const currentMsgReply = computed(() => (userStore.isSign && chatStore.currentMsgReply) || {})
+
 const sendMsgHandler = () => {
   // 空消息禁止发送
   if (!inputMsg.value?.length) {
@@ -23,13 +23,15 @@ const sendMsgHandler = () => {
 
   // 发送消息
   apis
-    .sendMsg({ content: inputMsg.value, roomId: 1 })
+    .sendMsg({ content: inputMsg.value, replyMsgId: currentMsgReply.value.message?.id, roomId: 1 })
     .send()
     .then((res) => {
       // 消息列表新增一条消息
       chatStore.pushMsg(res)
       // 清空输入列表
       inputMsg.value = ''
+      // 置空回复的消息
+      onClearReply()
     })
     .catch((error) => ElMessage.error(error.message || '消息发送失败请稍后重试'))
 }
@@ -41,6 +43,8 @@ const onShowLoginBoxHandler = () => (loginStore.showLogin = true)
 // 是否已登录
 const userStore = useUserStore()
 const isSign = computed(() => userStore.isSign)
+// 置空回复的消息
+const onClearReply = () => (chatStore.currentMsgReply = {})
 </script>
 
 <template>
@@ -53,14 +57,20 @@ const isSign = computed(() => userStore.isSign)
         <div class="chat">
           <ChatList />
           <div class="chat-msg-send">
-            <div class="msg-input-wrapper">
-              <input class="msg-input" type="text" v-model="inputMsg" @keyup.enter="sendMsgHandler" />
-              <div class="chat-not-login-mask" :hidden="isSign">
-                <ElIcon class="icon-lock"><IEpLock /></ElIcon>
-                <a class="login-link" @click="onShowLoginBoxHandler">点我登录</a>之后再发言~
-              </div>
+            <div v-if="Object.keys(currentMsgReply).length" class="reply-msg-wrapper">
+              <span>{{ currentMsgReply.fromUser?.username }}: {{ currentMsgReply.message?.content }}</span>
+              <el-icon class="reply-msg-icon" :size="14" @click="onClearReply"><IEpClose /></el-icon>
             </div>
-            <button class="send-button" :disabled="!inputMsg.length" @click="sendMsgHandler">🚀</button>
+            <div class="msg-input-box">
+              <div class="msg-input-wrapper">
+                <input class="msg-input" type="text" v-model="inputMsg" @keyup.enter="sendMsgHandler" />
+                <div class="chat-not-login-mask" :hidden="isSign">
+                  <ElIcon class="icon-lock"><IEpLock /></ElIcon>
+                  <a class="login-link" @click="onShowLoginBoxHandler">点我登录</a>之后再发言~
+                </div>
+              </div>
+              <button class="send-button" :disabled="!inputMsg.length" @click="sendMsgHandler">🚀</button>
+            </div>
           </div>
         </div>
       </template>

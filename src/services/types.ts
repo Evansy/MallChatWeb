@@ -118,21 +118,13 @@ export type MessageItemType = {
      */
     messageMark: {
       /**
-       * 举报数
-       */
-      banCount?: number
-      /**
        * 点赞数
        */
       likeCount: number
       /**
-       * 该用户是否已经举报 0否 1是
-       */
-      userBan?: 0 | 1
-      /**
        * 该用户是否已经点赞 0否 1是
        */
-      userLike: 0 | 1
+      userLike: IsYet
       /**
        * 点赞数
        */
@@ -140,7 +132,7 @@ export type MessageItemType = {
       /**
        * 到赞数
        */
-      userDislike: number
+      userDislike: IsYet
     }
     /**
      * 父消息，如果没有父消息，返回的是null
@@ -191,6 +183,12 @@ export enum ActType {
 export enum MarkType {
   Like = 1,
   DisLike,
+}
+
+export type SendMsgReq = {
+  content: string
+  replyMsgId?: number
+  roomId: number
 }
 
 export type MarkMsgReq = {

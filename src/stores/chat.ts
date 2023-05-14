@@ -1,4 +1,4 @@
-import { ref, watch } from 'vue'
+import { ref, reactive, watch } from 'vue'
 import { defineStore } from 'pinia'
 import apis from '@/services/apis'
 import type { MessageItemType } from '@/services/types'
@@ -20,6 +20,9 @@ export const useChatStore = defineStore('chat', () => {
 
   // 新消息计数
   const newMsgCount = ref(0)
+
+  // 当前消息回复
+  const currentMsgReply = reactive<Partial<MessageItemType>>({})
 
   const getMsgList = async () => {
     const data = await apis.getMsgList({ params: { pageSize, cursor: cursor.value, roomId: 1 } }).send()
@@ -68,5 +71,6 @@ export const useChatStore = defineStore('chat', () => {
     loading,
     isLast,
     loadMore,
+    currentMsgReply,
   }
 })

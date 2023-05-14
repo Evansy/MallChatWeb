@@ -27,8 +27,42 @@
 .chat-msg-send {
   padding: 10px 20px 20px;
   font-size: 0;
-  display: flex;
-  align-items: center;
+
+  .reply-msg-wrapper {
+    background-color: #424656;
+    font-size: 12px;
+    margin-bottom: 12px;
+    padding: 4px 12px;
+    border-radius: 8px;
+    color: var(--font-light);
+    display: flex;
+    align-items: center;
+    column-gap: 20px;
+    margin-right: 60px;
+  }
+
+  .reply-msg-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .reply-msg-icon {
+    cursor: pointer;
+    margin-left: auto;
+    border-radius: 4px;
+
+    &:hover {
+      background-color: var(--color-gray-bg);
+    }
+  }
+
+  .msg-input-box {
+    display: flex;
+    align-items: center;
+  }
 
   .chat-not-login-mask {
     position: absolute;

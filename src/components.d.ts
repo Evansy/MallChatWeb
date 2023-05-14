@@ -24,6 +24,7 @@ declare module '@vue/runtime-core' {
     IconTooling: typeof import('./components/icons/IconTooling.vue')['default']
     IEpArrowDownBold: typeof import('~icons/ep/arrow-down-bold')['default']
     IEpChatDotRound: typeof import('~icons/ep/chat-dot-round')['default']
+    IEpClose: typeof import('~icons/ep/close')['default']
     IEpCloseBold: typeof import('~icons/ep/close-bold')['default']
     IEpEditPen: typeof import('~icons/ep/edit-pen')['default']
     IEpFemale: typeof import('~icons/ep/female')['default']

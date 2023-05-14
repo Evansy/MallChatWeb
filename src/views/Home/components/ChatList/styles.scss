@@ -28,10 +28,39 @@
   max-width: 92%;
   margin-bottom: 20px;
   display: flex;
-  justify-content: flex-start;
+  flex-direction: column;
   align-items: flex-start;
+
+  .msg-item-inner {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .msg-item-reply {
+    background-color: #424656;
+    font-size: 12px;
+    margin-bottom: 12px;
+    padding: 4px 12px;
+    border-radius: 8px;
+    color: var(--font-light);
+    margin-top: 4px;
+    margin-right: 52px;
+  }
+
   // content-visibility: auto;
   // contain-intrinsic-size: 88.5px;
+
+  &.is-can {
+    &:hover {
+      .option-icons {
+        opacity: 1;
+        pointer-events: initial;
+      }
+    }
+  }
+
+
 
   &-me {
     align-self: flex-end;
@@ -140,4 +169,59 @@
   border-radius: 12px;
   cursor: pointer;
   background-color: var(--color-gray-bg);
+}
+
+.option-icons {
+  margin-top: auto;
+  margin-left: 12px;
+  margin-right: 12px;
+  display: flex;
+  column-gap: 4px;
+  padding-bottom: 4px;
+  opacity: 0;
+  pointer-events: none;
+  cursor: pointer;
+
+  .chat_item_icon {
+    display: inline-block;
+    background-image: url(@/assets/icon_like.svg);
+    width: 22px;
+    height: 22px;
+    background-size: 14px 14px;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+
+    &:hover {
+      background-color: rgba($color: #fff, $alpha: .2);
+    }
+
+    &_wrapper {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+    }
+  }
+
+  .icon_like {
+    background-image: url(@/assets/icon_like.svg);
+  }
+
+  .icon_like_active {
+    background-image: url(@/assets/icon_liked.svg);
+  }
+
+  .icon_dislike {
+    transform: rotate(180deg);
+    background-image: url(@/assets/icon_like.svg);
+  }
+
+  .icon_dislike_active {
+    background-image: url(@/assets/icon_liked.svg);
+  }
+
+  .icon_reply {
+    background-image: url(@/assets/icon_reply.svg);
+  }
 }
