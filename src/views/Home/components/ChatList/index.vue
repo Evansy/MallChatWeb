@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { watchEffect, ref, onMounted, nextTick, computed } from 'vue'
 import { useChatStore, pageSize } from '@/stores/chat'
+import { useUserStore } from '@/stores/user'
 import throttle from 'lodash/throttle'
 
 const chatListElRef = ref<HTMLDivElement>()
@@ -9,16 +10,9 @@ const chatListLastElRef = ref<HTMLDivElement>()
 // 获取消息列表
 // const getList = (cursor?: string) => apis.getMsgList({ params: { pageSize: 20, cursor, roomId: 1 } })
 const chatStore = useChatStore()
+const userStore = useUserStore()
 
-const myId = computed(() => {
-  let userInfo = { uid: null }
-  try {
-    userInfo = JSON.parse(localStorage.getItem('USER_INFO') || '{}')
-  } catch (error) {
-    userInfo = { uid: null }
-  }
-  return userInfo?.uid
-})
+const myId = computed(() => userStore?.userInfo.uid)
 
 const onChangeListScroll = throttle(
   () => {
@@ -34,13 +28,15 @@ const onChangeListScroll = throttle(
 watchEffect(
   () => {
     // 滚动到最新消息
-    if (chatStore.chatMessageList?.length <= pageSize && chatListElRef.value) {
-      // 加载列表了
-      chatStore.chatListToBottomAction?.()
+    if (chatStore.chatMessageList?.length <= pageSize && chatListElRef.value && chatStore.chatListToBottomAction) {
+      // 消息不满一屏不滚动
+      if (chatListElRef.value.scrollHeight <= chatListElRef.value.offsetHeight) return
+      // 滚动到消息列表底部
+      chatStore.chatListToBottomAction()
       // 加载完列表再把加载更多放出来(一开始就放出来的话，会触发 2 次加载列表)
       setTimeout(() => {
         chatListLastElRef.value && (chatListLastElRef.value.style.display = 'block')
-      }, 0)
+      }, 10)
     }
   },
   { flush: 'post' },
@@ -48,6 +44,10 @@ watchEffect(
 
 onMounted(() => {
   nextTick(() => {
+    chatStore.chatListToBottomAction = () => {
+      // 聊天列表滚动到底部
+      chatListElRef.value?.scrollTo({ left: 0, top: chatListElRef.value.scrollHeight })
+    }
     const observer = new IntersectionObserver(
       async (entries) => {
         if (entries?.[0]?.isIntersecting) {
@@ -65,14 +65,8 @@ onMounted(() => {
         threshold: 0.1,
       },
     )
-
     // 元素可见性监听
     chatListLastElRef.value && observer.observe(chatListLastElRef.value)
-
-    chatStore.chatListToBottomAction = () => {
-      // 聊天列表滚动到底部
-      chatListElRef.value?.scrollTo({ left: 0, top: chatListElRef.value.scrollHeight })
-    }
   })
 })
 </script>

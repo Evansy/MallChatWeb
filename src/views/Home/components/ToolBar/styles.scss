@@ -6,6 +6,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  &_avatar {
+    cursor: pointer;
+  }
 }
 
 .icon-github {

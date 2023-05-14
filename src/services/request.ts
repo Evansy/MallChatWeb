@@ -39,7 +39,7 @@ export const alovaIns = createAlova({
     const json = await response.json()
     if (response.status !== 200 || !json.success) {
       // 这边抛出错误时，将会进入请求失败拦截器内
-      throw new Error(json.message)
+      throw new Error(json.errMsg || json.message)
     }
     return json.data
   },

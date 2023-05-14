@@ -42,6 +42,9 @@ class WS {
         type: WsRequestMsgType.Authorization,
         data: { token },
       })
+      // 获取用户详情
+      const userStore = useUserStore()
+      userStore.getUserDetailAction()
     }
   }
 
@@ -107,7 +110,8 @@ class WS {
       case WsResponseMessageType.LoginSuccess: {
         userStore.isSign = true
         const { token, ...rest } = params.data as LoginSuccessResType
-        userStore.userInfo = rest
+        // FIXME 可以不需要赋值了，单独请求了接口。
+        userStore.userInfo = { ...userStore.userInfo, ...rest }
         localStorage.setItem('USER_INFO', JSON.stringify(rest))
         localStorage.setItem('TOKEN', token)
         loginStore.loginStatus = LoginStatus.Success

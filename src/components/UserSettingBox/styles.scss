@@ -1,0 +1,138 @@
+:global(.setting_box_modal) {
+  border-radius: 8px !important;
+}
+
+:global(.setting_box_modal .el-dialog__header) {
+  padding: 0
+}
+
+:global(.setting_box_modal .el-dialog__headerbtn) {
+  z-index: 5;
+}
+
+.setting_box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.setting_avatar {
+  --el-avatar-size: 100px;
+}
+
+.setting_avatar_box {
+  width: 100px;
+  height: 100px;
+  position: relative;
+}
+
+.setting_avatar_badge {
+  position: absolute;
+  left: 0;
+  bottom: -24px;
+  max-width: 100%;
+  max-height: 100%;
+  z-index: 5;
+}
+
+.setting_avatar_sex {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  padding: 2px;
+  z-index: 10;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  --avatar-sex-bg-man: var(--color-primary);
+  --avatar-sex-bg-female: pink;
+  background-color: var(--avatar-sex-bg-color);
+}
+
+.setting_tips {
+  width: fit-content;
+}
+
+.setting_name {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.not_allow {
+  cursor: not-allowed;
+}
+
+.badge_list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  column-gap: 16px;
+  margin-top: 20px;
+}
+
+.badge_item {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba($color: #000000, $alpha: .2);
+  position: relative;
+
+  &:hover {
+    .badge_item_mask {
+      opacity: 1;
+      pointer-events: initial;
+    }
+  }
+}
+
+.badge_item_mask {
+  position: absolute;
+  border-radius: 50%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba($color: #000000, $alpha: .2);
+  z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge_item_icon {
+  width: 80px;
+  min-width: 80px;
+  filter: grayscale(1);
+
+  &_has {
+    filter: grayscale(0);
+  }
+}
+
+.badge_item_info {
+  margin-left: 4px;
+}
+
+.name_edit_wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.name_edit_icon {
+  margin-left: 8px;
+}

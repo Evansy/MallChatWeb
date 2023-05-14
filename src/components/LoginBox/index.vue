@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { onMounted, computed } from 'vue'
 import { useWsLoginStore, LoginStatus } from '@/stores/ws'
+import { useUserStore } from '@/stores/user'
 import QrCode from 'qrcode.vue'
 
 const loginStore = useWsLoginStore()
+const userStore = useUserStore()
 const visible = computed({
   get() {
     return loginStore.showLogin
@@ -17,6 +19,8 @@ const loginInfo = computed(() => loginStore.loginQrCode)
 const loginStatus = computed(() => loginStore.loginStatus)
 
 onMounted(() => {
+  // 已登录就不获取二维码了
+  if (userStore.isSign) return
   // 获取登录二维码
   loginStore.getLoginQrCode()
 })

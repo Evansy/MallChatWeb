@@ -1,7 +1,6 @@
 import { ref, watch } from 'vue'
 import { defineStore } from 'pinia'
 import apis from '@/services/apis'
-import { useRequest } from 'alova'
 import type { MessageItemType } from '@/services/types'
 
 export const pageSize = 20
@@ -22,15 +21,16 @@ export const useChatStore = defineStore('chat', () => {
   // 新消息计数
   const newMsgCount = ref(0)
 
-  const getList = (cursor?: string) => apis.getMsgList({ params: { pageSize, cursor, roomId: 1 } })
-  const { send, onSuccess } = useRequest(getList, { immediate: true })
-
-  onSuccess(({ data }) => {
+  const getMsgList = async () => {
+    const data = await apis.getMsgList({ params: { pageSize, cursor: cursor.value, roomId: 1 } }).send()
     chatMessageList.value = [...data.list, ...chatMessageList.value]
     cursor.value = data.cursor
     isLast.value = data.isLast
     loading.value = false
-  })
+  }
+
+  // 默认执行一次
+  getMsgList()
 
   const pushMsg = (msg: MessageItemType) => {
     chatMessageList.value.push(msg)
@@ -49,7 +49,7 @@ export const useChatStore = defineStore('chat', () => {
 
   const loadMore = async () => {
     if (isLast.value) return
-    await send(cursor.value)
+    await getMsgList()
   }
 
   // 如果滚动超过一屏了，来了新消息要计数标识，滚动到一屏内的时候，清空计数

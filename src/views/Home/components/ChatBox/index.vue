@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import 'element-plus/es/components/message/style/css'
+import { ElMessage } from 'element-plus'
 import { useWsLoginStore } from '@/stores/ws'
 import { useUserStore } from '@/stores/user'
 import { useChatStore } from '@/stores/chat'
@@ -29,6 +31,7 @@ const sendMsgHandler = () => {
       // 清空输入列表
       inputMsg.value = ''
     })
+    .catch((error) => ElMessage.error(error.message || '消息发送失败请稍后重试'))
 }
 
 // 显示登录框

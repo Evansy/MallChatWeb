@@ -177,3 +177,74 @@ export type MessageItemType = {
     type: MessageType
   }
 }
+
+export enum ActType {
+  /**
+   * 确认
+   */
+  Confirm = 1,
+  /**
+   * 取消
+   */
+  Cancel,
+}
+export enum MarkType {
+  Like = 1,
+  DisLike,
+}
+
+export type MarkMsgReq = {
+  // actType	动作类型 1确认 2取消
+  actType: ActType
+  // 标记类型 1点赞 2举报
+  markType: MarkType
+  // 消息 ID
+  msgId: number
+}
+
+export enum SexType {
+  Man = 1,
+  Female,
+}
+
+export type UserInfoType = {
+  /**
+   * 用户唯一标识
+   */
+  uid: number
+  /**
+   * 用户头像
+   */
+  avatar: string
+  /**
+   * 用户名
+   */
+  name: string
+  /**
+   * 剩余改名次数
+   */
+  modifyNameChance: number
+  /**
+   * 性别 1为男性，2为女性
+   */
+  sex: SexType
+}
+
+// 是否拥有 0否 1是
+export enum IsYet {
+  No,
+  Yes,
+}
+
+export type BadgeType = {
+  // 徽章描述
+  describe: string
+  // 徽章id
+  id: number
+  // 徽章图标
+  image: string
+  // 是否拥有 0否 1是
+  obtain: IsYet
+  // 是否佩戴 0否 1是
+  wearing: IsYet
+}
