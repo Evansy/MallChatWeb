@@ -33,7 +33,7 @@ const sendMsgHandler = () => {
       // 置空回复的消息
       onClearReply()
     })
-    .catch((error) => ElMessage.error(error.message || '消息发送失败请稍后重试'))
+  // .catch((error) => ElMessage.error(error.message || '消息发送失败请稍后重试'))
 }
 
 // 显示登录框

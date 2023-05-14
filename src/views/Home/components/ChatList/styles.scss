@@ -25,27 +25,34 @@
 }
 
 .msg-item {
-  max-width: 92%;
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 
   .msg-item-inner {
+    max-width: 92%;
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
   }
 
   .msg-item-reply {
+    max-width: 40%;
     background-color: #424656;
     font-size: 12px;
     margin-bottom: 12px;
-    padding: 4px 12px;
+    padding: 3px 12px;
     border-radius: 8px;
     color: var(--font-light);
     margin-top: 4px;
-    margin-right: 52px;
+    margin-left: 52px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
   }
 
   // content-visibility: auto;
@@ -65,6 +72,10 @@
   &-me {
     align-self: flex-end;
     flex-direction: row-reverse;
+
+    &.msg-item-reply {
+      margin-right: 52px;
+    }
 
     .msg-item-avatar {
       margin-left: 12px;

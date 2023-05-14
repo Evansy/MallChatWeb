@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, computed } from 'vue'
+import { onMounted, computed, watchEffect } from 'vue'
 import { useWsLoginStore, LoginStatus } from '@/stores/ws'
 import { useUserStore } from '@/stores/user'
 import QrCode from 'qrcode.vue'
@@ -15,14 +15,15 @@ const visible = computed({
   },
 })
 
-const loginInfo = computed(() => loginStore.loginQrCode)
+const loginQrCode = computed(() => loginStore.loginQrCode)
 const loginStatus = computed(() => loginStore.loginStatus)
 
-onMounted(() => {
-  // 已登录就不获取二维码了
-  if (userStore.isSign) return
-  // 获取登录二维码
-  loginStore.getLoginQrCode()
+watchEffect(() => {
+  // 打开窗口了 而且 二维码没获取，而且非登录就去获取二维码
+  if (visible.value && !loginQrCode.value && !userStore.isSign) {
+    // 获取登录二维码
+    loginStore.getLoginQrCode()
+  }
 })
 </script>
 
@@ -31,8 +32,8 @@ onMounted(() => {
     <div class="login_box">
       <h2 class="login_title">MallChat</h2>
       <p class="login_slogan">边聊边买，岂不快哉~</p>
-      <div class="login_qrcode_wrapper" v-loading="!loginInfo">
-        <QrCode class="login_qrcode" v-if="loginInfo" :value="loginInfo" :size="328" :margin="5" />
+      <div class="login_qrcode_wrapper" v-loading="!loginQrCode">
+        <QrCode class="login_qrcode" v-if="loginQrCode" :value="loginQrCode" :size="328" :margin="5" />
       </div>
 
       <p class="login_desc" v-if="loginStatus === LoginStatus.Waiting">

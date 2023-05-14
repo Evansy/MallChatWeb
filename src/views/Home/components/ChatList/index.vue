@@ -77,12 +77,20 @@ onMounted(() => {
 // click like
 const onLikeMsg = async (actType: ActType, msg: MessageItemType['message']) => {
   await apis.markMsg({ actType, markType: MarkType.Like, msgId: msg.id }).send()
+  // 更新图标状态
   msg.messageMark.userLike = actType === ActType.Confirm ? IsYet.Yes : IsYet.No
+  // 更新点赞数
+  const likeCount = msg.messageMark.likeCount
+  msg.messageMark.likeCount = actType === ActType.Confirm ? likeCount + 1 : likeCount - 1
 }
 // 倒赞
 const onDisLikeMsg = async (actType: ActType, msg: MessageItemType['message']) => {
   await apis.markMsg({ actType, markType: MarkType.DisLike, msgId: msg.id }).send()
+  // 更新图标状态
   msg.messageMark.userDislike = actType === ActType.Confirm ? IsYet.Yes : IsYet.No
+  // 更新点赞数
+  const dislikeCount = msg.messageMark.dislikeCount
+  msg.messageMark.dislikeCount = actType === ActType.Confirm ? dislikeCount + 1 : dislikeCount - 1
 }
 // 回复消息
 const onReplyMsg = async (msgFromUser: MessageItemType) => {
@@ -139,7 +147,7 @@ const onReplyMsg = async (msgFromUser: MessageItemType) => {
                     )
                   "
                 />
-                {{ msg.message.messageMark.likeCount }}
+                {{ msg.message.messageMark.dislikeCount }}
               </span>
             </div>
           </div>

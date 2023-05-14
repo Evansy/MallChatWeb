@@ -130,6 +130,10 @@ class WS {
         chatStore.pushMsg(params.data as MessageItemType)
         break
       }
+      case WsResponseMessageType.OnOffLine: {
+        //
+        break
+      }
       default: {
         console.log('接收到未处理类型的消息:', params)
         break
