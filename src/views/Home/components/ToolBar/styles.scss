@@ -12,11 +12,28 @@
   }
 }
 
+.operate-icons {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 12px;
+  font-size: 0;
+}
+
 .icon-github {
   display: inline-block;
   width: 32px;
   height: 32px;
   background-image: url(@/assets/github.svg);
-  margin-top: auto;
-  cursor: pointer;
+}
+
+.operate-icon-text {
+  font-size: 12px;
+}
+
+.operate-icon-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
