@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import 'element-plus/es/components/message/style/css'
-import { ElMessage } from 'element-plus'
 import { useWsLoginStore } from '@/stores/ws'
 import { useUserStore } from '@/stores/user'
 import { useChatStore } from '@/stores/chat'
@@ -12,7 +10,9 @@ import ChatList from '../ChatList/index.vue'
 
 const chatStore = useChatStore()
 const isSelect = ref(false)
+const isSending = ref(false)
 const inputMsg = ref('')
+const msg_input_ref = ref<HTMLInputElement>()
 const currentMsgReply = computed(() => (userStore.isSign && chatStore.currentMsgReply) || {})
 
 const sendMsgHandler = () => {
@@ -20,6 +20,9 @@ const sendMsgHandler = () => {
   if (!inputMsg.value?.length) {
     return
   }
+
+  // 标记消息发送中
+  isSending.value = true
 
   // 发送消息
   apis
@@ -33,7 +36,10 @@ const sendMsgHandler = () => {
       // 置空回复的消息
       onClearReply()
     })
-  // .catch((error) => ElMessage.error(error.message || '消息发送失败请稍后重试'))
+    .finally(() => {
+      isSending.value = false
+      setTimeout(() => msg_input_ref.value?.focus(), 10)
+    })
 }
 
 // 显示登录框
@@ -63,7 +69,16 @@ const onClearReply = () => (chatStore.currentMsgReply = {})
             </div>
             <div class="msg-input-box">
               <div class="msg-input-wrapper">
-                <input class="msg-input" type="text" v-model="inputMsg" @keyup.enter="sendMsgHandler" />
+                <input
+                  class="msg-input"
+                  type="text"
+                  ref="msg_input_ref"
+                  autofocus
+                  v-model="inputMsg"
+                  :disabled="isSending"
+                  :placeholder="isSending ? '消息发送中' : '来聊点什么吧~'"
+                  @keyup.enter="sendMsgHandler"
+                />
                 <div class="chat-not-login-mask" :hidden="isSign">
                   <ElIcon class="icon-lock"><IEpLock /></ElIcon>
                   <a class="login-link" @click="onShowLoginBoxHandler">点我登录</a>之后再发言~

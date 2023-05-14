@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
+// 全局导入 toast 样式
+import 'element-plus/es/components/message/style/css'
 </script>
 
 <template>
