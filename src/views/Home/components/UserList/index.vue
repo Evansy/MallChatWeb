@@ -1,19 +1,54 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watchEffect, onMounted, nextTick } from 'vue'
 
+import { pageSize } from '@/stores/chat'
 import { useGroupStore } from '@/stores/group'
 import { OnlineStatus } from '@/services/types'
 
+const groupListLastElRef = ref<HTMLDivElement>()
 const groupStore = useGroupStore()
 const groupUserList = computed(() => groupStore.userList)
 const statistic = computed(() => groupStore.countInfo)
+
+watchEffect(
+  () => {
+    // 滚动到最新消息
+    if (groupUserList.value?.length <= pageSize && groupListLastElRef.value) {
+      // 加载完列表再把加载更多放出来(一开始就放出来的话，会触发 2 次加载列表)
+      setTimeout(() => {
+        groupListLastElRef.value && (groupListLastElRef.value.style.display = 'block')
+      }, 10)
+    }
+  },
+  { flush: 'post' },
+)
+
+onMounted(() => {
+  nextTick(() => {
+    const observer = new IntersectionObserver(
+      async (entries) => {
+        if (entries?.[0]?.isIntersecting) {
+          // 加载更多
+          await groupStore.loadMore()
+        }
+      },
+      {
+        // root: chatListElRef.value,
+        rootMargin: '10px',
+        threshold: 0.1,
+      },
+    )
+    // 元素可见性监听
+    groupListLastElRef.value && observer.observe(groupListLastElRef.value)
+  })
+})
 </script>
 
 <template>
   <div class="user-list-wrapper">
     <div class="user-list-header">群成员({{ statistic.onlineNum || 0 }}/{{ statistic.totalNum || 0 }})</div>
-    <TransitionGroup tag="ul" name="fade" class="user-list" v-loading.lock="groupStore.loading">
-      <template v-if="groupUserList?.length">
+    <template v-if="groupUserList?.length">
+      <TransitionGroup tag="ul" name="fade" class="user-list" v-loading.lock="groupStore.loading">
         <li
           class="user-list-item"
           :class="user.activeStatus === OnlineStatus.Online ? 'item-online' : ''"
@@ -27,12 +62,13 @@ const statistic = computed(() => groupStore.countInfo)
           <!-- {{ dayjs(user.lastOptTime).format('HH:mm:ss') }} -->
           {{ user.name }}
         </li>
-      </template>
-      <template v-else>
-        <li class="list-no-data">暂无成员~</li>
-      </template>
-      <!-- </ul> -->
-    </TransitionGroup>
+        <li class="list-last-visible-el" key="visible_el" ref="groupListLastElRef">&nbsp;</li>
+      </TransitionGroup>
+    </template>
+    <template v-else>
+      <li class="list-no-data">暂无成员~</li>
+    </template>
+    <!-- </ul> -->
   </div>
 </template>
 
