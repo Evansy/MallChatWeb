@@ -30,7 +30,7 @@ export type UserItem = {
   /**
    * 最后一次上下线时间
    */
-  lastOptTime: string
+  lastOptTime: number
   /**
    * 用户名称
    */

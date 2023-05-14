@@ -1,8 +1,9 @@
 import { useWsLoginStore, LoginStatus } from '@/stores/ws'
 import { useUserStore } from '@/stores/user'
 import { useChatStore } from '@/stores/chat'
+import { useGroupStore } from '@/stores/group'
 import { WsResponseMessageType, WsRequestMsgType } from './wsType'
-import type { LoginSuccessResType, LoginInitResType, WsReqMsgContentType } from './wsType'
+import type { LoginSuccessResType, LoginInitResType, WsReqMsgContentType, OnStatusChangeType } from './wsType'
 import type { MessageItemType } from '@/services/types'
 
 class WS {
@@ -97,6 +98,7 @@ class WS {
     const loginStore = useWsLoginStore()
     const userStore = useUserStore()
     const chatStore = useChatStore()
+    const groupStore = useGroupStore()
     switch (params.type) {
       case WsResponseMessageType.LoginQrCode: {
         const data = params.data as LoginInitResType
@@ -131,7 +133,10 @@ class WS {
         break
       }
       case WsResponseMessageType.OnOffLine: {
-        //
+        const data = params.data as OnStatusChangeType
+        groupStore.countInfo.onlineNum = data.onlineNum
+        groupStore.countInfo.totalNum = data.totalNum
+        groupStore.batchUpdateUserStatus(data.changeList)
         break
       }
       default: {

@@ -2,7 +2,6 @@
 import ToolBar from './components/ToolBar/index.vue'
 import SideBar from './components/SideBar/index.vue'
 import ChatBox from './components/ChatBox/index.vue'
-// import LoginBox from '@/components/LoginBox/index.vue'
 </script>
 
 <template>

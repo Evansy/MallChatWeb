@@ -44,6 +44,21 @@
     color: var(--font-light);
   }
 
+  .item-avatar-wrapper {
+    position: relative;
+  }
+
+  .item-online-status {
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    width: 10px;
+    height: 10px;
+    background-color: greenyellow;
+    border: 1px solid #fff;
+    border-radius: 50px;
+  }
+
   .item-avatar {
     width: 24px;
     height: 24px;

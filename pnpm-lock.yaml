@@ -10,6 +10,9 @@ dependencies:
   alova:
     specifier: ^2.3.0
     version: registry.npmmirror.com/alova@2.3.0
+  dayjs:
+    specifier: ^1.11.7
+    version: registry.npmmirror.com/dayjs@1.11.7
   element-plus:
     specifier: ^2.3.4
     version: registry.npmmirror.com/element-plus@2.3.4(vue@3.2.47)
