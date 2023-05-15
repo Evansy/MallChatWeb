@@ -34,8 +34,8 @@ onMounted(() => {
       },
       {
         // root: chatListElRef.value,
-        rootMargin: '10px',
-        threshold: 0.1,
+        // rootMargin: '0px',
+        threshold: 1,
       },
     )
     // 元素可见性监听
@@ -47,26 +47,30 @@ onMounted(() => {
 <template>
   <div class="user-list-wrapper">
     <div class="user-list-header">群成员({{ statistic.onlineNum || 0 }}/{{ statistic.totalNum || 0 }})</div>
-    <template v-if="groupUserList?.length">
-      <TransitionGroup tag="ul" name="fade" class="user-list" v-loading.lock="groupStore.loading">
-        <li
-          class="user-list-item"
-          :class="user.activeStatus === OnlineStatus.Online ? 'item-online' : ''"
-          v-for="user in groupUserList"
-          :key="user.uid"
-        >
-          <div class="item-avatar-wrapper">
-            <img class="item-avatar" :src="user.avatar" />
-            <i class="item-online-status" />
-          </div>
-          <!-- {{ dayjs(user.lastOptTime).format('HH:mm:ss') }} -->
-          {{ user.name }}
-        </li>
-        <li class="list-last-visible-el" key="visible_el" ref="groupListLastElRef">&nbsp;</li>
-      </TransitionGroup>
-    </template>
-    <template v-else>
-      <li class="list-no-data">暂无成员~</li>
+    <TransitionGroup
+      v-show="groupUserList?.length"
+      tag="ul"
+      name="fade"
+      class="user-list"
+      v-loading.lock="groupStore.loading"
+    >
+      <li
+        class="user-list-item"
+        :class="user.activeStatus === OnlineStatus.Online ? 'item-online' : ''"
+        v-for="user in groupUserList"
+        :key="user.uid"
+      >
+        <div class="item-avatar-wrapper">
+          <img class="item-avatar" :src="user.avatar" />
+          <i class="item-online-status" />
+        </div>
+        <!-- {{ dayjs(user.lastOptTime).format('HH:mm:ss') }} -->
+        {{ user.name }}
+      </li>
+      <li class="list-last-visible-el" key="visible_el" ref="groupListLastElRef">&nbsp;</li>
+    </TransitionGroup>
+    <template v-if="groupUserList?.length === 0">
+      <div class="list-no-data">暂无成员~</div>
     </template>
     <!-- </ul> -->
   </div>

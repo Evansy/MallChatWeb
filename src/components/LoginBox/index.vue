@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, computed, watchEffect } from 'vue'
+import { computed, watchEffect } from 'vue'
 import { useWsLoginStore, LoginStatus } from '@/stores/ws'
 import { useUserStore } from '@/stores/user'
 import QrCode from 'qrcode.vue'

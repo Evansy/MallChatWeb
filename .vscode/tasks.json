@@ -1,0 +1,13 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "vue: start",
+      "type": "npm",
+      "script": "dev",
+      "detail": "vite",
+      "isBackground": true,
+      "problemMatcher": []
+    }
+  ]
+}

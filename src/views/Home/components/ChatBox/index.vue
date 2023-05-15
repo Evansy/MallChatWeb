@@ -75,8 +75,8 @@ const onClearReply = () => (chatStore.currentMsgReply = {})
                   ref="msg_input_ref"
                   autofocus
                   v-model="inputMsg"
-                  :disabled="isSending"
-                  :placeholder="isSending ? '消息发送中' : '来聊点什么吧~'"
+                  :disabled="!isSign || isSending"
+                  :placeholder="isSign ? (isSending ? '消息发送中' : '来聊点什么吧~') : ''"
                   @keyup.enter="sendMsgHandler"
                 />
                 <div class="chat-not-login-mask" :hidden="isSign">

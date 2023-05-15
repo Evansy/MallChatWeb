@@ -41,7 +41,8 @@ export const alovaIns = createAlova({
     if (response.status !== 200 || !json.success) {
       // 这边抛出错误时，将会进入请求失败拦截器内
       if (json.errMsg) {
-        if (!getToken() && response.status !== 401) {
+        // 空 token 且 状态码 401 不弹提示
+        if (!token() && response.status === 401) {
           //
         } else {
           ElMessage.error(json.errMsg)

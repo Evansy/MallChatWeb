@@ -5,15 +5,20 @@ import { useGroupStore } from '@/stores/group'
 import { WsResponseMessageType, WsRequestMsgType } from './wsType'
 import type { LoginSuccessResType, LoginInitResType, WsReqMsgContentType, OnStatusChangeType } from './wsType'
 import type { MessageItemType } from '@/services/types'
+import { OnlineStatus } from '@/services/types'
 
 class WS {
-  connection: WebSocket | null
+  connection: WebSocket | null = null
 
   #tasks: WsReqMsgContentType[] = []
   #heartTimer: number | null = null
   #connectionReady: boolean = false
 
   constructor() {
+    this.initConnection()
+  }
+
+  initConnection = () => {
     this.connection = new WebSocket('wss://api.mallchat.cn/websocket')
     // 收到消息
     this.connection.addEventListener('message', this.onMessage)
@@ -33,6 +38,9 @@ class WS {
       clearInterval(this.#heartTimer)
       this.#heartTimer = null
     }
+
+    // 断线重连
+    setTimeout(this.initConnection, 1000)
   }
 
   // 检测登录状态
@@ -56,12 +64,12 @@ class WS {
     // 先探测登录态
     this.#detectionLoginStatus()
 
+    // 心跳❤️检测
+    this.#senHeartPack()
+
     setTimeout(() => {
       const userStore = useUserStore()
       if (userStore.isSign) {
-        // 心跳❤️检测
-        this.#senHeartPack()
-
         // 处理堆积的任务
         this.#tasks.forEach((task) => {
           this.#send(task)
@@ -118,6 +126,16 @@ class WS {
         localStorage.setItem('TOKEN', token)
         loginStore.loginStatus = LoginStatus.Success
         loginStore.showLogin = false
+        // 自己更新自己上线
+        groupStore.batchUpdateUserStatus([
+          {
+            activeStatus: OnlineStatus.Online,
+            avatar: rest.avatar,
+            lastOptTime: Date.now(),
+            name: rest.name,
+            uid: rest.uid,
+          },
+        ])
         break
       }
       case WsResponseMessageType.TokenExpired: {

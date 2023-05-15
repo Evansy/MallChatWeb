@@ -43,6 +43,7 @@ export default defineConfig({
     },
   },
   server: {
+    port: 9988,
     proxy: {
       // string shorthand
       // '/foo': 'http://localhost:4567/foo',

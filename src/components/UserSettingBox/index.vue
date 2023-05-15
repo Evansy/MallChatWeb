@@ -44,8 +44,10 @@ const toggleWarningBadge = async (badgeId: number) => {
 
 // 编辑用户名
 const onEditName = () => {
+  if (!userInfo.value?.modifyNameChance || userInfo.value.modifyNameChance === 0) return
   editName.isEdit = true
   editName.tempName = userInfo.value.name || ''
+  userInfo.value.modifyNameChance = userInfo.value?.modifyNameChance - 1
 }
 
 // 确认保存用户名
@@ -105,8 +107,7 @@ const onCancelEditName = async () => {
             <el-button
               class="name_edit_icon"
               size="small"
-              :class="userInfo?.modifyNameChance && userInfo.modifyNameChance > 0 ? 'pointer' : 'not_allow'"
-              :disabled="!userInfo?.modifyNameChance || userInfo.modifyNameChance === 0"
+              :class="userInfo?.modifyNameChance && userInfo.modifyNameChance > 0 ? 'pointer' : 'not_allow is-disabled'"
               :icon="EditPen"
               circle
               @click="onEditName"

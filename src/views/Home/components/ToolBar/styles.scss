@@ -17,15 +17,33 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  row-gap: 12px;
+  row-gap: 16px;
   font-size: 0;
 }
 
-.icon-github {
+.operate-icon {
   display: inline-block;
-  width: 32px;
-  height: 32px;
-  background-image: url(@/assets/github.svg);
+  width: 28px;
+  height: 28px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.icon-github {
+  background-image: url(@/assets/icons/icon_github.svg);
+}
+
+.icon-bilibili {
+  background-image: url(@/assets/icons/icon_bilibili.svg);
+}
+
+.icon-tiktok {
+  background-image: url(@/assets/icons/icon_tiktok.svg);
+}
+
+.icon-wechat {
+  background-image: url(@/assets/icons/icon_wechat.svg);
 }
 
 .operate-icon-text {
