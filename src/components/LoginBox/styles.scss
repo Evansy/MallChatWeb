@@ -27,9 +27,9 @@
   height: 328px;
 }
 
-.login_title {
-  font-size: 34px;
-  font-weight: bold;
+.login_logo {
+  width: 100px;
+  border-radius: 8px;
 }
 
 .login_slogan {
@@ -48,4 +48,9 @@
 
 .login_desc_icon {
   margin-right: 8px;
+}
+
+.login_desc_bold {
+  font-weight: bold;
+  color: #2aae67;
 }

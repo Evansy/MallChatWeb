@@ -240,7 +240,7 @@ export type BadgeType = {
   // 徽章id
   id: number
   // 徽章图标
-  image: string
+  img: string
   // 是否拥有 0否 1是
   obtain: IsYet
   // 是否佩戴 0否 1是

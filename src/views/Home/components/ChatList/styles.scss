@@ -48,6 +48,8 @@
     margin-top: 4px;
     margin-left: 52px;
 
+    word-break: break-word;
+
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -58,12 +60,10 @@
   // content-visibility: auto;
   // contain-intrinsic-size: 88.5px;
 
-  &.is-can {
-    &:hover {
-      .option-icons {
-        opacity: 1;
-        pointer-events: initial;
-      }
+  &:hover {
+    .option-icons {
+      opacity: 1;
+      pointer-events: initial;
     }
   }
 
@@ -113,6 +113,14 @@
     font-size: 12px;
     color: #999;
     margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+  }
+
+  .setting_badge {
+    width: 20px;
+    height: 20px;
   }
 
   &-info {
@@ -121,6 +129,7 @@
     border-radius: 5px 20px 20px 20px;
     background-color: #383c4b;
     color: #fff;
+    word-break: break-word;
   }
 }
 

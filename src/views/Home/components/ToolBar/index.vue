@@ -1,13 +1,20 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useUserStore } from '@/stores/user'
+import { useWsLoginStore } from '@/stores/ws'
 const visible = ref(false)
 const userStore = useUserStore()
+const loginStore = useWsLoginStore()
 
 const avatar = computed(() => userStore?.userInfo.avatar)
 const showSettingBox = () => {
+  // 没登录先登录
+  if (!userStore.isSign) {
+    loginStore.showLogin = true
+    return
+  }
   // 登录了才允许设置个人信息
-  userStore.isSign && (visible.value = true)
+  visible.value = true
 }
 </script>
 

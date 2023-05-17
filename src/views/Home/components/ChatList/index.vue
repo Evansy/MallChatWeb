@@ -3,6 +3,7 @@ import { watchEffect, ref, onMounted, nextTick, computed } from 'vue'
 import apis from '@/services/apis'
 import { useChatStore, pageSize } from '@/stores/chat'
 import { useUserStore } from '@/stores/user'
+import { useWsLoginStore } from '@/stores/ws'
 import { ActType, MarkType, IsYet } from '@/services/types'
 import type { MessageItemType } from '@/services/types'
 import throttle from 'lodash/throttle'
@@ -14,6 +15,7 @@ const chatListLastElRef = ref<HTMLDivElement>()
 // const getList = (cursor?: string) => apis.getMsgList({ params: { pageSize: 20, cursor, roomId: 1 } })
 const chatStore = useChatStore()
 const userStore = useUserStore()
+const loginStore = useWsLoginStore()
 
 const myId = computed(() => userStore?.userInfo.uid)
 const isSign = computed(() => userStore.isSign)
@@ -76,6 +78,11 @@ onMounted(() => {
 
 // click like
 const onLikeMsg = async (actType: ActType, msg: MessageItemType['message']) => {
+  // 没登录先登录
+  if (!isSign.value) {
+    loginStore.showLogin = true
+    return
+  }
   await apis.markMsg({ actType, markType: MarkType.Like, msgId: msg.id }).send()
   // 更新图标状态
   msg.messageMark.userLike = actType === ActType.Confirm ? IsYet.Yes : IsYet.No
@@ -85,6 +92,11 @@ const onLikeMsg = async (actType: ActType, msg: MessageItemType['message']) => {
 }
 // 倒赞
 const onDisLikeMsg = async (actType: ActType, msg: MessageItemType['message']) => {
+  // 没登录先登录
+  if (!isSign.value) {
+    loginStore.showLogin = true
+    return
+  }
   await apis.markMsg({ actType, markType: MarkType.DisLike, msgId: msg.id }).send()
   // 更新图标状态
   msg.messageMark.userDislike = actType === ActType.Confirm ? IsYet.Yes : IsYet.No
@@ -94,6 +106,11 @@ const onDisLikeMsg = async (actType: ActType, msg: MessageItemType['message']) =
 }
 // 回复消息
 const onReplyMsg = async (msgFromUser: MessageItemType) => {
+  // 没登录先登录
+  if (!isSign.value) {
+    loginStore.showLogin = true
+    return
+  }
   if (!msgFromUser) return
   chatStore.currentMsgReply = msgFromUser
 }
@@ -107,23 +124,26 @@ const onReplyMsg = async (msgFromUser: MessageItemType) => {
         <el-icon :size="14" class="loading-line-icon"><IEpLoading /></el-icon> 消息加载中
       </div>
       <template v-if="chatStore.chatMessageList?.length">
-        <div
-          class="msg-item"
-          :class="isSign ? 'is-can' : ''"
-          v-for="msg of chatStore.chatMessageList"
-          :key="msg.message.id"
-        >
+        <div class="msg-item" v-for="msg of chatStore.chatMessageList" :key="msg.message.id">
           <div class="msg-item-inner" :class="myId && myId === msg.fromUser.uid ? 'msg-item-me' : ''">
             <img class="msg-item-avatar" :src="msg.fromUser.avatar" />
             <div class="msg-item-box">
-              <div class="msg-item-name">{{ msg.fromUser.username }}</div>
+              <div class="msg-item-name">
+                <img
+                  class="setting_badge"
+                  :src="msg.fromUser?.badge?.img"
+                  v-show="msg.fromUser?.badge?.img"
+                  :title="msg.fromUser?.badge?.describe"
+                />
+                {{ msg.fromUser.username }}
+              </div>
               <div class="msg-item-info">
                 {{ msg.message.content }}
               </div>
             </div>
             <div class="option-icons">
-              <i class="chat_item_icon icon_reply" @click="onReplyMsg(msg)" />
-              <span class="chat_item_icon_wrapper">
+              <i class="chat_item_icon icon_reply" @click="onReplyMsg(msg)" title="回复" />
+              <span class="chat_item_icon_wrapper" title="点赞">
                 <i
                   class="chat_item_icon"
                   :class="msg.message.messageMark.userLike === IsYet.Yes ? 'icon_like_active' : 'icon_like'"
@@ -136,7 +156,7 @@ const onReplyMsg = async (msgFromUser: MessageItemType) => {
                 />
                 {{ msg.message.messageMark.likeCount }}
               </span>
-              <span class="chat_item_icon_wrapper">
+              <span class="chat_item_icon_wrapper" title="不喜欢">
                 <i
                   class="chat_item_icon icon_dislike"
                   :class="msg.message.messageMark.userDislike === IsYet.Yes ? 'icon_dislike_active' : 'icon_dislike'"

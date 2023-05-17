@@ -26,13 +26,9 @@
   position: relative;
 }
 
-.setting_avatar_badge {
-  position: absolute;
-  left: 0;
-  bottom: -24px;
-  max-width: 100%;
-  max-height: 100%;
-  z-index: 5;
+.setting_badge {
+  width: 20px;
+  height: 20px;
 }
 
 .setting_avatar_sex {
@@ -46,6 +42,12 @@
   --avatar-sex-bg-man: var(--color-primary);
   --avatar-sex-bg-female: pink;
   background-color: var(--avatar-sex-bg-color);
+}
+
+.user-name {
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
 }
 
 .setting_tips {

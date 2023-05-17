@@ -1,13 +1,23 @@
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
+import { computed, reactive, watchEffect, defineProps } from 'vue'
 import { useRequest } from 'alova'
 import { ElMessage } from 'element-plus'
 import { Select, CloseBold, EditPen } from '@element-plus/icons-vue'
-import { useWsLoginStore } from '@/stores/ws'
 import { useUserStore } from '@/stores/user'
 import { SexType, IsYet } from '@/services/types'
 import apis from '@/services/apis'
-import { tempBadgeMapImg } from './constant'
+
+const props = defineProps(['modelValue'])
+const emit = defineEmits(['update:modelValue'])
+
+const value = computed({
+  get() {
+    return props.modelValue
+  },
+  set(value) {
+    emit('update:modelValue', value)
+  },
+})
 
 const editName = reactive({
   isEdit: false,
@@ -15,31 +25,26 @@ const editName = reactive({
   saving: false,
 })
 
-const loginStore = useWsLoginStore()
 const userStore = useUserStore()
-const visible = computed({
-  get() {
-    return loginStore.showLogin
-  },
-  set(value) {
-    loginStore.showLogin = value
-  },
-})
 
 const userInfo = computed(() => userStore.userInfo)
-const { send, data: badgeList } = useRequest(apis.getBadgeList, { initialData: [] })
+const { send: handlerGetBadgeList, data: badgeList } = useRequest(apis.getBadgeList, { initialData: [] })
 
-const tempBadgeList = computed(() => badgeList.value.map((item, i) => ({ ...item, image: tempBadgeMapImg[i] })))
+watchEffect(() => {
+  if (value.value) {
+    handlerGetBadgeList()
+  }
+})
 
 const currentBadge = computed(() =>
-  tempBadgeList.value.find((item) => item.obtain === IsYet.Yes && item.wearing === IsYet.Yes),
+  badgeList.value.find((item) => item.obtain === IsYet.Yes && item.wearing === IsYet.Yes),
 )
 
 // 佩戴卸下徽章
 const toggleWarningBadge = async (badgeId: number) => {
   if (!badgeId) return
   await apis.setUserBadge(badgeId).send()
-  send()
+  handlerGetBadgeList()
 }
 
 // 编辑用户名
@@ -72,7 +77,7 @@ const onCancelEditName = async () => {
 </script>
 
 <template>
-  <ElDialog class="setting_box_modal" v-model="visible" :width="580" :close-on-click-modal="false" center>
+  <ElDialog class="setting_box_modal" v-model="value" :width="580" :close-on-click-modal="false" center>
     <div class="setting_box">
       <div class="setting_avatar_box">
         <ElAvatar
@@ -92,12 +97,14 @@ const onCancelEditName = async () => {
           <IEpFemale v-if="userInfo.sex === SexType.Man" />
           <IEpMale v-if="userInfo.sex === SexType.Female" />
         </el-icon>
-        <img class="setting_avatar_badge" :src="currentBadge?.image" v-show="currentBadge" />
       </div>
 
       <div class="setting_name">
         <div class="name_edit_wrapper" v-show="editName.isEdit === false">
-          <span>{{ userInfo.name || '-' }}</span>
+          <span class="user-name">
+            <img class="setting_badge" :src="currentBadge?.img" v-show="currentBadge" />
+            {{ userInfo.name || '-' }}
+          </span>
           <el-tooltip
             class="box-item"
             effect="dark"
@@ -131,11 +138,11 @@ const onCancelEditName = async () => {
       <el-alert class="setting_tips" title="Tips: MallChat名称不允许重复，快来抢占" type="warning" :closable="false" />
 
       <ul class="badge_list">
-        <li class="badge_item" v-for="badge of tempBadgeList" :key="badge.id">
+        <li class="badge_item" v-for="badge of badgeList" :key="badge.id">
           <img
             class="badge_item_icon"
             :class="{ badge_item_icon_has: badge.obtain === IsYet.Yes }"
-            :src="badge.image"
+            :src="badge.img"
             alt="badge"
           />
           <div class="badge_item_mask">

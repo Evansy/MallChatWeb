@@ -60,7 +60,7 @@ export const useGroupStore = defineStore('group', () => {
     for (let index = 0, len = items.length; index < len; index++) {
       const curUser = items[index]
       const findIndex = tempNew.findIndex((item) => item.uid === curUser.uid)
-      findIndex > -1 && (tempNew[findIndex] = curUser)
+      findIndex > -1 && (tempNew[findIndex].activeStatus = curUser.activeStatus)
     }
     tempNew.sort(sorAction)
     userList.value = tempNew

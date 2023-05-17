@@ -12,7 +12,11 @@ class WS {
 
   #tasks: WsReqMsgContentType[] = []
   #heartTimer: number | null = null
-  #connectionReady: boolean = false
+
+  // 重连 timer
+  #timer: null | number = null
+  // 重连🔐
+  #lockReconnect = false
 
   constructor() {
     this.initConnection()
@@ -32,15 +36,30 @@ class WS {
 
   // 重置一些属性
   #onClose = () => {
-    this.#connectionReady = false
     // 清除心跳定时器
     if (this.#heartTimer) {
       clearInterval(this.#heartTimer)
       this.#heartTimer = null
     }
 
+    // 已经在连接中就不重连了
+    if (this.#lockReconnect) return
+
+    // 标识重连中
+    this.#lockReconnect = true
+
+    // 清除 timer，避免任务堆积。
+    if (this.#timer) {
+      clearTimeout(this.#timer)
+      this.#timer = null
+    }
+
     // 断线重连
-    setTimeout(this.initConnection, 1000)
+    this.#timer = setTimeout(() => {
+      this.initConnection()
+      // 标识已经开启重连任务
+      this.#lockReconnect = false
+    }, 2000)
   }
 
   // 检测登录状态
@@ -58,9 +77,6 @@ class WS {
   }
 
   #dealTasks = () => {
-    // 标识连接已建立
-    this.#connectionReady = true
-
     // 先探测登录态
     this.#detectionLoginStatus()
 
@@ -69,11 +85,15 @@ class WS {
 
     setTimeout(() => {
       const userStore = useUserStore()
+      const loginStore = useWsLoginStore()
       if (userStore.isSign) {
         // 处理堆积的任务
         this.#tasks.forEach((task) => {
           this.#send(task)
         })
+      } else {
+        // 如果没登录，而且已经请求了登录二维码，就要更新登录二维码。
+        loginStore.loginQrCode && loginStore.getLoginQrCode()
       }
     }, 500)
   }
@@ -91,7 +111,7 @@ class WS {
   }
 
   send = (params: WsReqMsgContentType) => {
-    if (this.#connectionReady) {
+    if (this.connection?.readyState === 1) {
       this.#send(params)
     } else {
       // 放到队列
@@ -125,7 +145,10 @@ class WS {
         localStorage.setItem('USER_INFO', JSON.stringify(rest))
         localStorage.setItem('TOKEN', token)
         loginStore.loginStatus = LoginStatus.Success
+        // 关闭登录弹窗
         loginStore.showLogin = false
+        // 清空登录二维码
+        loginStore.loginQrCode = undefined
         // 自己更新自己上线
         groupStore.batchUpdateUserStatus([
           {

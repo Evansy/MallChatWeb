@@ -38,7 +38,10 @@ const sendMsgHandler = () => {
     })
     .finally(() => {
       isSending.value = false
+      // 输入框重新获取焦点
       setTimeout(() => msg_input_ref.value?.focus(), 10)
+      // 滚动到消息列表底部
+      chatStore.chatListToBottomAction?.()
     })
 }
 
