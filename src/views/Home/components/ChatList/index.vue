@@ -129,12 +129,13 @@ const onReplyMsg = async (msgFromUser: MessageItemType) => {
             <img class="msg-item-avatar" :src="msg.fromUser.avatar" />
             <div class="msg-item-box">
               <div class="msg-item-name">
-                <img
-                  class="setting_badge"
-                  :src="msg.fromUser?.badge?.img"
-                  v-show="msg.fromUser?.badge?.img"
-                  :title="msg.fromUser?.badge?.describe"
-                />
+                <el-tooltip
+                  effect="dark"
+                  :content="msg.fromUser?.badge?.describe"
+                  :placement="myId && myId === msg.fromUser.uid ? 'top-end' : 'top-start'"
+                >
+                  <img class="setting_badge" :src="msg.fromUser?.badge?.img" v-show="msg.fromUser?.badge?.img" />
+                </el-tooltip>
                 {{ msg.fromUser.username }}
               </div>
               <div class="msg-item-info">

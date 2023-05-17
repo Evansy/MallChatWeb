@@ -102,7 +102,9 @@ const onCancelEditName = async () => {
       <div class="setting_name">
         <div class="name_edit_wrapper" v-show="editName.isEdit === false">
           <span class="user-name">
-            <img class="setting_badge" :src="currentBadge?.img" v-show="currentBadge" />
+            <el-tooltip effect="dark" :content="currentBadge?.describe" placement="top">
+              <img class="setting_badge" :src="currentBadge?.img" v-show="currentBadge" />
+            </el-tooltip>
             {{ userInfo.name || '-' }}
           </span>
           <el-tooltip
@@ -150,7 +152,7 @@ const onCancelEditName = async () => {
               <el-button size="small" v-if="badge.wearing === IsYet.No" @click="toggleWarningBadge(badge.id)">
                 佩戴
               </el-button>
-              <el-button size="small" v-if="badge.wearing === IsYet.Yes">卸下</el-button>
+              <!-- <el-button size="small" v-if="badge.wearing === IsYet.Yes">卸下</el-button> -->
             </template>
             <el-tooltip effect="dark" :content="badge.describe" placement="top">
               <el-icon class="badge_item_info" color="#fff"><IEpInfoFilled /></el-icon>
