@@ -30,6 +30,15 @@ const showSettingBox = () => {
     <div class="operate-icons">
       <a
         class="operate-icon-link"
+        href="https://www.yuque.com/snab/planet/cef1mcko4fve0ur3"
+        target="_blank"
+        rel="noopener noreferrer"
+        title="语雀"
+      >
+        <i class="operate-icon icon-yuque" />
+      </a>
+      <a
+        class="operate-icon-link"
         href="https://space.bilibili.com/146719540"
         target="_blank"
         rel="noopener noreferrer"

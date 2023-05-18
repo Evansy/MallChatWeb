@@ -2,9 +2,7 @@
 
 <template>
   <ul class="list">
-    <li class="item">
-      <img class="item-avatar" src="@/assets/avatars/4.jpeg" alt="群聊" /> 大群聊
-    </li>
+    <li class="item active"><img class="item-avatar" src="@/assets/logo.jpeg" alt="群聊" />抹茶群聊</li>
   </ul>
 </template>
 

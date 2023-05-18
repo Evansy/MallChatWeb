@@ -14,6 +14,7 @@
   align-items: center;
   padding: 0 24px;
 
+  &.active,
   &:hover {
     background-color: var(--color-primary);
     transition: .3s;
@@ -25,7 +26,6 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  border: 1px solid #fff;
   position: relative;
   margin-right: 20px;
 }
