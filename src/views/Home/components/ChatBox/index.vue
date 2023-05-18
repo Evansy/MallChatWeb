@@ -72,15 +72,17 @@ const onClearReply = () => (chatStore.currentMsgReply = {})
             </div>
             <div class="msg-input-box">
               <div class="msg-input-wrapper">
-                <input
+                <el-input
+                  name="input_content"
+                  :autosize="{ minRows: 1, maxRows: 4 }"
                   class="msg-input"
-                  type="text"
+                  type="textarea"
                   ref="msg_input_ref"
                   autofocus
                   v-model="inputMsg"
                   :disabled="!isSign || isSending"
                   :placeholder="isSign ? (isSending ? '消息发送中' : '来聊点什么吧~') : ''"
-                  @keyup.enter="sendMsgHandler"
+                  @keyup.enter.exact="sendMsgHandler"
                 />
                 <div class="chat-not-login-mask" :hidden="isSign">
                   <ElIcon class="icon-lock"><IEpLock /></ElIcon>

@@ -91,20 +91,41 @@
   }
 
   .msg-input {
-    width: 100%;
-    height: 40px;
-    background-color: #424656;
-    border-radius: 15px;
-    border: none;
-    padding: 10px;
-    box-sizing: border-box;
-    transition: .2s;
-    font-size: 16px;
-    color: #fff;
+    // width: 100%;
+    // height: 40px;
+    // background-color: #424656;
+    // border-radius: 15px;
+    // border: none;
+    // padding: 10px;
+    // box-sizing: border-box;
+    // transition: .2s;
+    // font-size: 16px;
+    // color: #fff;
+    // border: none;
 
-    &:focus {
-      outline: 2px solid #2287e1;
+    :deep(.el-textarea__inner) {
+      width: 100%;
+      // height: 40px;
+      background-color: #424656;
+      border-radius: 16px;
+      border: none;
+      padding: 10px;
+      resize: none;
+      transition: .2s;
+      font-size: 14px;
+      color: #fff;
+      box-sizing: border-box;
+      transition: .2s;
+      box-shadow: none;
+
+      &:focus {
+        outline: 2px solid #2287e1;
+      }
     }
+
+    // &:focus {
+    //   outline: 2px solid #2287e1;
+    // }
   }
 
   .send-button {
