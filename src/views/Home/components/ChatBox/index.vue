@@ -73,6 +73,7 @@ const onWrap = () => (inputMsg.value += '\n')
             </div>
             <div class="msg-input-box">
               <div class="msg-input-wrapper">
+                <!-- @keydown.enter.prevent 阻止 textarea 默认换行事件 -->
                 <el-input
                   name="input_content"
                   :autosize="{ minRows: 1, maxRows: 4 }"
@@ -83,7 +84,9 @@ const onWrap = () => (inputMsg.value += '\n')
                   v-model="inputMsg"
                   :disabled="!isSign || isSending"
                   :placeholder="isSign ? (isSending ? '消息发送中' : '来聊点什么吧~') : ''"
-                  @keyup.enter.exact="sendMsgHandler"
+                  @keydown.enter.prevent.exact
+                  @keydown.enter.exact="sendMsgHandler"
+                  @keydown.shift.enter.exact="onWrap"
                   @keydown.ctrl.enter.exact="onWrap"
                   @keydown.meta.enter.exact="onWrap"
                 />
