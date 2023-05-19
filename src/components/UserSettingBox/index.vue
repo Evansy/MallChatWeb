@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, watchEffect, defineProps } from 'vue'
+import { computed, reactive, watchEffect } from 'vue'
 import { useRequest } from 'alova'
 import { ElMessage } from 'element-plus'
 import { Select, CloseBold, EditPen } from '@element-plus/icons-vue'

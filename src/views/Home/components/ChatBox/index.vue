@@ -17,7 +17,7 @@ const currentMsgReply = computed(() => (userStore.isSign && chatStore.currentMsg
 
 const sendMsgHandler = () => {
   // 空消息禁止发送
-  if (!inputMsg.value?.length) {
+  if (!inputMsg.value?.trim().length) {
     return
   }
 
@@ -54,6 +54,7 @@ const userStore = useUserStore()
 const isSign = computed(() => userStore.isSign)
 // 置空回复的消息
 const onClearReply = () => (chatStore.currentMsgReply = {})
+const onWrap = () => (inputMsg.value += '\n')
 </script>
 
 <template>
@@ -83,6 +84,8 @@ const onClearReply = () => (chatStore.currentMsgReply = {})
                   :disabled="!isSign || isSending"
                   :placeholder="isSign ? (isSending ? '消息发送中' : '来聊点什么吧~') : ''"
                   @keyup.enter.exact="sendMsgHandler"
+                  @keydown.ctrl.enter.exact="onWrap"
+                  @keydown.meta.enter.exact="onWrap"
                 />
                 <div class="chat-not-login-mask" :hidden="isSign">
                   <ElIcon class="icon-lock"><IEpLock /></ElIcon>
