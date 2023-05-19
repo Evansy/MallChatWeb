@@ -37,16 +37,16 @@ const onToMallChatWeb = () => window.open('https://github.com/Evansy/MallChatWeb
         rel="noopener noreferrer"
         title="bilibili"
       >
-        <i class="operate-icon icon-bilibili" /><span class="operate-icon-text">B站</span>
+        <i class="operate-icon icon-bilibili" />
       </a>
       <a
         class="operate-icon-link"
-        href="https://mp.weixin.qq.com/s/MKCWzoCIzvh5G_1sK5sLoA"
+        href="https://mp.weixin.qq.com/s/m1SRsBG96kLJW5mPe4AVGA"
         target="_blank"
         rel="noopener noreferrer"
         title="wechat"
       >
-        <i class="operate-icon icon-wechat" /><span class="operate-icon-text">微信</span>
+        <i class="operate-icon icon-wechat" />
       </a>
       <a
         class="operate-icon-link"
