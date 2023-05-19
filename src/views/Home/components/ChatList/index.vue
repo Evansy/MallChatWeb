@@ -78,11 +78,6 @@ onMounted(() => {
 
 // click like
 const onLikeMsg = async (actType: ActType, msg: MessageItemType['message']) => {
-  // 没登录先登录
-  if (!isSign.value) {
-    loginStore.showLogin = true
-    return
-  }
   await apis.markMsg({ actType, markType: MarkType.Like, msgId: msg.id }).send()
   // 更新图标状态
   msg.messageMark.userLike = actType === ActType.Confirm ? IsYet.Yes : IsYet.No
@@ -92,11 +87,6 @@ const onLikeMsg = async (actType: ActType, msg: MessageItemType['message']) => {
 }
 // 倒赞
 const onDisLikeMsg = async (actType: ActType, msg: MessageItemType['message']) => {
-  // 没登录先登录
-  if (!isSign.value) {
-    loginStore.showLogin = true
-    return
-  }
   await apis.markMsg({ actType, markType: MarkType.DisLike, msgId: msg.id }).send()
   // 更新图标状态
   msg.messageMark.userDislike = actType === ActType.Confirm ? IsYet.Yes : IsYet.No
@@ -106,11 +96,6 @@ const onDisLikeMsg = async (actType: ActType, msg: MessageItemType['message']) =
 }
 // 回复消息
 const onReplyMsg = async (msgFromUser: MessageItemType) => {
-  // 没登录先登录
-  if (!isSign.value) {
-    loginStore.showLogin = true
-    return
-  }
   if (!msgFromUser) return
   chatStore.currentMsgReply = msgFromUser
 }
@@ -143,16 +128,17 @@ const onReplyMsg = async (msgFromUser: MessageItemType) => {
               </div>
             </div>
             <div class="option-icons">
-              <i class="chat_item_icon icon_reply" @click="onReplyMsg(msg)" title="回复" />
+              <i class="chat_item_icon icon_reply" v-login="() => onReplyMsg(msg)" title="回复" />
               <span class="chat_item_icon_wrapper" title="点赞">
                 <i
                   class="chat_item_icon"
                   :class="msg.message.messageMark.userLike === IsYet.Yes ? 'icon_like_active' : 'icon_like'"
-                  @click="
-                    onLikeMsg(
-                      msg.message.messageMark.userLike === IsYet.Yes ? ActType.Cancel : ActType.Confirm,
-                      msg.message,
-                    )
+                  v-login="
+                    () =>
+                      onLikeMsg(
+                        msg.message.messageMark.userLike === IsYet.Yes ? ActType.Cancel : ActType.Confirm,
+                        msg.message,
+                      )
                   "
                 />
                 {{ msg.message.messageMark.likeCount }}
@@ -161,11 +147,12 @@ const onReplyMsg = async (msgFromUser: MessageItemType) => {
                 <i
                   class="chat_item_icon icon_dislike"
                   :class="msg.message.messageMark.userDislike === IsYet.Yes ? 'icon_dislike_active' : 'icon_dislike'"
-                  @click="
-                    onDisLikeMsg(
-                      msg.message.messageMark.userDislike === IsYet.Yes ? ActType.Cancel : ActType.Confirm,
-                      msg.message,
-                    )
+                  v-login="
+                    () =>
+                      onDisLikeMsg(
+                        msg.message.messageMark.userDislike === IsYet.Yes ? ActType.Cancel : ActType.Confirm,
+                        msg.message,
+                      )
                   "
                 />
                 {{ msg.message.messageMark.dislikeCount }}

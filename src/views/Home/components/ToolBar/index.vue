@@ -1,21 +1,14 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useUserStore } from '@/stores/user'
-import { useWsLoginStore } from '@/stores/ws'
 const visible = ref(false)
 const userStore = useUserStore()
-const loginStore = useWsLoginStore()
 
 const avatar = computed(() => userStore?.userInfo.avatar)
-const showSettingBox = () => {
-  // 没登录先登录
-  if (!userStore.isSign) {
-    loginStore.showLogin = true
-    return
-  }
-  // 登录了才允许设置个人信息
-  visible.value = true
-}
+
+const showSettingBox = () => (visible.value = true)
+const onToMallChat = () => window.open('https://github.com/zongzibinbin/MallChat', '_blank')
+const onToMallChatWeb = () => window.open('https://github.com/Evansy/MallChatWeb', '_blank')
 </script>
 
 <template>
@@ -24,7 +17,7 @@ const showSettingBox = () => {
       size="large"
       class="side_toolbar_avatar"
       :src="avatar || 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'"
-      @click="showSettingBox"
+      v-login="showSettingBox"
     />
 
     <div class="operate-icons">
@@ -35,7 +28,7 @@ const showSettingBox = () => {
         rel="noopener noreferrer"
         title="语雀"
       >
-        <i class="operate-icon icon-yuque" />
+        <i class="operate-icon icon-yuque" /><span class="operate-icon-text">项目文档</span>
       </a>
       <a
         class="operate-icon-link"
@@ -44,7 +37,7 @@ const showSettingBox = () => {
         rel="noopener noreferrer"
         title="bilibili"
       >
-        <i class="operate-icon icon-bilibili" />
+        <i class="operate-icon icon-bilibili" /><span class="operate-icon-text">B站</span>
       </a>
       <a
         class="operate-icon-link"
@@ -53,25 +46,25 @@ const showSettingBox = () => {
         rel="noopener noreferrer"
         title="wechat"
       >
-        <i class="operate-icon icon-wechat" />
+        <i class="operate-icon icon-wechat" /><span class="operate-icon-text">微信</span>
       </a>
       <a
         class="operate-icon-link"
-        href="https://github.com/zongzibinbin/MallChat"
         target="_blank"
         rel="noopener noreferrer"
         title="MallChatWeb Server"
+        v-login="onToMallChat"
       >
-        <i class="operate-icon icon-github" /><span class="operate-icon-text">(server)</span>
+        <i class="operate-icon icon-github" /><span class="operate-icon-text">后端源码</span>
       </a>
       <a
         class="operate-icon-link"
-        href="https://github.com/Evansy/MallChatWeb"
         target="_blank"
         rel="noopener noreferrer"
         title="MallChatWeb Web"
+        v-login="onToMallChatWeb"
       >
-        <i class="operate-icon icon-github" /><span class="operate-icon-text">(web)</span>
+        <i class="operate-icon icon-github" /><span class="operate-icon-text">前端源码</span>
       </a>
     </div>
 
