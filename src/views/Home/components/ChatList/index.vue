@@ -3,10 +3,11 @@ import { watchEffect, ref, onMounted, nextTick, computed } from 'vue'
 import apis from '@/services/apis'
 import { useChatStore, pageSize } from '@/stores/chat'
 import { useUserStore } from '@/stores/user'
-import { useWsLoginStore } from '@/stores/ws'
 import { ActType, MarkType, IsYet } from '@/services/types'
 import type { MessageItemType } from '@/services/types'
 import throttle from 'lodash/throttle'
+
+import defaultAvatar from '@/assets/avatars/default.png'
 
 const chatListElRef = ref<HTMLDivElement>()
 const chatListLastElRef = ref<HTMLDivElement>()
@@ -15,10 +16,9 @@ const chatListLastElRef = ref<HTMLDivElement>()
 // const getList = (cursor?: string) => apis.getMsgList({ params: { pageSize: 20, cursor, roomId: 1 } })
 const chatStore = useChatStore()
 const userStore = useUserStore()
-const loginStore = useWsLoginStore()
 
 const myId = computed(() => userStore?.userInfo.uid)
-const isSign = computed(() => userStore.isSign)
+const myBadge = computed(() => userStore?.userInfo.badge)
 
 const onChangeListScroll = throttle(
   () => {
@@ -111,7 +111,7 @@ const onReplyMsg = async (msgFromUser: MessageItemType) => {
       <template v-if="chatStore.chatMessageList?.length">
         <div class="msg-item" v-for="msg of chatStore.chatMessageList" :key="msg.message.id">
           <div class="msg-item-inner" :class="myId && myId === msg.fromUser.uid ? 'msg-item-me' : ''">
-            <img class="msg-item-avatar" :src="msg.fromUser.avatar" />
+            <img class="msg-item-avatar" :src="msg.fromUser.avatar || defaultAvatar" />
             <div class="msg-item-box">
               <div class="msg-item-name">
                 <el-tooltip
@@ -119,7 +119,11 @@ const onReplyMsg = async (msgFromUser: MessageItemType) => {
                   :content="msg.fromUser?.badge?.describe"
                   :placement="myId && myId === msg.fromUser.uid ? 'top-end' : 'top-start'"
                 >
-                  <img class="setting_badge" :src="msg.fromUser?.badge?.img" v-show="msg.fromUser?.badge?.img" />
+                  <img
+                    class="setting_badge"
+                    :src="(myId && myId === msg.fromUser.uid ? myBadge : undefined) ?? msg.fromUser?.badge?.img"
+                    v-show="msg.fromUser?.badge?.img"
+                  />
                 </el-tooltip>
                 {{ msg.fromUser.username }}
               </div>

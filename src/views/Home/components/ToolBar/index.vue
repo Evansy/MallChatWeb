@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useUserStore } from '@/stores/user'
+import defaultAvatar from '@/assets/avatars/default.png'
 const visible = ref(false)
 const userStore = useUserStore()
 
@@ -13,12 +14,7 @@ const onToMallChatWeb = () => window.open('https://github.com/Evansy/MallChatWeb
 
 <template>
   <aside class="side_toolbar">
-    <ElAvatar
-      size="large"
-      class="side_toolbar_avatar"
-      :src="avatar || 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'"
-      v-login="showSettingBox"
-    />
+    <ElAvatar size="large" class="side_toolbar_avatar" :src="avatar || defaultAvatar" v-login="showSettingBox" />
 
     <div class="operate-icons">
       <a

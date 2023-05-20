@@ -226,6 +226,10 @@ export type UserInfoType = {
    * 性别 1为男性，2为女性
    */
   sex: SexType
+  /**
+   * 徽章，本地字段，有值用本地，无值用远端
+   */
+  badge?: string
 }
 
 // 是否拥有 0否 1是

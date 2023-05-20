@@ -5,6 +5,7 @@ import { ElMessage } from 'element-plus'
 import { Select, CloseBold, EditPen } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user'
 import { SexType, IsYet } from '@/services/types'
+import type { BadgeType } from '@/services/types'
 import apis from '@/services/apis'
 
 const props = defineProps(['modelValue'])
@@ -33,6 +34,7 @@ const { send: handlerGetBadgeList, data: badgeList } = useRequest(apis.getBadgeL
 watchEffect(() => {
   if (value.value) {
     handlerGetBadgeList()
+    userStore.getUserDetailAction()
   }
 })
 
@@ -41,10 +43,11 @@ const currentBadge = computed(() =>
 )
 
 // 佩戴卸下徽章
-const toggleWarningBadge = async (badgeId: number) => {
-  if (!badgeId) return
-  await apis.setUserBadge(badgeId).send()
+const toggleWarningBadge = async (badge: BadgeType) => {
+  if (!badge?.id) return
+  await apis.setUserBadge(badge.id).send()
   handlerGetBadgeList()
+  badge.img && (userInfo.value.badge = badge.img)
 }
 
 // 编辑用户名
@@ -52,7 +55,6 @@ const onEditName = () => {
   if (!userInfo.value?.modifyNameChance || userInfo.value.modifyNameChance === 0) return
   editName.isEdit = true
   editName.tempName = userInfo.value.name || ''
-  userInfo.value.modifyNameChance = userInfo.value?.modifyNameChance - 1
 }
 
 // 确认保存用户名
@@ -67,6 +69,8 @@ const onSaveUserName = async () => {
   editName.saving = false
   editName.isEdit = false
   editName.tempName = ''
+  if (!userInfo.value?.modifyNameChance || userInfo.value.modifyNameChance === 0) return
+  userInfo.value.modifyNameChance = userInfo.value?.modifyNameChance - 1
 }
 // 确认保存用户名
 const onCancelEditName = async () => {
@@ -149,7 +153,7 @@ const onCancelEditName = async () => {
           />
           <div class="badge_item_mask">
             <template v-if="badge.obtain === IsYet.Yes">
-              <el-button size="small" v-if="badge.wearing === IsYet.No" @click="toggleWarningBadge(badge.id)">
+              <el-button size="small" v-if="badge.wearing === IsYet.No" @click="toggleWarningBadge(badge)">
                 佩戴
               </el-button>
               <!-- <el-button size="small" v-if="badge.wearing === IsYet.Yes">卸下</el-button> -->

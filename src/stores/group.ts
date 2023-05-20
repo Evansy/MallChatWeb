@@ -5,6 +5,7 @@ import type { UserItem } from '@/services/types'
 import { pageSize } from './chat'
 import cloneDeep from 'lodash/cloneDeep'
 import { OnlineStatus } from '@/services/types'
+import { uniqueUserList } from '@/utils/unique'
 
 const sorAction = (pre: UserItem, next: UserItem) => {
   if (pre.activeStatus === OnlineStatus.Online && next.activeStatus === OnlineStatus.Online) {
@@ -31,7 +32,7 @@ export const useGroupStore = defineStore('group', () => {
   // 获取群成员
   const getGroupUserList = async () => {
     const data = await apis.getGroupList({ params: { pageSize, cursor: cursor.value } }).send()
-    const tempNew = cloneDeep([...data.list, ...userList.value])
+    const tempNew = cloneDeep(uniqueUserList([...data.list, ...userList.value]))
     tempNew.sort(sorAction)
     userList.value = tempNew
     cursor.value = data.cursor
