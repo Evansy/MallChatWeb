@@ -76,8 +76,6 @@
     }
   }
 
-
-
   &-me {
     align-self: flex-end;
     flex-direction: row-reverse;
@@ -141,6 +139,13 @@
     word-break: break-word;
     white-space: pre-line;
   }
+}
+
+.msg-time-block {
+  text-align: center;
+  font-size: 12px;
+  color: var(--font-light);
+  align-self: center;
 }
 
 .icon-lock {

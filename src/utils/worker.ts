@@ -10,6 +10,9 @@ let connection: WebSocket
 // 心跳 timer
 let heartTimer: number | null = null
 
+// 重连次数上限
+const reconnectCountMax = 100
+let reconnectCount = 0
 // 重连 timer
 let timer: null | number = null
 // 重连🔐
@@ -49,10 +52,16 @@ const onCloseHandler = () => {
     clearTimeout(timer)
     timer = null
   }
+  // 达到重连次数上限
+  if (reconnectCount >= reconnectCountMax) {
+    reconnectCount = 0
+    return
+  }
 
   // 断线重连
   timer = setTimeout(() => {
     initConnection()
+    reconnectCount++
     // 标识已经开启重连任务
     lockReconnect = false
   }, 2000)
@@ -99,6 +108,7 @@ self.onmessage = (e: MessageEvent<string>) => {
   const { type, value } = JSON.parse(e.data)
   switch (type) {
     case 'initWS': {
+      reconnectCount = 0
       initConnection()
       break
     }

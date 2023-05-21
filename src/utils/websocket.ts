@@ -17,6 +17,13 @@ class WS {
     worker.postMessage('{"type":"initWS"}')
     // 收到消息
     worker.addEventListener('message', this.onWorkerMsg)
+
+    // 后台重试次数达到上限之后，tab 获取焦点再重试
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && !this.#connectReady) {
+        worker.postMessage('{"type":"initWS"}')
+      }
+    })
   }
 
   onWorkerMsg = (e: MessageEvent<any>) => {
@@ -97,15 +104,18 @@ class WS {
     const chatStore = useChatStore()
     const groupStore = useGroupStore()
     switch (params.type) {
+      // 获取登录二维码
       case WsResponseMessageType.LoginQrCode: {
         const data = params.data as LoginInitResType
         loginStore.loginQrCode = data.loginUrl
         break
       }
+      // 等待授权
       case WsResponseMessageType.WaitingAuthorize: {
         loginStore.loginStatus = LoginStatus.Waiting
         break
       }
+      // 登录成功
       case WsResponseMessageType.LoginSuccess: {
         userStore.isSign = true
         const { token, ...rest } = params.data as LoginSuccessResType
@@ -130,6 +140,7 @@ class WS {
         ])
         break
       }
+      // 用户 token 过期
       case WsResponseMessageType.TokenExpired: {
         userStore.isSign = false
         userStore.userInfo = {}
@@ -138,15 +149,23 @@ class WS {
         loginStore.loginStatus = LoginStatus.Init
         break
       }
+      // 收到消息
       case WsResponseMessageType.ReceiveMessage: {
         chatStore.pushMsg(params.data as MessageItemType)
         break
       }
+      // 用户下线
       case WsResponseMessageType.OnOffLine: {
         const data = params.data as OnStatusChangeType
         groupStore.countInfo.onlineNum = data.onlineNum
         groupStore.countInfo.totalNum = data.totalNum
         groupStore.batchUpdateUserStatus(data.changeList)
+        break
+      }
+      // 小黑子的发言在禁用后，要删除他的发言
+      case WsResponseMessageType.InValidUser: {
+        const data = params.data as { uid: number }
+        chatStore.filterUser(data.uid)
         break
       }
       default: {

@@ -26,6 +26,10 @@ export enum WsResponseMessageType {
    * 6.前端token失效
    */
   TokenExpired,
+  /**
+   * 7.禁用的用户
+   */
+  InValidUser,
 }
 
 /**

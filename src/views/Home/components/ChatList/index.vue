@@ -115,7 +115,8 @@ const onReplyMsg = async (msgFromUser: MessageItemType) => {
         <el-icon :size="14" class="loading-line-icon"><IEpLoading /></el-icon> 消息加载中
       </div>
       <template v-if="chatStore.chatMessageList?.length">
-        <div class="msg-item" v-for="msg of chatStore.chatMessageList" :key="msg.message.id">
+        <div class="msg-item" v-for="msg of chatStore.chatMessageList" :key="msg.message?.id">
+          <div class="msg-time-block" v-if="msg.timeBlock">{{ msg.timeBlock }}</div>
           <div class="msg-item-inner" :class="myId && myId === msg.fromUser.uid ? 'msg-item-me' : ''">
             <img class="msg-item-avatar" :src="msg.fromUser.avatar || defaultAvatar" />
             <div class="msg-item-box">

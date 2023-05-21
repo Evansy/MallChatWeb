@@ -168,6 +168,8 @@ export type MessageItemType = {
      */
     type: MessageType
   }
+  // 是否显示时间，有值才显示
+  timeBlock?: string
 }
 
 export enum ActType {

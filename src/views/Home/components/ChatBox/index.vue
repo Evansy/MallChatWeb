@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import type { ElInput } from 'element-plus'
 import { useWsLoginStore } from '@/stores/ws'
 import { useUserStore } from '@/stores/user'
 import { useChatStore } from '@/stores/chat'
 import apis from '@/services/apis'
+import { judgeClient } from '@/utils/detectDevice'
+import { emojis } from './constant'
+
+const client = judgeClient()
 
 import UserList from '../UserList/index.vue'
 import ChatList from '../ChatList/index.vue'
@@ -12,7 +17,7 @@ const chatStore = useChatStore()
 const isSelect = ref(false)
 const isSending = ref(false)
 const inputMsg = ref('')
-const msg_input_ref = ref<HTMLInputElement>()
+const msg_input_ref = ref<typeof ElInput>()
 const currentMsgReply = computed(() => (userStore.isSign && chatStore.currentMsgReply) || {})
 
 const sendMsgHandler = () => {
@@ -55,6 +60,17 @@ const isSign = computed(() => userStore.isSign)
 // 置空回复的消息
 const onClearReply = () => (chatStore.currentMsgReply = {})
 const onWrap = () => (inputMsg.value += '\n')
+const insertEmoji = (emoji: string) => {
+  let input = msg_input_ref.value?.textarea
+  if (!input) return
+  let startPos = input.selectionStart as number
+  let endPos = input.selectionEnd as number
+  let resultText = input.value.substring(0, startPos) + emoji + input.value.substring(endPos)
+  input.value = resultText
+  input.focus()
+  input.selectionStart = startPos + emoji.length
+  input.selectionEnd = startPos + emoji.length
+}
 </script>
 
 <template>
@@ -95,6 +111,22 @@ const onWrap = () => (inputMsg.value += '\n')
                   <a class="login-link" @click="onShowLoginBoxHandler">点我登录</a>之后再发言~
                 </div>
               </div>
+              <el-popover
+                placement="top-end"
+                effect="dark"
+                title=""
+                :width="client === 'PC' ? 418 : '95%'"
+                trigger="click"
+              >
+                <template #reference>
+                  <button class="emoji-button">😊</button>
+                </template>
+                <ul class="emoji-list">
+                  <li class="emoji-item" v-for="(emoji, $index) of emojis" :key="$index" @click="insertEmoji(emoji)">
+                    {{ emoji }}
+                  </li>
+                </ul>
+              </el-popover>
               <button class="send-button" :disabled="!inputMsg.length" @click="sendMsgHandler">🚀</button>
             </div>
           </div>

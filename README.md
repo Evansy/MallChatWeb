@@ -12,7 +12,7 @@ MallChat 的【前端】项目，是一个既能购物又能即时聊天的电�
 ## 项目导航
 
 1. **快速体验地址**：[抹茶聊天首页](https://mallchat.cn)
-2. **后端项目仓库**：[MallChat](https://github.com/Evansy/MallChat)
+2. **后端项目仓库**：[MallChat](https://github.com/zongzibinbin/MallChat)
 3. **项目视频记录**：[Bilibili 地址](https://space.bilibili.com/146719540) 全程分享项目进度，功能选型的思考，同时征集迭代建议。
 4. **项目学习文档**：10w+字，保姆级教学路线，环境搭建、核心功能、基建轮子、接口压测、问题记录、一个不落。可点击[抹茶项目文档](https://www.yuque.com/snab/planet/cef1mcko4fve0ur3)查看（内含 500 人交流大群）
 5. **项目交流群**：对抹茶感兴趣的，可以加入[交流群](#公众号)。你的每一个举动，都会决定项目未来的方向。无论是提意见做产品经理，还是找 bug 做个测试人员，又或者加入开发小模块成为 contributer，都欢迎你的加入。

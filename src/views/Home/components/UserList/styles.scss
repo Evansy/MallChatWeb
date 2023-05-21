@@ -5,6 +5,7 @@
   padding: 0;
   flex: 1;
   display: flex;
+  row-gap: 2px;
 
   align-items: flex-start;
   flex-direction: column;
@@ -39,12 +40,13 @@
     align-items: center;
     width: 100%;
     filter: grayscale(1);
-    padding: 4px;
+    padding: 2px;
     border-radius: 4px;
     cursor: default;
+    content-visibility: auto;
 
     &:hover {
-      background-color: rgba(var(--vt-c-white), 1);
+      background-color: rgba(#fff, 0.1);
     }
 
     &.item-online {

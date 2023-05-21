@@ -2,6 +2,7 @@ import { ref, reactive, watch } from 'vue'
 import { defineStore } from 'pinia'
 import apis from '@/services/apis'
 import type { MessageItemType } from '@/services/types'
+import { computedTimeBlock } from '@/utils/computedTime'
 
 export const pageSize = 20
 
@@ -26,7 +27,7 @@ export const useChatStore = defineStore('chat', () => {
 
   const getMsgList = async () => {
     const data = await apis.getMsgList({ params: { pageSize, cursor: cursor.value, roomId: 1 } }).send()
-    chatMessageList.value = [...data.list, ...chatMessageList.value]
+    chatMessageList.value = [...computedTimeBlock(data.list), ...chatMessageList.value]
     cursor.value = data.cursor
     isLast.value = data.isLast
     loading.value = false
@@ -36,7 +37,9 @@ export const useChatStore = defineStore('chat', () => {
   getMsgList()
 
   const pushMsg = (msg: MessageItemType) => {
-    chatMessageList.value.push(msg)
+    chatMessageList.value.push(
+      ...computedTimeBlock([chatMessageList.value[chatMessageList.value.length - 1], msg], false),
+    )
 
     if (isScrollAboveOneScreen.value) {
       newMsgCount.value++
@@ -48,6 +51,12 @@ export const useChatStore = defineStore('chat', () => {
       // 如果超过一屏了，不自动滚动到最新消息。
       chatListToBottomAction.value?.()
     }, 0)
+  }
+
+  // 过滤掉小黑子的发言
+  const filterUser = (uid: number) => {
+    if (typeof uid !== 'number') return
+    chatMessageList.value = chatMessageList.value.filter((item) => item.fromUser.uid !== uid)
   }
 
   const loadMore = async () => {
@@ -72,5 +81,6 @@ export const useChatStore = defineStore('chat', () => {
     isLast,
     loadMore,
     currentMsgReply,
+    filterUser,
   }
 })
