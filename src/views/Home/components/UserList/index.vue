@@ -42,37 +42,42 @@ onMounted(() => {
     groupListLastElRef.value && observer.observe(groupListLastElRef.value)
   })
 })
+
+const hiddenGroupListShow = () => (groupStore.showGroupList = false)
 </script>
 
 <template>
-  <div class="user-list-wrapper">
-    <div class="user-list-header">群成员({{ statistic.onlineNum || 0 }}/{{ statistic.totalNum || 0 }})</div>
-    <TransitionGroup
-      v-show="groupUserList?.length"
-      tag="ul"
-      name="fade"
-      class="user-list"
-      v-loading.lock="groupStore.loading"
-    >
-      <li
-        class="user-list-item"
-        :class="user.activeStatus === OnlineStatus.Online ? 'item-online' : ''"
-        v-for="user in groupUserList"
-        :key="user.uid"
+  <div class="user-list-box">
+    <div class="user-list-mask" @click="hiddenGroupListShow" :class="groupStore.showGroupList ? 'show' : ''" />
+    <div class="user-list-wrapper" :class="groupStore.showGroupList ? 'show' : ''">
+      <div class="user-list-header">群成员({{ statistic.onlineNum || 0 }}/{{ statistic.totalNum || 0 }})</div>
+      <TransitionGroup
+        v-show="groupUserList?.length"
+        tag="ul"
+        name="fade"
+        class="user-list"
+        v-loading.lock="groupStore.loading"
       >
-        <div class="item-avatar-wrapper">
-          <img class="item-avatar" :src="user.avatar" />
-          <i class="item-online-status" />
-        </div>
-        <!-- {{ dayjs(user.lastOptTime).format('HH:mm:ss') }} -->
-        {{ user.name }}
-      </li>
-      <li class="list-last-visible-el" key="visible_el" ref="groupListLastElRef">&nbsp;</li>
-    </TransitionGroup>
-    <template v-if="groupUserList?.length === 0">
-      <div class="list-no-data">暂无成员~</div>
-    </template>
-    <!-- </ul> -->
+        <li
+          class="user-list-item"
+          :class="user.activeStatus === OnlineStatus.Online ? 'item-online' : ''"
+          v-for="user in groupUserList"
+          :key="user.uid"
+        >
+          <div class="item-avatar-wrapper">
+            <img class="item-avatar" :src="user.avatar" />
+            <i class="item-online-status" />
+          </div>
+          <!-- {{ dayjs(user.lastOptTime).format('HH:mm:ss') }} -->
+          {{ user.name }}
+        </li>
+        <li class="list-last-visible-el" key="visible_el" ref="groupListLastElRef">&nbsp;</li>
+      </TransitionGroup>
+      <template v-if="groupUserList?.length === 0">
+        <div class="list-no-data">暂无成员~</div>
+      </template>
+      <!-- </ul> -->
+    </div>
   </div>
 </template>
 

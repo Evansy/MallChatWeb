@@ -2,7 +2,8 @@
   flex: 1;
   display: flex;
   align-items: stretch;
-  padding: 20px;
+  padding: 16px;
+  overflow: hidden;
 }
 
 .chat-wrapper {
@@ -11,7 +12,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 20px;
 }
 
 .chat {
@@ -150,5 +150,17 @@
       opacity: 0.3;
       cursor: not-allowed;
     }
+  }
+}
+
+
+@media only screen and (min-width: 640px) {
+  .chat-box {
+    padding-left: 0;
+    padding: 20px;
+  }
+
+  .chat-wrapper {
+    margin-right: 20px;
   }
 }

@@ -6,6 +6,7 @@ import { useUserStore } from '@/stores/user'
 import { ActType, MarkType, IsYet } from '@/services/types'
 import type { MessageItemType } from '@/services/types'
 import throttle from 'lodash/throttle'
+import { judgeClient } from '@/utils/detectDevice'
 
 import defaultAvatar from '@/assets/avatars/default.png'
 
@@ -62,7 +63,12 @@ onMounted(() => {
           // 加载更多
           await chatStore.loadMore()
           // 保持滚动条位置。
-          chatListElRef.value?.scrollTo({ left: 0, top: firstMsgRef?.offsetTop - 20 || 0 })
+          // FIXME ios 有 bug，内容会空白
+          if (judgeClient() === 'iOS') {
+            chatListElRef.value?.scroll({ left: 0, top: firstMsgRef?.offsetTop - 20 || 0, behavior: 'smooth' })
+          } else {
+            chatListElRef.value?.scroll(0, firstMsgRef?.offsetTop - 20 || 0)
+          }
         }
       },
       {

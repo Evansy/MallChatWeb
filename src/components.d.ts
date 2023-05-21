@@ -28,6 +28,7 @@ declare module '@vue/runtime-core' {
     IEpCloseBold: typeof import('~icons/ep/close-bold')['default']
     IEpEditPen: typeof import('~icons/ep/edit-pen')['default']
     IEpFemale: typeof import('~icons/ep/female')['default']
+    IEpFold: typeof import('~icons/ep/fold')['default']
     IEpIEditPen: typeof import('~icons/ep/i-edit-pen')['default']
     IEpInfoFilled: typeof import('~icons/ep/info-filled')['default']
     IEpLoading: typeof import('~icons/ep/loading')['default']

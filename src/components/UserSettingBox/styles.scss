@@ -78,13 +78,11 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  column-gap: 16px;
   margin-top: 20px;
 }
 
 .badge_item {
-  width: 100px;
-  height: 100px;
+  width: 30%;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -117,8 +115,10 @@
 }
 
 .badge_item_icon {
-  width: 80px;
-  min-width: 80px;
+  width: 80%;
+  min-width: 80%;
+  margin-top: 10%;
+  margin-bottom: 10%;
   filter: grayscale(1);
 
   &_has {
@@ -137,4 +137,15 @@
 
 .name_edit_icon {
   margin-left: 8px;
+}
+
+@media only screen and (min-width: 640px) {
+  .badge_list {
+    column-gap: 16px;
+  }
+
+  .badge_item {
+    width: 100px;
+    height: 100px;
+  }
 }

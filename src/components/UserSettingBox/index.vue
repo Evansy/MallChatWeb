@@ -7,6 +7,9 @@ import { useUserStore } from '@/stores/user'
 import { SexType, IsYet } from '@/services/types'
 import type { BadgeType } from '@/services/types'
 import apis from '@/services/apis'
+import { judgeClient } from '@/utils/detectDevice'
+
+const client = judgeClient()
 
 const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue'])
@@ -81,7 +84,13 @@ const onCancelEditName = async () => {
 </script>
 
 <template>
-  <ElDialog class="setting_box_modal" v-model="value" :width="580" :close-on-click-modal="false" center>
+  <ElDialog
+    class="setting_box_modal"
+    v-model="value"
+    :width="client === 'PC' ? 580 : '85%'"
+    :close-on-click-modal="false"
+    center
+  >
     <div class="setting_box">
       <div class="setting_avatar_box">
         <ElAvatar

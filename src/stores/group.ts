@@ -29,6 +29,9 @@ export const useGroupStore = defineStore('group', () => {
   const cursor = ref()
   const countInfo = reactive({ onlineNum: 0, totalNum: 0 })
 
+  // 移动端控制显隐
+  const showGroupList = ref(false)
+
   // 获取群成员
   const getGroupUserList = async () => {
     const data = await apis.getGroupList({ params: { pageSize, cursor: cursor.value } }).send()
@@ -67,5 +70,5 @@ export const useGroupStore = defineStore('group', () => {
     userList.value = tempNew
   }
 
-  return { userList, loading, loadMore, getGroupUserList, countInfo, batchUpdateUserStatus }
+  return { userList, loading, loadMore, getGroupUserList, countInfo, batchUpdateUserStatus, showGroupList }
 })

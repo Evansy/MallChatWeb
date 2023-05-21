@@ -5,15 +5,33 @@
   padding: 0;
   flex: 1;
   display: flex;
-  // gap: 8px;
 
   align-items: flex-start;
   flex-direction: column;
   overflow: hidden;
+  // 取消滚动链接
+  overscroll-behavior-y: contain;
   overflow-y: auto;
 
   :deep(.el-loading-mask) {
     background-color: var(--color-background-black-mute);
+  }
+
+  &-box {
+    position: relative;
+  }
+
+  &-mask {
+    transition: background-color .3s ease;
+
+    &.show {
+      position: fixed;
+      top: 66px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba($color: #000, $alpha: .5);
+    }
   }
 
   &-item {
@@ -75,6 +93,17 @@
     background-color: var(--color-gray-bg);
     display: flex;
     flex-direction: column;
+
+    position: absolute;
+    top: 0;
+    right: -16px;
+    bottom: 16px;
+    transition: transform .3s ease;
+    transform: translateX(100%);
+
+    &.show {
+      transform: translateX(-16px);
+    }
   }
 
   &-header {
@@ -89,4 +118,27 @@
   z-index: 10;
   pointer-events: none;
   display: none;
+}
+
+@media only screen and (min-width: 640px) {
+  .user-list-wrapper {
+    position: relative;
+    top: 0;
+    right: 0;
+    // right: -200px;
+    transform: translateX(0);
+
+    &.show {
+      transform: translateX(0);
+    }
+  }
+
+  .user-list-mask.show {
+    position: relative;
+    top: initial;
+    left: initial;
+    right: initial;
+    bottom: initial;
+    background-color: transparent;
+  }
 }

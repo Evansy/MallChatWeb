@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useUserStore } from '@/stores/user'
+import { useGroupStore } from '@/stores/group'
 import defaultAvatar from '@/assets/avatars/default.png'
 const visible = ref(false)
 const userStore = useUserStore()
+const groupStore = useGroupStore()
 
 const avatar = computed(() => userStore?.userInfo.avatar)
 
 const showSettingBox = () => (visible.value = true)
 const onToMallChat = () => window.open('https://github.com/zongzibinbin/MallChat', '_blank')
 const onToMallChatWeb = () => window.open('https://github.com/Evansy/MallChatWeb', '_blank')
+const toggleGroupListShow = () => (groupStore.showGroupList = !groupStore.showGroupList)
 </script>
 
 <template>
@@ -63,6 +66,8 @@ const onToMallChatWeb = () => window.open('https://github.com/Evansy/MallChatWeb
         <i class="operate-icon icon-github" /><span class="operate-icon-text">前端源码</span>
       </a>
     </div>
+
+    <el-icon class="menu-icon" color="#fff" :size="32" @click="toggleGroupListShow"><IEpFold /></el-icon>
 
     <UserSettingBox v-model="visible" />
   </aside>
