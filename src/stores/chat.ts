@@ -27,6 +27,7 @@ export const useChatStore = defineStore('chat', () => {
 
   const getMsgList = async () => {
     const data = await apis.getMsgList({ params: { pageSize, cursor: cursor.value, roomId: 1 } }).send()
+    if (!data) return
     chatMessageList.value = [...computedTimeBlock(data.list), ...chatMessageList.value]
     cursor.value = data.cursor
     isLast.value = data.isLast

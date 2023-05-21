@@ -133,6 +133,8 @@ const onReplyMsg = async (msgFromUser: MessageItemType) => {
                   />
                 </el-tooltip>
                 {{ msg.fromUser.username }}
+                <!-- {{ msg.message.id }}
+                {{ dayjs(msg.message.sendTime).format('YYYY-MM-DD HH:mm:ss') }} -->
               </div>
               <div class="msg-item-info">
                 {{ msg.message.content }}

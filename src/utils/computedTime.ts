@@ -1,9 +1,10 @@
 import type { MessageItemType } from '@/services/types'
 import dayjs from 'dayjs'
 
-// 10 * 60 * 1000;
-const intervalTime = 600000
+// 5 * 60 * 1000;
+const intervalTime = 300000
 // 计算 50 条，到达 50 重置
+const computedCountMax = 50
 let computedCount = 0
 
 const timeToStr = (time: number) => {
@@ -15,8 +16,7 @@ const timeToStr = (time: number) => {
 
 // 超过20分钟，或者超过50条评论，展示时间
 const checkTimeInterval = (cur: MessageItemType, pre: MessageItemType) => {
-  pre && console.log(cur.message.id, cur.message.sendTime - pre.message.sendTime)
-  if ((pre && cur.message.sendTime - pre.message.sendTime > intervalTime) || computedCount >= 50) {
+  if ((pre && cur.message.sendTime - pre.message.sendTime > intervalTime) || computedCount >= computedCountMax) {
     computedCount = 0
     return { ...cur, timeBlock: timeToStr(cur.message.sendTime) }
   } else {

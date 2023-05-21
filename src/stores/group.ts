@@ -35,6 +35,7 @@ export const useGroupStore = defineStore('group', () => {
   // 获取群成员
   const getGroupUserList = async () => {
     const data = await apis.getGroupList({ params: { pageSize, cursor: cursor.value } }).send()
+    if (!data) return
     const tempNew = cloneDeep(uniqueUserList([...data.list, ...userList.value]))
     tempNew.sort(sorAction)
     userList.value = tempNew
@@ -54,11 +55,13 @@ export const useGroupStore = defineStore('group', () => {
   getGroupUserList()
   getCountStatistic()
 
+  // 加载更多群成员
   const loadMore = async () => {
     if (isLast.value) return
     await getGroupUserList()
   }
 
+  // 更新用户在线状态
   const batchUpdateUserStatus = (items: UserItem[]) => {
     const tempNew = cloneDeep(userList.value)
     for (let index = 0, len = items.length; index < len; index++) {
@@ -70,5 +73,11 @@ export const useGroupStore = defineStore('group', () => {
     userList.value = tempNew
   }
 
-  return { userList, loading, loadMore, getGroupUserList, countInfo, batchUpdateUserStatus, showGroupList }
+  // 过滤掉小黑子
+  const filterUser = (uid: number) => {
+    if (typeof uid !== 'number') return
+    userList.value = userList.value.filter((item) => item.uid !== uid)
+  }
+
+  return { userList, loading, loadMore, getGroupUserList, countInfo, batchUpdateUserStatus, showGroupList, filterUser }
 })

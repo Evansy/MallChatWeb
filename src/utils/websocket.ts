@@ -165,7 +165,10 @@ class WS {
       // 小黑子的发言在禁用后，要删除他的发言
       case WsResponseMessageType.InValidUser: {
         const data = params.data as { uid: number }
+        // 消息列表删掉小黑子发言
         chatStore.filterUser(data.uid)
+        // 群成员列表删掉小黑子
+        groupStore.filterUser(data.uid)
         break
       }
       default: {
