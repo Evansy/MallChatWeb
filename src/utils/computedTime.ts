@@ -3,8 +3,8 @@ import dayjs from 'dayjs'
 
 // 5 * 60 * 1000;
 const intervalTime = 300000
-// 计算 50 条，到达 50 重置
-const computedCountMax = 50
+// 计算 20 条，到达 20 重置
+const computedCountMax = 20
 let computedCount = 0
 
 const timeToStr = (time: number) => {
