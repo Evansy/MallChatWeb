@@ -59,14 +59,17 @@ const userStore = useUserStore()
 const isSign = computed(() => userStore.isSign)
 // 置空回复的消息
 const onClearReply = () => (chatStore.currentMsgReply = {})
-const onWrap = () => (inputMsg.value += '\n')
+const onWrap = () => insertEmoji('\n')
 const insertEmoji = (emoji: string) => {
   let input = msg_input_ref.value?.textarea
   if (!input) return
   let startPos = input.selectionStart as number
   let endPos = input.selectionEnd as number
   let resultText = input.value.substring(0, startPos) + emoji + input.value.substring(endPos)
+  // 需要保留，否则光标位置不正确。
   input.value = resultText
+  // 需要更新以触发 onChang
+  inputMsg.value = resultText
   input.focus()
   input.selectionStart = startPos + emoji.length
   input.selectionEnd = startPos + emoji.length

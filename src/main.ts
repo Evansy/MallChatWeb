@@ -1,5 +1,7 @@
 import { createApp } from 'vue'
-// import ElementPlus from 'element-plus'
+import dayjs from 'dayjs'
+import 'dayjs/locale/zh-cn'
+import weekday from 'dayjs/plugin/weekday'
 // import 'element-plus/dist/index.css'
 import { createPinia } from 'pinia'
 
@@ -9,6 +11,11 @@ import router from './router'
 import '@/utils/websocket'
 import './styles/main.css'
 import vLogin from './directives/v-login'
+
+// 设置 dayjs 语言
+dayjs.locale('zh-cn')
+// 设置一周起始位周一
+dayjs.extend(weekday)
 
 const app = createApp(App)
 

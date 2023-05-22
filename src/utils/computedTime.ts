@@ -9,9 +9,14 @@ let computedCount = 0
 
 const timeToStr = (time: number) => {
   const sendTime = dayjs(time)
-  const isToday = dayjs(sendTime).diff(dayjs(dayjs().format('YYYY-MM-DD')), 'day') < 1
-  console.log(dayjs(sendTime).diff(dayjs(dayjs().format('YYYY-MM-DD')), 'day'))
-  return isToday ? sendTime.format('HH:mm:ss') : sendTime.format('YYYY-MM-DD HH:mm:ss')
+  const gapDay = dayjs().endOf('day').diff(sendTime, 'day')
+  const isLastWeek = gapDay >= 7
+  // 今天显示时分秒, 今天往前一周内，显示周几， 再前面显示日期
+  return gapDay < 2
+    ? `${gapDay === 1 ? '昨天 ' : ''}${sendTime.format('HH:mm')}`
+    : isLastWeek
+    ? sendTime.format('YYYY-MM-DD HH:mm')
+    : dayjs(sendTime).format('dddd HH:mm')
 }
 
 // 超过20分钟，或者超过50条评论，展示时间
