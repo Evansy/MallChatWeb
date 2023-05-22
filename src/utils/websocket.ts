@@ -7,6 +7,7 @@ import type { LoginSuccessResType, LoginInitResType, WsReqMsgContentType, OnStat
 import type { MessageItemType } from '@/services/types'
 import { OnlineStatus } from '@/services/types'
 import { worker } from './initWorker'
+import shakeTitle from '@/utils/shakeTitle'
 
 class WS {
   #tasks: WsReqMsgContentType[] = []
@@ -22,6 +23,11 @@ class WS {
     document.addEventListener('visibilitychange', () => {
       if (document.hidden && !this.#connectReady) {
         worker.postMessage('{"type":"initWS"}')
+      }
+
+      // 获得焦点停止消息闪烁
+      if (!document.hidden) {
+        shakeTitle.clear()
       }
     })
   }

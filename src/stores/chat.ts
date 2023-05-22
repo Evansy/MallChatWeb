@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import apis from '@/services/apis'
 import type { MessageItemType } from '@/services/types'
 import { computedTimeBlock } from '@/utils/computedTime'
+import shakeTitle from '@/utils/shakeTitle'
 
 export const pageSize = 20
 
@@ -41,6 +42,11 @@ export const useChatStore = defineStore('chat', () => {
     chatMessageList.value.push(
       ...computedTimeBlock([chatMessageList.value[chatMessageList.value.length - 1], msg], false),
     )
+
+    // tab 在后台获得新消息，就开始闪烁！
+    if (document.hidden && !shakeTitle.isShaking) {
+      shakeTitle.start()
+    }
 
     if (isScrollAboveOneScreen.value) {
       newMsgCount.value++
