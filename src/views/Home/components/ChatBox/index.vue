@@ -20,7 +20,11 @@ const inputMsg = ref('')
 const msg_input_ref = ref<typeof ElInput>()
 const currentMsgReply = computed(() => (userStore.isSign && chatStore.currentMsgReply) || {})
 
-const sendMsgHandler = () => {
+const sendMsgHandler = (e: Event | KeyboardEvent) => {
+  // 中文输入法的时候，按 ENTER，会直接提交，不是选中输入法的选项
+  // https://www.zhangxinxu.com/wordpress/2023/02/js-enter-submit-compositionupdate
+  const event = e as KeyboardEvent
+  if (typeof event.keyCode === 'number' && event.keyCode !== 13) return
   // 空消息禁止发送
   if (!inputMsg.value?.trim().length) {
     return
@@ -59,8 +63,8 @@ const userStore = useUserStore()
 const isSign = computed(() => userStore.isSign)
 // 置空回复的消息
 const onClearReply = () => (chatStore.currentMsgReply = {})
-const onWrap = () => insertEmoji('\n')
-const insertEmoji = (emoji: string) => {
+const onWrap = () => insertText('\n')
+const insertText = (emoji: string) => {
   let input = msg_input_ref.value?.textarea
   if (!input) return
   let startPos = input.selectionStart as number
@@ -125,7 +129,7 @@ const insertEmoji = (emoji: string) => {
                   <button class="emoji-button">😊</button>
                 </template>
                 <ul class="emoji-list">
-                  <li class="emoji-item" v-for="(emoji, $index) of emojis" :key="$index" @click="insertEmoji(emoji)">
+                  <li class="emoji-item" v-for="(emoji, $index) of emojis" :key="$index" @click="insertText(emoji)">
                     {{ emoji }}
                   </li>
                 </ul>
