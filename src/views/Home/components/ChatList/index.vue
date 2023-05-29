@@ -13,6 +13,8 @@ import defaultAvatar from '@/assets/avatars/default.png'
 const chatListElRef = ref<HTMLDivElement>()
 const chatListLastElRef = ref<HTMLDivElement>()
 
+const emit = defineEmits(['startReplying'])
+
 // 获取消息列表
 // const getList = (cursor?: string) => apis.getMsgList({ params: { pageSize: 20, cursor, roomId: 1 } })
 const chatStore = useChatStore()
@@ -104,6 +106,7 @@ const onDisLikeMsg = async (actType: ActType, msg: MessageItemType['message']) =
 const onReplyMsg = async (msgFromUser: MessageItemType) => {
   if (!msgFromUser) return
   chatStore.currentMsgReply = msgFromUser
+  emit('startReplying', msgFromUser)
 }
 </script>
 
