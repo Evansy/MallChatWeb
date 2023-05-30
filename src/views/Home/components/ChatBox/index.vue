@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import type { ElInput } from 'element-plus'
 import { useWsLoginStore } from '@/stores/ws'
 import { useUserStore } from '@/stores/user'
@@ -19,6 +19,11 @@ const isSending = ref(false)
 const inputMsg = ref('')
 const msg_input_ref = ref<typeof ElInput>()
 const currentMsgReply = computed(() => (userStore.isSign && chatStore.currentMsgReply) || {})
+
+
+const focusMsgInput = () => {
+  setTimeout(() => msg_input_ref.value?.focus(), 10)
+}
 
 const sendMsgHandler = (e: Event | KeyboardEvent) => {
   // 中文输入法的时候，按 ENTER，会直接提交，不是选中输入法的选项
@@ -48,7 +53,7 @@ const sendMsgHandler = (e: Event | KeyboardEvent) => {
     .finally(() => {
       isSending.value = false
       // 输入框重新获取焦点
-      setTimeout(() => msg_input_ref.value?.focus(), 10)
+      focusMsgInput()
       // 滚动到消息列表底部
       chatStore.chatListToBottomAction?.()
     })
@@ -61,6 +66,7 @@ const onShowLoginBoxHandler = () => (loginStore.showLogin = true)
 // 是否已登录
 const userStore = useUserStore()
 const isSign = computed(() => userStore.isSign)
+
 // 置空回复的消息
 const onClearReply = () => (chatStore.currentMsgReply = {})
 const onWrap = () => insertText('\n')
@@ -88,7 +94,7 @@ const insertText = (emoji: string) => {
       </template>
       <template v-else>
         <div class="chat">
-          <ChatList />
+          <ChatList @start-replying="focusMsgInput" />
           <div class="chat-msg-send">
             <div v-if="Object.keys(currentMsgReply).length" class="reply-msg-wrapper">
               <span>{{ currentMsgReply.fromUser?.username }}: {{ currentMsgReply.message?.content }}</span>
