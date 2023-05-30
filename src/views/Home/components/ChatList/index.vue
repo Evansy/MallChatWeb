@@ -7,6 +7,7 @@ import { ActType, MarkType, IsYet } from '@/services/types'
 import type { MessageItemType } from '@/services/types'
 import throttle from 'lodash/throttle'
 import { judgeClient } from '@/utils/detectDevice'
+import RenderMsg from '@/components/RenderMsg'
 
 import defaultAvatar from '@/assets/avatars/default.png'
 
@@ -136,11 +137,14 @@ const onReplyMsg = async (msgFromUser: MessageItemType) => {
                   />
                 </el-tooltip>
                 {{ msg.fromUser.username }}
-                <!-- {{ msg.message.id }}
-                {{ dayjs(msg.message.sendTime).format('YYYY-MM-DD HH:mm:ss') }} -->
+                <span class="msg-item-from">({{ msg.fromUser.locPlace || '未知' }})</span>
               </div>
               <div class="msg-item-info">
-                {{ msg.message.content }}
+                <RenderMsg
+                  :text="msg.message.content"
+                  :url-map="msg.message.urlTitleMap"
+                  :is-me="myId && myId === msg.fromUser.uid"
+                />
               </div>
             </div>
             <div class="option-icons">

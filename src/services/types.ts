@@ -100,6 +100,10 @@ export type MessageItemType = {
      * 用户ID
      */
     uid: number
+    /**
+     * 用户归属地
+     */
+    locPlace: string
   }
   /**
    * 消息详情
@@ -167,6 +171,10 @@ export type MessageItemType = {
      * 消息类型 1正常文本 2.爆赞 （点赞超过10）3.危险发言（举报超5）
      */
     type: MessageType
+    /**
+     * 消息中的链接
+     */
+    urlTitleMap: Record<string, string>
   }
   // 是否显示时间，有值才显示
   timeBlock?: string

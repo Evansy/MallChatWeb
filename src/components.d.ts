@@ -38,6 +38,7 @@ declare module '@vue/runtime-core' {
     IEpSelect: typeof import('~icons/ep/select')['default']
     IEpSuccessFilled: typeof import('~icons/ep/success-filled')['default']
     LoginBox: typeof import('./components/LoginBox/index.vue')['default']
+    MsgContent: typeof import('./components/MsgContent.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     UserSettingBox: typeof import('./components/UserSettingBox/index.vue')['default']

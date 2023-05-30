@@ -27,7 +27,7 @@
   --color-background-soft: var(--vt-c-white-soft);
   --color-background-mute: var(--vt-c-white-mute);
 
-  --color-background-black-mute: background-color: rgba(255, 255, 255, .2);
+  --color-background-black-mute: background-color: rgba(255, 255, 255, 0.2);
 
   --color-border: var(--vt-c-divider-light-2);
   --color-border-hover: var(--vt-c-divider-light-1);
@@ -98,4 +98,15 @@ a:hover,
 a:active {
   cursor: pointer;
   color: var(--color-primary);
+}
+
+.msg-content-link {
+  font-size: 14px;
+  display: inline-block;
+  margin-left:4px;
+  margin-right:4px;
+}
+.msg-content-link:hover{
+  color: currentColor;
+  text-decoration: underline;
 }

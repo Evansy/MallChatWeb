@@ -3,6 +3,10 @@ import { computed, ref } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useGroupStore } from '@/stores/group'
 import defaultAvatar from '@/assets/avatars/default.png'
+import qrcode from '@/assets/qrcode.jpeg'
+import { judgeClient } from '@/utils/detectDevice'
+
+const client = judgeClient()
 const visible = ref(false)
 const userStore = useUserStore()
 const groupStore = useGroupStore()
@@ -38,15 +42,13 @@ const toggleGroupListShow = () => (groupStore.showGroupList = !groupStore.showGr
       >
         <i class="operate-icon icon-bilibili" />
       </a>
-      <a
-        class="operate-icon-link"
-        href="https://mp.weixin.qq.com/s/m1SRsBG96kLJW5mPe4AVGA"
-        target="_blank"
-        rel="noopener noreferrer"
-        title="wechat"
-      >
-        <i class="operate-icon icon-wechat" />
-      </a>
+
+      <el-tooltip effect="dark" :placement="client === 'PC' ? 'right' : 'bottom'">
+        <template #content> <img class="icon-wechat-qrcode" :src="qrcode" alt="wx qrcode" /></template>
+        <a class="operate-icon-link" target="_blank" rel="noopener noreferrer" title="wechat">
+          <i class="operate-icon icon-wechat" />
+        </a>
+      </el-tooltip>
       <a
         class="operate-icon-link"
         target="_blank"
