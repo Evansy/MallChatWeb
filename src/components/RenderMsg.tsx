@@ -17,7 +17,10 @@ export default defineComponent({
           };" href="${url.includes('http') ? url : `//${url}`}">${title}</a>`,
         )
       }
-      const clean = DOMPurify.sanitize(result, { ALLOWED_TAGS: ['a'], ALLOWED_ATTR: ['style', 'href', 'rel', 'class'] })
+      const clean = DOMPurify.sanitize(result, {
+        ALLOWED_TAGS: ['a'],
+        ALLOWED_ATTR: ['style', 'href', 'rel', 'class', 'target'],
+      })
       return <div v-html={clean} />
     }
   },

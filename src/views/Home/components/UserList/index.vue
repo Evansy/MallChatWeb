@@ -50,7 +50,7 @@ const hiddenGroupListShow = () => (groupStore.showGroupList = false)
   <div class="user-list-box">
     <div class="user-list-mask" @click="hiddenGroupListShow" :class="groupStore.showGroupList ? 'show' : ''" />
     <div class="user-list-wrapper" :class="groupStore.showGroupList ? 'show' : ''">
-      <div class="user-list-header">群成员({{ statistic.onlineNum || 0 }}/{{ statistic.totalNum || 0 }})</div>
+      <div class="user-list-header">在线人数：{{ statistic.onlineNum || 0 }}</div>
       <TransitionGroup
         v-show="groupUserList?.length"
         tag="ul"

@@ -24,6 +24,15 @@ MallChat 的【前端】项目，是一个既能购物又能即时聊天的电�
 
 ### 项目演示
 
+### 项目启动及部署
+
+- 环境: node 16.18+, 包管理工具 pnpm (安装完 node 执行 `npm i pnpm -g` 即可);
+- 安装依赖: clone 工程之后，执行 `pnpm i`
+- 启动: 按 `F5` 即可自动执行 `pnpm run dev` 并且打开浏览器
+- 部署
+  - 部署到本地：执行 `pnpm build` 构建完成后把 `dist` 文件夹 放到服务器，并配置 `nginx` 即可
+  - 自动 CI/CD：通过 `github actions` 在代码提交到 GitHub 之后自动构建并部署到服务器, 详细参考可查看 [deploy.yml](.github/workflows/deploy.yml)
+
 #### C 端项目
 
 - 前端项目地址：[https://github.com/Evansy/MallChatWeb](https://github.com/Evansy/MallChatWeb)
@@ -65,6 +74,13 @@ MallChat 的【前端】项目，是一个既能购物又能即时聊天的电�
 ## star 趋势图
 
 ![Stargazers over time](https://starchart.cc/Evansy/MallChatWeb.svg)
+
+## 贡献者
+
+感谢各位贡献 PR 的小伙伴们~  
+<a href="https://github.com/Evansy/MallChatWeb/graphs/contributors">
+<img src="https://contrib.rocks/image?repo=Evansy/MallChatWeb" />
+</a>
 
 ## 公众号
 

@@ -2,6 +2,10 @@
   "name": "mall-chat-web",
   "version": "0.0.0",
   "private": true,
+  "engines": {
+    "node": ">=16.16.0",
+    "pnpm": ">=8.4"
+  },
   "scripts": {
     "dev": "vite --host",
     "build": "run-p type-check build-only",

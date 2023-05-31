@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 import type { ElInput } from 'element-plus'
 import { useWsLoginStore } from '@/stores/ws'
 import { useUserStore } from '@/stores/user'
@@ -18,8 +18,6 @@ const isSelect = ref(false)
 const isSending = ref(false)
 const inputMsg = ref('')
 const msg_input_ref = ref<typeof ElInput>()
-const currentMsgReply = computed(() => (userStore.isSign && chatStore.currentMsgReply) || {})
-
 
 const focusMsgInput = () => {
   setTimeout(() => msg_input_ref.value?.focus(), 10)
@@ -66,10 +64,13 @@ const onShowLoginBoxHandler = () => (loginStore.showLogin = true)
 // 是否已登录
 const userStore = useUserStore()
 const isSign = computed(() => userStore.isSign)
+const currentMsgReply = computed(() => (userStore.isSign && chatStore.currentMsgReply) || {})
 
 // 置空回复的消息
 const onClearReply = () => (chatStore.currentMsgReply = {})
+// 插入换行符
 const onWrap = () => insertText('\n')
+// 插入内容
 const insertText = (emoji: string) => {
   let input = msg_input_ref.value?.textarea
   if (!input) return
