@@ -19,10 +19,20 @@ const isSending = ref(false)
 const inputMsg = ref('')
 const msg_input_ref = ref<typeof ElInput>()
 const currentMsgReply = computed(() => (userStore.isSign && chatStore.currentMsgReply) || {})
-
+const msgInputStyle = ref({})
 
 const focusMsgInput = () => {
-  setTimeout(() => msg_input_ref.value?.focus(), 10)
+  setTimeout(() => {
+    msg_input_ref.value?.focus()
+  }, 10)
+}
+
+const setMsgInputStyle = () => {
+  msgInputStyle.value = { outline: '2px solid #2287e1' }
+}
+
+const rmMsgInputStyle = () => {
+  msgInputStyle.value = {}
 }
 
 const sendMsgHandler = (e: Event | KeyboardEvent) => {
@@ -120,6 +130,9 @@ const insertText = (emoji: string) => {
                   @keydown.shift.enter.exact="onWrap"
                   @keydown.ctrl.enter.exact="onWrap"
                   @keydown.meta.enter.exact="onWrap"
+                  @focus="setMsgInputStyle"
+                  @blur="rmMsgInputStyle"
+                  :style="msgInputStyle"
                 />
                 <div class="chat-not-login-mask" :hidden="isSign">
                   <ElIcon class="icon-lock"><IEpLock /></ElIcon>

@@ -129,6 +129,7 @@ const onCancelEditName = async () => {
             effect="dark"
             :content="`剩余改名次数: ${userInfo.modifyNameChance || 0}`"
             placement="right"
+            :enterable="false"
           >
             <el-button
               class="name_edit_icon"
