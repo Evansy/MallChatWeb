@@ -1,4 +1,5 @@
 import { defineComponent } from 'vue'
+import DOMPurify from 'dompurify'
 
 export default defineComponent({
   props: ['urlMap', 'text', 'isMe'],
@@ -16,7 +17,8 @@ export default defineComponent({
           });" href="${url.includes('http') ? url : `//${url}`}">${title}</a>`,
         )
       }
-      return <div innerHTML={result} />
+      const clean = DOMPurify.sanitize(result, { ALLOWED_TAGS: ['a'], ALLOWED_ATTR: ['style', 'href', 'rel', 'class'] })
+      return <div v-html={clean} />
     }
   },
 })
