@@ -12,9 +12,9 @@ export default defineComponent({
       for (const [url, title] of Object.entries(props.urlMap)) {
         result = result?.replace(
           url,
-          `<a rel="noopener noreferrer nofollow" target="_blank" class="msg-content-link" style="color: var(${
-            props.isMe ? '#fff' : '--color-primary'
-          });" href="${url.includes('http') ? url : `//${url}`}">${title}</a>`,
+          `<a rel="noopener noreferrer nofollow" target="_blank" class="msg-content-link" style="color: ${
+            props.isMe ? '#fff' : 'var(--color-primary)'
+          };" href="${url.includes('http') ? url : `//${url}`}">${title}</a>`,
         )
       }
       const clean = DOMPurify.sanitize(result, { ALLOWED_TAGS: ['a'], ALLOWED_ATTR: ['style', 'href', 'rel', 'class'] })
