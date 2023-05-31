@@ -83,6 +83,8 @@ const insertText = (emoji: string) => {
   input.focus()
   input.selectionStart = startPos + emoji.length
   input.selectionEnd = startPos + emoji.length
+  //临时让获取焦点
+  focusMsgInput()
 }
 </script>
 
