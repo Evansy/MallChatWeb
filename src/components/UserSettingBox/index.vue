@@ -66,6 +66,10 @@ const onSaveUserName = async () => {
     ElMessage.warning('用户名不能为空哦~')
     return
   }
+  if (editName.tempName === userInfo.value.name) {
+    ElMessage.warning('用户名和当前一样的哦~')
+    return
+  }
   editName.saving = true
   await apis.modifyUserName(editName.tempName).send()
   userStore.userInfo.name = editName.tempName
