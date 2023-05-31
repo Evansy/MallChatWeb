@@ -56,7 +56,7 @@ onMounted(() => {
   nextTick(() => {
     chatStore.chatListToBottomAction = () => {
       // 聊天列表滚动到底部
-      chatListElRef.value?.scrollTo({ left: 0, top: chatListElRef.value.scrollHeight })
+      chatListElRef.value?.scrollTo({ left: 0, top: chatListElRef.value.scrollHeight, behavior: 'smooth' })
     }
     const observer = new IntersectionObserver(
       async (entries) => {
