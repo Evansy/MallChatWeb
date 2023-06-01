@@ -16,14 +16,8 @@ export default {
     this.isShaking = true
     // 开始计时
     timer = setInterval(() => {
-      // count 除 2 取余，来判断显示还是为空
-      if (count % 2 === 0) {
-        document.title = `【新消息】${title}`
-      } else {
-        document.title = `【】${title}`
-      }
-      // 累加计数
-      count++
+      count++ // 累加计数
+      document.title = `【${ count&1 ? '新消息' : '\u3000\u3000\u3000' }】${title}` // count 除 2 取余，来判断显示还是为空
     }, 1000)
   },
   // 重置闪烁逻辑
