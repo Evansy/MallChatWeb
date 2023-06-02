@@ -1,5 +1,7 @@
-import type { MessageItemType } from '@/services/types'
 import dayjs from 'dayjs'
+import type { Dayjs } from 'dayjs'
+import type { MessageItemType } from '@/services/types'
+
 
 // 5 分钟 5 * 60 * 1000;
 const intervalTime = 300000
@@ -51,4 +53,22 @@ export const computedTimeBlock = (list: MessageItemType[], needFirst = true) => 
     temp.push(checkTimeInterval(item, preItem))
   }
   return temp
+}
+
+/**
+ * 消息时间戳格式化
+ * @param timestamp 时间戳
+ * @returns 格式化后的时间字符串
+ */
+export const formatTimestamp = (timestamp: number): string => {
+  const now: Dayjs = dayjs()
+  const date: Dayjs = dayjs(timestamp)
+
+  if (now.isSame(date, 'day')) {
+    return date.format('HH:mm')
+  } else if (now.diff(date, 'year') >= 1) {
+    return date.format('YYYY年MM月DD日 HH:mm')
+  } else {
+    return date.format('MM月DD日 HH:mm')
+  }
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, provide } from 'vue'
 import type { ElInput } from 'element-plus'
 import { useWsLoginStore } from '@/stores/ws'
 import { useUserStore } from '@/stores/user'
@@ -22,6 +22,8 @@ const msg_input_ref = ref<typeof ElInput>()
 const focusMsgInput = () => {
   setTimeout(() => msg_input_ref.value?.focus(), 10)
 }
+
+provide('focusMsgInput', focusMsgInput)
 
 const sendMsgHandler = (e: Event | KeyboardEvent) => {
   // 中文输入法的时候，按 ENTER，会直接提交，不是选中输入法的选项
