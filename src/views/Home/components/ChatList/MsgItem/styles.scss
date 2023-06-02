@@ -71,17 +71,21 @@
     }
 
     &-reply {
-        display: -webkit-inline-box;
-        -webkit-line-clamp: 4;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        font-size: 12px;
+        width: fit-content;
         margin-top: 4px;
-        padding: 3px 12px;
-        border-radius: 8px;
-        color: var(--font-light);
-        background-color: #424656;
+        margin-right: auto;
+        .ellipsis {
+            display: -webkit-inline-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 8px;
+            color: var(--font-light);
+            background-color: #424656;
+        }
     }
 }
 
@@ -110,6 +114,10 @@
     .chat-item-content {
         margin-left: auto;
         border-radius: 20px 5px 20px 20px;
+    }
+    .chat-item-reply {
+        margin-left: auto;
+        margin-right: 0;
     }
 }
 
