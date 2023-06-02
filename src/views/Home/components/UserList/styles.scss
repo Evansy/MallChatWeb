@@ -40,7 +40,7 @@
     align-items: center;
     width: 100%;
     filter: grayscale(1);
-    padding: 2px;
+    padding: 5px 2px;
     border-radius: 4px;
     cursor: default;
     // content-visibility: auto;
@@ -80,6 +80,7 @@
   }
 
   .item-avatar {
+    display: block;
     width: 24px;
     height: 24px;
     border-radius: 50%;
