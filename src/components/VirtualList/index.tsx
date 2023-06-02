@@ -24,19 +24,23 @@ interface DataSource {
 export default defineComponent({
   name: 'VirtualList',
   props: {
+    // 数据
     data: {
       type: Array,
       required: true,
       default: () => [],
     },
+    // 唯一标识键值
     dataKey: {
-        type: [String, Function],
-        required: true,
+      type: [String, Function],
+      required: true,
     },
+    // 数据项组件
     item: {
       type: [Object, Function],
       required: true,
     },
+    // 可视区域内保留的数据项个数
     keeps: {
       type: Number,
       default: 30,
@@ -45,18 +49,22 @@ export default defineComponent({
       type: Number,
       default: 50,
     },
+    // 起始索引-用来指定默认从哪里开始渲染
     start: {
       type: Number,
       default: 0,
     },
+    // 偏移量
     offset: {
       type: Number,
       default: 0,
     },
+    // 顶部触发阈值
     topThreshold: {
       type: Number,
       default: 0,
     },
+    // 底部触发阈值
     bottomThreshold: {
       type: Number,
       default: 0,
@@ -68,6 +76,7 @@ export default defineComponent({
     const shepherd = ref<HTMLDivElement | null>(null)
     let virtual: Virtual
 
+    // 监听数据数组长度变化 更新数据
     watch(
       () => props.data.length,
       () => {
@@ -93,21 +102,26 @@ export default defineComponent({
       (newValue) => scrollToOffset(newValue),
     )
 
+    // 根据id获取数据项大小
     const getSize = (id: string) => {
       return virtual.sizes.get(id)
     }
+    // 获取滚动条偏移量
     const getOffset = () => {
         return rootRef.value ? Math.ceil(rootRef.value.scrollTop) : 0
     }
+    // 获取可视区域大小
     const getClientSize = () => {
       const key = 'clientHeight'
       return rootRef.value ? Math.ceil(rootRef.value[key]) : 0
     }
+    // 获取滚动条总高度
     const getScrollSize = () => {
       const key = 'scrollHeight'
       return rootRef.value ? Math.ceil(rootRef.value[key]) : 0
     }
 
+    // 统一处理向外暴露事件
     const emitEvent = (offset:number, clientSize:number, scrollSize :number) => {
       emit('scroll', {offset, clientSize, scrollSize})
       
@@ -129,8 +143,10 @@ export default defineComponent({
       emitEvent(offset, clientSize, scrollSize)
     }
 
+    // 获取数据源中的唯一标识
     const getUniqueIdFromDataSources = () => {
       const { dataKey, data = [] } = props
+      // 如果dataKey是函数 则调用传入的函数执行获取唯一标识
       return data.map((dataSource: any) =>
         typeof dataKey === 'function' ? dataKey(dataSource) : dataSource[dataKey],
       )
@@ -138,6 +154,10 @@ export default defineComponent({
     const onRangeChanged = (newRange: any) => {
       range.value = newRange
     }
+    /**
+     * 初始化一个virtual实例
+     * @description 详细参数见virtual.ts
+     */
     const installVirtual = () => {
       virtual = new Virtual(
         {
@@ -154,6 +174,11 @@ export default defineComponent({
       range.value = virtual.getRange()
     }
 
+    /**
+     * 滚动到指定索引
+     * @param index 索引值
+     * @description 如果索引值大于等于数据长度说明到底了则滚动到底部
+     */
     const scrollToIndex = (index: number) => {
       if (index >= props.data.length - 1) {
         scrollToBottom()
@@ -163,20 +188,30 @@ export default defineComponent({
       }
     }
 
+    /**
+     * 滚动到指定偏移量
+     * @param offset 滚动条偏移量
+     */
     const scrollToOffset = (offset: number) => {
         if (rootRef.value) {
             rootRef.value.scrollTop = offset
         }
     }
 
+    /**
+     * 渲染插槽列表-（重点函数）
+     * @returns {VNode[]} 插槽列表
+     */
     const getRenderSlots = () => {
       const slots = []
-      const { start, end } = range.value!
+      const { start, end } = range.value! // 解构获取范围的起始、结束索引
       const { data, dataKey, item } = props
       for (let index = start; index <= end; index++) {
-        const dataSource = data[index] as DataSource
-        if (dataSource) {
+        const dataSource = data[index] as DataSource // 获取当前索引的数据项
+        if (dataSource) { 
+          // 取这个项里面的唯一标识拿来做key
           const uniqueKey = typeof dataKey === 'function' ? dataKey(dataSource) : dataSource[dataKey]
+          // 如果唯一标识是字符串或者数字则渲染
           if (typeof uniqueKey === 'string' || typeof uniqueKey === 'number') {
             slots.push(
               <Item
@@ -193,11 +228,13 @@ export default defineComponent({
       return slots
     }
 
+    // 数据项大小改变时触发
     const onItemResized = (id: string, size: number) => {
       virtual.saveSize(id, size)
       emit('resized', id, size)
     }
 
+    // 滚动到底部
     const scrollToBottom = () => {
       if (shepherd.value) {
         const offset = shepherd.value.offsetTop
