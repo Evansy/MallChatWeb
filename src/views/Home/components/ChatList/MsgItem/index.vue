@@ -13,28 +13,28 @@ const props = defineProps({
   // 消息体
   msg: {
     type: Object as PropType<MessageItemType>,
-    required: true
+    required: true,
   },
   // 是否显示时间
   isShowTime: {
     type: Boolean,
-    default: true
+    default: true,
   },
   // 是否显示时间段
   isShowTimeBlock: {
     type: Boolean,
-    default: true
+    default: true,
   },
   // 消息气泡模式：左右分布-spread、左对齐-left、右对齐-right
   bubbleMode: {
     type: String,
-    default: 'spread'
+    default: 'spread',
   },
   // 消息气泡操作触发方式
   tooltipTrigger: {
     type: [String, Array] as PropType<TooltipTriggerType | TooltipTriggerType[]>,
-    default: 'hover'
-  }
+    default: 'hover',
+  },
 })
 
 const userStore = useUserStore()
@@ -43,29 +43,28 @@ const isCurrentUser = computed(() => props.msg?.fromUser.uid === userStore?.user
 const chatCls = computed(() => ({
   'chat-item': true,
   'is-me': isCurrentUser.value,
-  right: isCurrentUser.value && props.bubbleMode === 'spread' || props.bubbleMode === 'right',
+  right: (isCurrentUser.value && props.bubbleMode === 'spread') || props.bubbleMode === 'right',
 }))
 
-const renderMsgRef = ref<HTMLElement | null>(null);
-const boxRef = ref<HTMLElement | null>(null);
-const tooltipPlacement = ref();
+const renderMsgRef = ref<HTMLElement | null>(null)
+const boxRef = ref<HTMLElement | null>(null)
+const tooltipPlacement = ref()
 
-onMounted(()=>{
+onMounted(() => {
   nextTick(() => {
     if (renderMsgRef.value && boxRef.value) {
-      const renderMsgWidth = renderMsgRef.value.clientWidth;
-      const boxWidth = boxRef.value.clientWidth;
-      if(renderMsgWidth + 85 <= boxWidth){
-        tooltipPlacement.value = 'right-end';
-      }else if(props.msg.message.reply) {
-        tooltipPlacement.value = 'top-end';
+      const renderMsgWidth = renderMsgRef.value.clientWidth
+      const boxWidth = boxRef.value.clientWidth
+      if (renderMsgWidth + 85 <= boxWidth) {
+        tooltipPlacement.value = 'right-end'
+      } else if (props.msg.message.reply) {
+        tooltipPlacement.value = 'top-end'
       } else {
-        tooltipPlacement.value = 'bottom-end';
+        tooltipPlacement.value = 'bottom-end'
       }
     }
   })
 })
-
 </script>
 
 <template>
@@ -105,20 +104,11 @@ onMounted(()=>{
           <MsgOption :msg="msg" />
         </template>
         <div class="chat-item-content" ref="renderMsgRef">
-          <RenderMsg
-            :text="msg.message.content.trim()"
-            :url-map="msg.message.urlTitleMap"
-            :is-me="isCurrentUser"
-          />
+          <RenderMsg :text="msg.message.content.trim()" :url-map="msg.message.urlTitleMap" :is-me="isCurrentUser" />
         </div>
       </el-tooltip>
-      <div
-        v-if="msg.message.reply"
-        class="chat-item-reply"
-      >
-        <span class="ellipsis">
-          {{ msg.message.reply.username }}: {{ msg.message.reply.content }}
-        </span>
+      <div v-if="msg.message.reply" class="chat-item-reply">
+        <span class="ellipsis"> {{ msg.message.reply.username }}: {{ msg.message.reply.content }} </span>
       </div>
     </div>
   </div>

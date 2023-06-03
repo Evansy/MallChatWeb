@@ -31,7 +31,7 @@ const onLikeMsg = async (actType: ActType, msg: MessageItemType['message']) => {
  */
 const onDisLikeMsg = async (actType: ActType, msg: MessageItemType['message']) => {
   await apis.markMsg({ actType, markType: MarkType.DisLike, msgId: msg.id }).send()
-  const { dislikeCount } = msg.messageMark;
+  const { dislikeCount } = msg.messageMark
   msg.messageMark.userDislike = actType === ActType.Confirm ? IsYet.Yes : IsYet.No
   msg.messageMark.dislikeCount = actType === ActType.Confirm ? dislikeCount + 1 : dislikeCount - 1
 }

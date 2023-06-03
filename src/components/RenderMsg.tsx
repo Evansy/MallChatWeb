@@ -7,8 +7,11 @@ export default defineComponent({
     return () => {
       if (!props.urlMap || Object.keys(props.urlMap).length === 0) return props.text
 
-      let result = props.text
-      console.log(result)
+      // 先过滤所有标签
+      const clean = DOMPurify.sanitize(props.text, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })
+
+      // 再替换标签，保证用户输入的内容是干净的
+      let result = clean
       for (const [url, title] of Object.entries(props.urlMap)) {
         result = result?.replace(
           url,
@@ -17,11 +20,7 @@ export default defineComponent({
           };" href="${url.includes('http') ? url : `//${url}`}">${title}</a>`,
         )
       }
-      const clean = DOMPurify.sanitize(result, {
-        ALLOWED_TAGS: ['a'],
-        ALLOWED_ATTR: ['style', 'href', 'rel', 'class', 'target'],
-      })
-      return <div v-html={clean} />
+      return <div v-html={result} />
     }
   },
 })

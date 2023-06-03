@@ -26,13 +26,13 @@
     margin-bottom: 4px;
     gap: 4px;
     color: #999;
-  
+
     svg {
       @keyframes rotate {
         from {
           transform: rotate(0);
         }
-  
+
         to {
           transform: rotate(360deg);
         }

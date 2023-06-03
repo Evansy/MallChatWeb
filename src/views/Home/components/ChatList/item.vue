@@ -4,15 +4,15 @@ import type { MessageItemType } from '@/services/types'
 import type { PropType } from 'vue'
 
 defineProps({
-   source: {
+  source: {
     type: Object as PropType<MessageItemType>,
-    required: true
+    required: true,
   },
 })
 </script>
 
 <template>
-<div>
-  <MsgItem bubble-mode="spread" :msg="source" />
-</div>
+  <div>
+    <MsgItem bubble-mode="spread" :msg="source" />
+  </div>
 </template>

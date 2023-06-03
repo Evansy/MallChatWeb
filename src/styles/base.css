@@ -27,7 +27,7 @@
   --color-background-soft: var(--vt-c-white-soft);
   --color-background-mute: var(--vt-c-white-mute);
 
-  --color-background-black-mute: background-color: rgba(255, 255, 255, 0.2);
+  --color-background-black-mute: rgba(255, 255, 255, 0.2);
 
   --color-border: var(--vt-c-divider-light-2);
   --color-border-hover: var(--vt-c-divider-light-1);
@@ -77,8 +77,8 @@ body {
   background: var(--color-background);
   transition: color 0.5s, background-color 0.5s;
   line-height: 1.5;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
-    Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans',
+    'Droid Sans', 'Helvetica Neue', sans-serif;
   font-size: 15px;
   padding: 0;
   text-rendering: optimizeLegibility;
@@ -103,10 +103,10 @@ a:active {
 .msg-content-link {
   font-size: 14px;
   display: inline-block;
-  margin-left:4px;
-  margin-right:4px;
+  margin-left: 4px;
+  margin-right: 4px;
 }
-.msg-content-link:hover{
+.msg-content-link:hover {
   color: currentColor;
   text-decoration: underline;
 }

@@ -23,7 +23,6 @@
   flex-direction: column;
 }
 
-
 .chat-msg-send {
   padding: 10px 20px 20px;
   font-size: 0;
@@ -99,11 +98,11 @@
       border: none;
       padding: 10px;
       resize: none;
-      transition: .2s;
+      transition: 0.2s;
       font-size: 14px;
       color: #fff;
       box-sizing: border-box;
-      transition: .2s;
+      transition: 0.2s;
       box-shadow: none;
 
       &:focus {
@@ -117,7 +116,7 @@
     background-color: var(--color-primary);
     border: 0;
     padding: 0;
-    transition: .3s;
+    transition: 0.3s;
     box-shadow: 0 0 5px 0 #08f;
     color: #fff;
     height: 40px;
@@ -165,7 +164,6 @@
     background-color: #424656;
   }
 }
-
 
 @media only screen and (min-width: 640px) {
   .chat-box {

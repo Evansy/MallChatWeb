@@ -1,12 +1,4 @@
-import { 
-  defineComponent,
-  onActivated,
-  onBeforeMount,
-  onMounted,
-  onUnmounted,
-  ref,
-  watch
-} from 'vue'
+import { defineComponent, onActivated, onBeforeMount, onMounted, onUnmounted, ref, watch } from 'vue'
 import Virtual from './virtual'
 import Item from './item'
 
@@ -18,7 +10,7 @@ interface Range {
 }
 
 interface DataSource {
-    [key: string]: any;
+  [key: string]: any
 }
 
 export default defineComponent({
@@ -108,7 +100,7 @@ export default defineComponent({
     }
     // 获取滚动条偏移量
     const getOffset = () => {
-        return rootRef.value ? Math.ceil(rootRef.value.scrollTop) : 0
+      return rootRef.value ? Math.ceil(rootRef.value.scrollTop) : 0
     }
     // 获取可视区域大小
     const getClientSize = () => {
@@ -122,9 +114,9 @@ export default defineComponent({
     }
 
     // 统一处理向外暴露事件
-    const emitEvent = (offset:number, clientSize:number, scrollSize :number) => {
-      emit('scroll', {offset, clientSize, scrollSize})
-      
+    const emitEvent = (offset: number, clientSize: number, scrollSize: number) => {
+      emit('scroll', { offset, clientSize, scrollSize })
+
       if (virtual.isFront() && !!props.data.length && offset - props.topThreshold <= 0) {
         emit('totop')
       } else if (virtual.isBehind() && offset + clientSize + props.bottomThreshold >= scrollSize) {
@@ -147,9 +139,7 @@ export default defineComponent({
     const getUniqueIdFromDataSources = () => {
       const { dataKey, data = [] } = props
       // 如果dataKey是函数 则调用传入的函数执行获取唯一标识
-      return data.map((dataSource: any) =>
-        typeof dataKey === 'function' ? dataKey(dataSource) : dataSource[dataKey],
-      )
+      return data.map((dataSource: any) => (typeof dataKey === 'function' ? dataKey(dataSource) : dataSource[dataKey]))
     }
     const onRangeChanged = (newRange: any) => {
       range.value = newRange
@@ -193,9 +183,9 @@ export default defineComponent({
      * @param offset 滚动条偏移量
      */
     const scrollToOffset = (offset: number) => {
-        if (rootRef.value) {
-            rootRef.value.scrollTop = offset
-        }
+      if (rootRef.value) {
+        rootRef.value.scrollTop = offset
+      }
     }
 
     /**
@@ -208,7 +198,7 @@ export default defineComponent({
       const { data, dataKey, item } = props
       for (let index = start; index <= end; index++) {
         const dataSource = data[index] as DataSource // 获取当前索引的数据项
-        if (dataSource) { 
+        if (dataSource) {
           // 取这个项里面的唯一标识拿来做key
           const uniqueKey = typeof dataKey === 'function' ? dataKey(dataSource) : dataSource[dataKey]
           // 如果唯一标识是字符串或者数字则渲染
@@ -286,10 +276,8 @@ export default defineComponent({
       const { padFront, padBehind } = range.value!
       return (
         <div ref={rootRef} onScroll={onScroll}>
-          <div style={{padding: `${padFront}px 0px ${padBehind}px`}}>
-            {getRenderSlots()}
-          </div>
-          <div ref={shepherd} style={{ width: '100%', height: '0px' }}/>
+          <div style={{ padding: `${padFront}px 0px ${padBehind}px` }}>{getRenderSlots()}</div>
+          <div ref={shepherd} style={{ width: '100%', height: '0px' }} />
         </div>
       )
     }

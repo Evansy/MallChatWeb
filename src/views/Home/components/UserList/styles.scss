@@ -23,7 +23,7 @@
   }
 
   &-mask {
-    transition: background-color .3s ease;
+    transition: background-color 0.3s ease;
 
     &.show {
       position: fixed;
@@ -31,7 +31,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: rgba($color: #000, $alpha: .5);
+      background-color: rgba($color: #000, $alpha: 0.5);
     }
   }
 
@@ -101,7 +101,7 @@
     top: 0;
     right: -16px;
     bottom: 16px;
-    transition: transform .3s ease;
+    transition: transform 0.3s ease;
     transform: translateX(100%);
 
     &.show {

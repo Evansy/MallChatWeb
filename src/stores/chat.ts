@@ -67,7 +67,7 @@ export const useChatStore = defineStore('chat', () => {
     await getMsgList()
   }
 
-  const clearNewMsgCount = () => { 
+  const clearNewMsgCount = () => {
     newMsgCount.value = 0
   }
 
