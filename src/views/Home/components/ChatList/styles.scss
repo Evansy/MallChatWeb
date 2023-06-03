@@ -66,6 +66,10 @@
   border-radius: 12px;
   cursor: pointer;
   background-color: var(--color-gray-bg);
+
+  &:hover {
+    background-color: var(--color-primary);
+  }
 }
 
 .virtual-list {
