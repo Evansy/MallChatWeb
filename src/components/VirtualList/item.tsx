@@ -66,12 +66,15 @@ export default defineComponent({
     })
 
     return () => {
-      const { component: Comp, index, source, uniqueKey } = props
+      const { component: Comp, index, source: msg, uniqueKey } = props
       // 渲染出传入自定义组件项-这里的Comp就是传入的自定义组件 (ts-ignore避免类型警告)
       return (
         <div key={uniqueKey} ref={rootRef}>
             {/* @ts-ignore */}
-          <Comp {...{source,index}} />
+          <Comp  
+            bubble-mode="spread" 
+            {...{msg,index}} 
+          />
         </div>
       )
     }

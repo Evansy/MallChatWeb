@@ -4,7 +4,7 @@ import throttle from 'lodash/throttle'
 import { useChatStore } from '@/stores/chat'
 import type { MessageItemType } from '@/services/types'
 import VirtualList from '@/components/VirtualList/index';
-import Item from './item.vue';
+import MsgItem from './MsgItem/index.vue'
 
 const chatStore = useChatStore()
 const virtualListRef = ref();
@@ -64,7 +64,7 @@ const getKey = (item: MessageItemType) => item.message.id;
       class="virtual-list"
       :data="chatStore.chatMessageList"
       :data-key="getKey"
-      :item="Item"
+      :item="MsgItem"
       :size="20"
       @totop="onTotop"
       @scroll="onScroll"
