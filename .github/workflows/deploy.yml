@@ -7,7 +7,7 @@ on:
 # 要执行的任务
 jobs:
   # 任务名称
-  build:
+  build_and_deploy:
     # runs-on 指定job任务运行所需要的虚拟机环境（必填）
     runs-on: ubuntu-latest
     # 任务步骤
@@ -34,6 +34,15 @@ jobs:
       # 打包
       - name: 打包
         run: pnpm build
+      # 部署到 github pages
+      - name: 部署到 Github Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.PAGES_DEPLOY_GITHUB_KEY }}
+          external_repository: Evansy/mallchat.github.io
+          publish_branch: main # default: gh-pages
+          publish_dir: ./dist
+          cname: mallchat.cn
       # 上传打包文件到远程服务器
       - name: 上传文件到远程服务器
         uses: zhenyuWang/Upload-File-Action@v1.0.1
