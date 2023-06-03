@@ -1,40 +1,78 @@
-.list {
+.chat-message {
   display: none;
-  list-style-type: none;
-  padding-left: 10px;
-  padding-right: 20px;
+  margin: 20px 10px;
+  padding: 4px;
+  overflow-y: auto;
+
+  &-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 280px;
+    height: 60px;
+    border-radius: 8px;
+    color: var(--el-color-info-light-7);
+    background-color: var(--color-gray-bg);
+    padding: 12px 10px;
+    cursor: pointer;
+    
+    .el-avatar {
+      flex: none;
+    }
+
+    .message-info {
+      margin-right: auto;
+      padding: 0 10px;
+
+      .person {
+        font-size: 14px;
+      }
+
+      .tag {
+        display: inline-block;
+        font-size: 12px;
+        transform: scale(0.8);
+        font-weight: bold;
+        color: #c59512;
+        background-color: #EFE2BB;
+        border-radius: 4px;
+        padding: 1px 4px;
+        margin-left: 4px;
+      }
+
+      .message-message {
+        font-size: 12px;
+        color: var(--font-light);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+      }
+    }
+
+    .message-time {
+      font-size: 12px;
+      color: var(--font-light);
+    }
+  
+    &:hover {
+      background-color: #484d5f;
+      transition: .3s;
+    }
+    &:not(:first-child) {
+      margin-top: 4px;
+    }
+
+    &.active {
+      background-color: var(--vt-c-indigo);
+    }
+  }
 }
 
 @media only screen and (min-width: 1400px) {
-  .list {
+  .chat-message {
     display: block;
   }
-}
-
-.item {
-  width: 250px;
-  height: 80px;
-  border-radius: 8px;
-  background-color: var(--color-gray-bg);
-  position: relative;
-  margin: 24px 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  padding: 0 24px;
-
-  &.active,
-  &:hover {
-    background-color: var(--color-primary);
-    transition: .3s;
-    box-shadow: 0 0 10px 0 #08f;
-  }
-}
-
-.item-avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  position: relative;
-  margin-right: 20px;
 }
