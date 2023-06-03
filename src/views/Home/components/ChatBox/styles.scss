@@ -37,8 +37,9 @@
     color: var(--font-light);
     display: flex;
     align-items: center;
-    column-gap: 20px;
-    margin-right: 60px;
+    column-gap: 12px;
+    word-wrap: break-word;
+    white-space: pre-wrap;
   }
 
   .reply-msg-content {

@@ -116,7 +116,9 @@ onMounted(()=>{
         v-if="msg.message.reply"
         class="chat-item-reply"
       >
-        {{ msg.message.reply.username }}: {{ msg.message.reply.content }}
+        <span class="ellipsis">
+          {{ msg.message.reply.username }}: {{ msg.message.reply.content }}
+        </span>
       </div>
     </div>
   </div>
