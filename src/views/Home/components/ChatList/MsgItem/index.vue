@@ -73,7 +73,7 @@ onMounted(() => {
     if (renderMsgRef.value && boxRef.value) {
       const renderMsgWidth = renderMsgRef.value.clientWidth
       const boxWidth = boxRef.value.clientWidth
-      if (renderMsgWidth + 85 <= boxWidth) {
+      if (renderMsgWidth + 100 <= boxWidth) {
         tooltipPlacement.value = 'right-end'
       } else if (props.msg.message.reply) {
         tooltipPlacement.value = 'top-end'
