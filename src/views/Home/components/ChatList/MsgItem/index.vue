@@ -116,7 +116,7 @@ onMounted(() => {
         :offset="0"
         :hide-after="0"
         :show-arrow="false"
-        :appendToBody="false"
+        :teleported="false"
       >
         <template #content>
           <MsgOption :msg="msg" />
