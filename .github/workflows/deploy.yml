@@ -34,15 +34,6 @@ jobs:
       # 打包
       - name: 打包
         run: pnpm build
-      # 部署到 github pages
-      - name: 部署到 Github Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          personal_token: ${{ secrets.PAGES_DEPLOY_GITHUB_KEY }}
-          external_repository: Evansy/mallchat.github.io
-          publish_branch: main # default: gh-pages
-          publish_dir: ./dist
-          cname: mallchat.cn
       # 上传打包文件到远程服务器
       - name: 上传文件到远程服务器
         uses: zhenyuWang/Upload-File-Action@v1.0.1
