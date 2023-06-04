@@ -20,8 +20,8 @@ const toggleGroupListShow = () => (groupStore.showGroupList = !groupStore.showGr
 </script>
 
 <template>
-  <aside class="side_toolbar">
-    <ElAvatar size="large" class="side_toolbar_avatar" :src="avatar || defaultAvatar" v-login="showSettingBox" />
+  <aside class="side-toolbar">
+    <ElAvatar size="large" class="side-toolbar-avatar" :src="avatar || defaultAvatar" v-login="showSettingBox" />
 
     <div class="operate-icons">
       <a

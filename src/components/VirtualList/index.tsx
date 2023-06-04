@@ -61,6 +61,15 @@ export default defineComponent({
       type: Number,
       default: 0,
     },
+    // Item项的Props
+    itemProps: {
+      type: Object,
+    },
+    // 指定用什么名字传递数据
+    dataPropName: {
+      type: String,
+      default: 'source',
+    },
   },
   setup(props, { emit, expose }) {
     const range = ref<Range | null>(null)
@@ -195,7 +204,7 @@ export default defineComponent({
     const getRenderSlots = () => {
       const slots = []
       const { start, end } = range.value! // 解构获取范围的起始、结束索引
-      const { data, dataKey, item } = props
+      const { data, dataKey, item, itemProps, dataPropName } = props
       for (let index = start; index <= end; index++) {
         const dataSource = data[index] as DataSource // 获取当前索引的数据项
         if (dataSource) {
@@ -209,6 +218,8 @@ export default defineComponent({
                 uniqueKey={uniqueKey}
                 source={dataSource}
                 component={item}
+                itemProps={itemProps}
+                dataPropName={dataPropName}
                 onItemResize={onItemResized}
               />,
             )
@@ -255,6 +266,7 @@ export default defineComponent({
       } else if (props.offset) {
         scrollToOffset(props.offset)
       }
+      emit('ok')
     })
 
     onUnmounted(() => {

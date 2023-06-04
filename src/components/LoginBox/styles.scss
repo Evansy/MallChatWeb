@@ -1,56 +1,52 @@
-// :deep {
-//   .el-dialog {
-//     border-radius: 8px !important;
-//   }
-// }
-
-:global(.login_box_modal) {
+/* stylelint-disable selector-class-pattern */
+/* stylelint-disable selector-pseudo-class-no-unknown */
+:global(.login-box-modal) {
   border-radius: 8px !important;
 }
 
-:global(.login_box_modal .el-dialog__header) {
+:global(.login-box-modal .el-dialog--header) {
   padding: 0;
 }
 
-:global(.login_box_modal .el-dialog__headerbtn) {
+:global(.login-box-modal .el-dialog--headerbtn) {
   z-index: 5;
 }
 
-.login_box {
+.login-box {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.login_qrcode_wrapper {
+.login-qrcode-wrapper {
   width: 328px;
   height: 328px;
 }
 
-.login_logo {
+.login-logo {
   width: 100px;
   border-radius: 8px;
 }
 
-.login_slogan {
+.login-slogan {
   margin-top: 12px;
   margin-bottom: 16px;
-  color: rgba(0, 0, 0, 0.45);
   font-size: 14px;
+  color: rgb(0 0 0 / 45%);
 }
 
-.login_desc {
-  height: 32px;
-  margin-top: 16px;
+.login-desc {
   display: flex;
   align-items: center;
+  height: 32px;
+  margin-top: 16px;
 }
 
-.login_desc_icon {
+.login-desc-icon {
   margin-right: 8px;
 }
 
-.login_desc_bold {
+.login-desc-bold {
   font-weight: bold;
   color: #2aae67;
 }

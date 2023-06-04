@@ -1,45 +1,31 @@
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
-  --vt-c-white: #ffffff;
+  --vt-c-white: #fff;
   --vt-c-white-soft: #f8f8f8;
   --vt-c-white-mute: #f2f2f2;
-
   --vt-c-black: #181818;
-  --vt-c-black-soft: #222222;
+  --vt-c-black-soft: #222;
   --vt-c-black-mute: #282828;
-
   --vt-c-indigo: #2c3e50;
-
-  --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
-  --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
-  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
-  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
-
+  --vt-c-divider-light-1: rgb(60 60 60 / 29%);
+  --vt-c-divider-light-2: rgb(60 60 60 / 12%);
+  --vt-c-divider-dark-1: rgb(84 84 84 / 65%);
+  --vt-c-divider-dark-2: rgb(84 84 84 / 48%);
   --vt-c-text-light-1: var(--vt-c-indigo);
-  --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
+  --vt-c-text-light-2: rgb(60 60 60 / 66%);
   --vt-c-text-dark-1: var(--vt-c-white);
-  --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
-}
-
-/* semantic color variables for this project */
-:root {
+  --vt-c-text-dark-2: rgb(235 235 235 / 64%);
   --color-background: var(--vt-c-white);
   --color-background-soft: var(--vt-c-white-soft);
   --color-background-mute: var(--vt-c-white-mute);
-
-  --color-background-black-mute: rgba(255, 255, 255, 0.2);
-
+  --color-background-black-mute: rgb(255 255 255 / 20%);
   --color-border: var(--vt-c-divider-light-2);
   --color-border-hover: var(--vt-c-divider-light-1);
-
   --color-heading: var(--vt-c-text-light-1);
   --color-text: var(--vt-c-text-light-1);
-
   --section-gap: 160px;
-
   --color-primary: #1d90f5;
   --color-primary-hover: var(--el-color-primary);
-
   --color-dark-bg: #272a37;
   --color-gray-bg: #323644;
   --font-white: #fff;
@@ -53,10 +39,8 @@
     --color-background: var(--vt-c-black);
     --color-background-soft: var(--vt-c-black-soft);
     --color-background-mute: var(--vt-c-black-mute);
-
     --color-border: var(--vt-c-divider-dark-2);
     --color-border-hover: var(--vt-c-divider-dark-1);
-
     --color-heading: var(--vt-c-text-dark-1);
     --color-text: var(--vt-c-text-dark-2);
   }
@@ -65,23 +49,23 @@
 *,
 *::before,
 *::after {
+  position: relative;
   box-sizing: border-box;
   margin: 0;
-  position: relative;
   font-weight: normal;
 }
 
 body {
   min-height: 100vh;
-  color: var(--color-text);
-  background: var(--color-background);
-  transition: color 0.5s, background-color 0.5s;
-  line-height: 1.5;
+  padding: 0;
   font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans',
     'Droid Sans', 'Helvetica Neue', sans-serif;
   font-size: 15px;
-  padding: 0;
-  text-rendering: optimizeLegibility;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: var(--color-background);
+  transition: color 0.5s, background-color 0.5s;
+  text-rendering: optimizelegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -90,23 +74,24 @@ a:link,
 a:visited {
   color: #fff;
   text-decoration: none;
-  transition: color 0.3s ease;
   cursor: pointer;
+  transition: color 0.3s ease;
 }
 
 a:hover,
 a:active {
-  cursor: pointer;
   color: var(--color-primary);
+  cursor: pointer;
 }
 
 .msg-content-link {
-  font-size: 14px;
   display: inline-block;
-  margin-left: 4px;
   margin-right: 4px;
+  margin-left: 4px;
+  font-size: 14px;
 }
+
 .msg-content-link:hover {
-  color: currentColor;
+  color: currentcolor;
   text-decoration: underline;
 }
