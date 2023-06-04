@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, type PropType } from 'vue'
+import { computed, nextTick, onMounted, ref, type Ref, type PropType, inject } from 'vue'
 import ContextMenu from '@imengyu/vue3-context-menu'
 import { useUserStore } from '@/stores/user'
+import { useChatStore, pageSize } from '@/stores/chat'
 import { formatTimestamp } from '@/utils/computedTime'
-import type { MessageItemType } from '@/services/types'
+import type { MessageItemType, MessageItemContentType } from '@/services/types'
 import defaultAvatar from '@/assets/avatars/default.png'
 import RenderMsg from '@/components/RenderMsg'
 import MsgOption from '../MsgOption/index.vue'
@@ -39,6 +40,7 @@ const props = defineProps({
 })
 
 const userStore = useUserStore()
+const chatStore = useChatStore()
 const myBadge = computed(() => userStore?.userInfo.badge)
 const isCurrentUser = computed(() => props.msg?.fromUser.uid === userStore?.userInfo.uid)
 const chatCls = computed(() => ({
@@ -50,6 +52,28 @@ const chatCls = computed(() => ({
 const renderMsgRef = ref<HTMLElement | null>(null)
 const boxRef = ref<HTMLElement | null>(null)
 const tooltipPlacement = ref()
+const virtualListRef = inject<Ref>('virtualListRef')
+
+// 滚动到消息
+const scrollToMsg = async (msg: MessageItemContentType) => {
+  const { reply, id } = msg
+  // 不允许跳转不跳转，目前是 100 条(后端配置)以内允许跳转
+  if (!reply || !reply.canCallback) return
+  // 如果消息已经加载过了，就直接跳转
+  const index = chatStore.getMsgIndex(reply.id)
+  if (index > -1) {
+    virtualListRef?.value?.scrollToIndex(index)
+  } else {
+    // 如果没有加载过，就先加载，然后跳转
+    const curMsgIndex = chatStore.getMsgIndex(id)
+    // 先计算大概要加载多少个 pageSize 固定倍数的。
+    const needLoadPageSize = Math.ceil((reply.gapCount - curMsgIndex) / pageSize) * pageSize
+    // 加载数据
+    await chatStore.loadMore(needLoadPageSize)
+    // 跳转
+    setTimeout(virtualListRef?.value?.scrollToIndex(chatStore.getMsgIndex(reply.id)), 0)
+  }
+}
 
 /** 右键菜单 */
 function handleRightClick(e: MouseEvent, msg: MessageItemType) {
@@ -125,7 +149,13 @@ onMounted(() => {
           <RenderMsg :text="msg.message.content.trim()" :url-map="msg.message.urlTitleMap" :is-me="isCurrentUser" />
         </div>
       </el-tooltip>
-      <div v-if="msg.message.reply" class="chat-item-reply">
+      <div
+        v-if="msg.message.reply"
+        class="chat-item-reply"
+        :class="{ pointer: msg.message.reply.canCallback }"
+        @click="scrollToMsg(msg.message)"
+      >
+        <i class="can-scroll-icon" v-if="msg.message.reply.canCallback" />
         <span class="ellipsis"> {{ msg.message.reply.username }}: {{ msg.message.reply.content }} </span>
       </div>
     </div>
@@ -136,10 +166,10 @@ onMounted(() => {
 
 <style lang="scss">
 .option-tooltip {
-  color: #fff;
-  padding: 0;
-  border: none !important;
-  background: none !important;
   z-index: 3;
+  padding: 0;
+  color: #fff;
+  background: none !important;
+  border: none !important;
 }
 </style>

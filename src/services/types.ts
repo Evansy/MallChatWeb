@@ -70,6 +70,77 @@ export enum MessageType {
   Danger,
 }
 
+export type MessageReplyType = {
+  /**
+   * 是否可消息跳转 0否 1是
+   */
+  canCallback: number
+  /**
+   * 是否可消息跳转 0否 1是
+   */
+  content: string
+  /**
+   * 跳转间隔的消息条数
+   */
+  gapCount: number
+  /**
+   * 消息id
+   */
+  id: number
+  /**
+   * 用户名称
+   */
+  username: string
+}
+
+export type MessageItemContentType = {
+  /**
+   * 消息内容
+   */
+  content: string
+  /**
+   * 消息id
+   */
+  id: number
+  /**
+   * 消息标记
+   */
+  messageMark: {
+    /**
+     * 点赞数
+     */
+    likeCount: number
+    /**
+     * 该用户是否已经点赞 0否 1是
+     */
+    userLike: IsYet
+    /**
+     * 点赞数
+     */
+    dislikeCount: number
+    /**
+     * 到赞数
+     */
+    userDislike: IsYet
+  }
+  /**
+   * 父消息，如果没有父消息，返回的是null
+   */
+  reply: MessageReplyType | null
+  /**
+   * 消息发送时间
+   */
+  sendTime: number
+  /**
+   * 消息类型 1正常文本 2.爆赞 （点赞超过10）3.危险发言（举报超5）
+   */
+  type: MessageType
+  /**
+   * 消息中的链接
+   */
+  urlTitleMap: Record<string, string>
+}
+
 export type MessageItemType = {
   /**
    * 发送者信息
@@ -108,74 +179,8 @@ export type MessageItemType = {
   /**
    * 消息详情
    */
-  message: {
-    /**
-     * 消息内容
-     */
-    content: string
-    /**
-     * 消息id
-     */
-    id: number
-    /**
-     * 消息标记
-     */
-    messageMark: {
-      /**
-       * 点赞数
-       */
-      likeCount: number
-      /**
-       * 该用户是否已经点赞 0否 1是
-       */
-      userLike: IsYet
-      /**
-       * 点赞数
-       */
-      dislikeCount: number
-      /**
-       * 到赞数
-       */
-      userDislike: IsYet
-    }
-    /**
-     * 父消息，如果没有父消息，返回的是null
-     */
-    reply: {
-      /**
-       * 是否可消息跳转 0否 1是
-       */
-      canCallback: number
-      /**
-       * 是否可消息跳转 0否 1是
-       */
-      content: string
-      /**
-       * 跳转间隔的消息条数
-       */
-      gapCount: number
-      /**
-       * 消息id
-       */
-      id: number
-      /**
-       * 用户名称
-       */
-      username: string
-    } | null
-    /**
-     * 消息发送时间
-     */
-    sendTime: number
-    /**
-     * 消息类型 1正常文本 2.爆赞 （点赞超过10）3.危险发言（举报超5）
-     */
-    type: MessageType
-    /**
-     * 消息中的链接
-     */
-    urlTitleMap: Record<string, string>
-  }
+  message: MessageItemContentType
+
   // 是否显示时间，有值才显示
   timeBlock?: string
 }
