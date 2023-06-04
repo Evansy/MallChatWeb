@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+. "$(dirname -- "$0")/common.sh"
+
+pnpm type-check
+pnpm lint:style
+pnpm link:format
+pnpm link:lint-staged

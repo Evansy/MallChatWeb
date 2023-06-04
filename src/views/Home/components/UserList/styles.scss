@@ -1,19 +1,20 @@
 .user-list {
-  list-style-type: none;
-  margin-top: 8px;
-  margin: 0;
-  padding: 0;
-  flex: 1;
   display: flex;
-  row-gap: 2px;
-
-  align-items: flex-start;
+  flex: 1;
   flex-direction: column;
+  row-gap: 2px;
+  align-items: flex-start;
+  padding: 0;
+  margin: 0;
+  margin-top: 8px;
   overflow: hidden;
-  // 取消滚动链接
-  overscroll-behavior-y: contain;
   overflow-y: auto;
 
+  // 取消滚动链接
+  overscroll-behavior-y: contain;
+  list-style-type: none;
+
+  /* stylelint-disable-next-line selector-pseudo-class-no-unknown */
   :deep(.el-loading-mask) {
     background-color: var(--color-background-black-mute);
   }
@@ -27,11 +28,8 @@
 
     &.show {
       position: fixed;
-      top: 66px;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba($color: #000, $alpha: 0.5);
+      inset: 66px 0 0;
+      background-color: rgba($color: #000, $alpha: 50%);
     }
   }
 
@@ -39,10 +37,11 @@
     display: flex;
     align-items: center;
     width: 100%;
-    filter: grayscale(1);
     padding: 5px 2px;
-    border-radius: 4px;
     cursor: default;
+    filter: grayscale(1);
+    border-radius: 4px;
+
     // content-visibility: auto;
 
     &:hover {
@@ -55,11 +54,11 @@
   }
 
   .list-no-data {
-    width: 100%;
-    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    height: 100%;
     font-size: 14px;
     color: var(--font-light);
   }
@@ -83,24 +82,23 @@
     display: block;
     width: 24px;
     height: 24px;
-    border-radius: 50%;
-    border: 1px solid #fff;
     margin-right: 8px;
+    border: 1px solid #fff;
+    border-radius: 50%;
   }
 
   &-wrapper {
-    width: 200px;
-    height: 100%;
-    padding: 8px 12px;
-    border-radius: 8px;
-    background-color: var(--color-gray-bg);
-    display: flex;
-    flex-direction: column;
-
     position: absolute;
     top: 0;
     right: -16px;
     bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    height: 100%;
+    padding: 8px 12px;
+    background-color: var(--color-gray-bg);
+    border-radius: 8px;
     transition: transform 0.3s ease;
     transform: translateX(100%);
 
@@ -115,19 +113,20 @@
 }
 
 .list-last-visible-el {
+  z-index: 10;
+  display: none;
   width: 100%;
   height: 1px;
   line-height: 1px;
-  z-index: 10;
   pointer-events: none;
-  display: none;
 }
 
-@media only screen and (min-width: 640px) {
+@media only screen and (width >=640px) {
   .user-list-wrapper {
     position: relative;
     top: 0;
     right: 0;
+
     // right: -200px;
     transform: translateX(0);
 
@@ -139,9 +138,9 @@
   .user-list-mask.show {
     position: relative;
     top: initial;
-    left: initial;
     right: initial;
     bottom: initial;
+    left: initial;
     background-color: transparent;
   }
 }

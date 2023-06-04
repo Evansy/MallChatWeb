@@ -1,6 +1,6 @@
 .chat-item {
-  display: flex;
   position: relative;
+  display: flex;
   width: 100%;
   padding-bottom: 20px;
 
@@ -11,10 +11,10 @@
     img {
       width: 100%;
       height: 100%;
-      border-radius: 50%;
-      user-select: none;
-      -webkit-user-drag: none;
       cursor: pointer;
+      user-select: none;
+      border-radius: 50%;
+      -webkit-user-drag: none;
     }
   }
 
@@ -25,11 +25,11 @@
 
   &-user-info {
     display: flex;
+    column-gap: 4px;
     align-items: center;
+    margin-bottom: 8px;
     font-size: 12px;
     color: #999;
-    margin-bottom: 8px;
-    column-gap: 4px;
     white-space: nowrap;
 
     .user-name:hover {
@@ -40,8 +40,8 @@
     .user-badge {
       width: 18px;
       height: 18px;
-      user-select: none;
       cursor: pointer;
+      user-select: none;
     }
 
     .send-time {
@@ -55,15 +55,16 @@
     width: fit-content;
     min-height: 1em;
     padding: 8px 12px;
-    border-radius: 5px 20px 20px 20px;
-    background-color: #383c4b;
     color: #fff;
     word-break: break-word;
     white-space: pre-line;
+    background-color: #383c4b;
+    border-radius: 5px 20px 20px;
   }
 
   &-option {
     position: absolute;
+
     // display: none;
     top: -20px;
     right: 0;
@@ -74,17 +75,18 @@
     width: fit-content;
     margin-top: 4px;
     margin-right: auto;
+
     .ellipsis {
       display: -webkit-inline-box;
+      padding: 4px 12px;
+      overflow: hidden;
+      font-size: 12px;
+      color: var(--font-light);
+      text-overflow: ellipsis;
+      background-color: #424656;
+      border-radius: 8px;
       -webkit-line-clamp: 4;
       -webkit-box-orient: vertical;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-size: 12px;
-      padding: 4px 12px;
-      border-radius: 8px;
-      color: var(--font-light);
-      background-color: #424656;
     }
   }
 }
@@ -111,13 +113,15 @@
       order: 3;
     }
   }
+
   .chat-item-content {
     margin-left: auto;
     border-radius: 20px 5px 20px 20px;
   }
+
   .chat-item-reply {
-    margin-left: auto;
     margin-right: 0;
+    margin-left: auto;
   }
 }
 
@@ -125,6 +129,7 @@
   .send-time {
     display: inline-block;
   }
+
   .chat-item-option {
     display: inline-flex;
   }
@@ -133,8 +138,8 @@
 .send-time-block {
   display: inline-block;
   width: 100%;
-  font-size: 12px;
   margin-bottom: 12px;
+  font-size: 12px;
   color: var(--font-light);
   text-align: center;
   user-select: none;

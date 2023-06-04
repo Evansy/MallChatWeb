@@ -26,20 +26,20 @@ watchEffect(() => {
 </script>
 
 <template>
-  <ElDialog class="login_box_modal" :width="376" v-model="visible" center>
-    <div class="login_box">
-      <img class="login_logo" src="@/assets/logo.jpeg" alt="MallChat" />
-      <p class="login_slogan">边聊边买，岂不快哉~</p>
-      <div class="login_qrcode_wrapper" v-loading="!loginQrCode">
-        <QrCode class="login_qrcode" v-if="loginQrCode" :value="loginQrCode" :size="328" :margin="5" />
+  <ElDialog class="login-box-modal" :width="376" v-model="visible" center>
+    <div class="login-box">
+      <img class="login-logo" src="@/assets/logo.jpeg" alt="MallChat" />
+      <p class="login-slogan">边聊边买，岂不快哉~</p>
+      <div class="login-qrcode-wrapper" v-loading="!loginQrCode">
+        <QrCode class="login-qrcode" v-if="loginQrCode" :value="loginQrCode" :size="328" :margin="5" />
       </div>
 
-      <p class="login_desc" v-if="loginStatus === LoginStatus.Waiting">
-        <ElIcon :size="32" class="login_desc_icon" color="#67c23a"><IEpSuccessFilled /></ElIcon>
+      <p class="login-desc" v-if="loginStatus === LoginStatus.Waiting">
+        <ElIcon :size="32" class="login-desc-icon" color="#67c23a"><IEpSuccessFilled /></ElIcon>
         扫码成功~，点击“登录”继续登录
       </p>
-      <p class="login_desc" v-if="loginStatus === LoginStatus.Init">
-        使用「<strong class="login_desc_bold">微信</strong>」扫描二维码登录~~
+      <p class="login-desc" v-if="loginStatus === LoginStatus.Init">
+        使用「<strong class="login-desc-bold">微信</strong>」扫描二维码登录~~
       </p>
     </div>
   </ElDialog>
