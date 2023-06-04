@@ -4,9 +4,9 @@
   &-item {
     display: inline-flex;
     align-items: center;
+    margin-right: 4px;
     font-size: 12px;
     line-height: 12px;
-    margin-right: 4px;
     cursor: pointer;
   }
 
@@ -14,34 +14,34 @@
     display: inline-block;
     width: 22px;
     height: 22px;
-    border-radius: 50%;
-    background-size: 14px;
-    background-position: center;
     background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14px;
+    border-radius: 50%;
   }
 
   .icon:hover {
-    background-color: rgba($color: #fff, $alpha: 0.2);
+    background-color: rgba($color: #fff, $alpha: 20%);
   }
 
   .reply {
-    background-image: url(@/assets/icons/icon_reply.svg);
+    background-image: url('@/assets/icons/icon_reply.svg');
   }
 
   .like {
-    background-image: url(@/assets/icons/icon_like.svg);
+    background-image: url('@/assets/icons/icon_like.svg');
   }
 
   .like-active {
-    background-image: url(@/assets/icons/icon_liked.svg);
+    background-image: url('@/assets/icons/icon_liked.svg');
   }
 
   .dislike {
+    background-image: url('@/assets/icons/icon_like.svg');
     transform: rotate(180deg);
-    background-image: url(@/assets/icons/icon_like.svg);
   }
 
   .dislike-active {
-    background-image: url(@/assets/icons/icon_liked.svg);
+    background-image: url('@/assets/icons/icon_liked.svg');
   }
 }
