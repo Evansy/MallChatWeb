@@ -140,7 +140,12 @@ const insertText = (emoji: string) => {
                   <button class="emoji-button">😊</button>
                 </template>
                 <ul class="emoji-list">
-                  <li class="emoji-item" v-for="(emoji, $index) of emojis" :key="$index" @click="insertText(emoji)">
+                  <li
+                    class="emoji-item"
+                    v-for="(emoji, $index) of emojis"
+                    :key="$index"
+                    v-login="() => insertText(emoji)"
+                  >
                     {{ emoji }}
                   </li>
                 </ul>
