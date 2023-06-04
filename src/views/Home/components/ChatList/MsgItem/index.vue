@@ -66,12 +66,13 @@ const scrollToMsg = async (msg: MessageItemContentType) => {
   } else {
     // 如果没有加载过，就先加载，然后跳转
     const curMsgIndex = chatStore.getMsgIndex(id)
-    // 先计算大概要加载多少个 pageSize 固定倍数的。
-    const needLoadPageSize = Math.ceil((reply.gapCount - curMsgIndex) / pageSize) * pageSize
+    // +1 是在 reply.gapCount - curMsgIndex 刚好是 pageSize 倍数的时候，跳转到的是第一条消息，会触发加载更多，样式会乱掉
+    const needLoadPageSize = Math.ceil((reply.gapCount - curMsgIndex + 1) / pageSize) * pageSize
     // 加载数据
     await chatStore.loadMore(needLoadPageSize)
     // 跳转
-    setTimeout(virtualListRef?.value?.scrollToIndex(chatStore.getMsgIndex(reply.id)), 0)
+    setTimeout(virtualListRef?.value?.scrollToIndex(chatStore.getMsgIndex(reply.id), true), 0)
+    // TODO 跳转到的消息 高亮一下
   }
 }
 

@@ -84,6 +84,10 @@
     background-color: #424656;
     border-radius: 8px;
 
+    &.pointer {
+      cursor: pointer;
+    }
+
     .ellipsis {
       display: -webkit-inline-box;
       text-overflow: ellipsis;
@@ -124,10 +128,6 @@
   .chat-item-reply {
     margin-right: 0;
     margin-left: auto;
-
-    &.pointer {
-      cursor: pointer;
-    }
   }
 }
 
