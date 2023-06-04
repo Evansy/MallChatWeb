@@ -3,7 +3,7 @@ name: build and deploy MallChat
 on:
   push:
     branches:
-      - main
+      - env/test
 # 要执行的任务
 jobs:
   # 任务名称
@@ -39,19 +39,11 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.PAGES_DEPLOY_GITHUB_KEY }}
+          # 部署的目标仓库
           external_repository: Evansy/mallchat.github.io
+          # 部署的目标分支
           publish_branch: main # default: gh-pages
+          # 部署的源目录
           publish_dir: ./dist
-          cname: mallchat.cn
-      # 上传打包文件到远程服务器
-      - name: 上传文件到远程服务器
-        uses: zhenyuWang/Upload-File-Action@v1.0.1
-        with:
-          username: 'root'
-          server: ${{ secrets.DEPLOY_SERVER_HOST }}
-          port: ${{ secrets.DEPLOY_SERVER_PORT }}
-          ssh_private_key: ${{ secrets.DEPLOY_KEY}}
-          # 要上传文件所在目录
-          local_path: './dist/*'
-          # 远程服务器目标路径
-          target_path: '/www/wwwroot/www.mallchat.cn'
+          # 部署默认的 CNAME 文件内容
+          cname: test.mallchat.cn
