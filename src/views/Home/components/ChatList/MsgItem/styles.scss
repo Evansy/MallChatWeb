@@ -72,19 +72,21 @@
   }
 
   &-reply {
+    display: flex;
+    align-items: center;
     width: fit-content;
+    padding: 4px 12px;
     margin-top: 4px;
     margin-right: auto;
+    overflow: hidden;
+    font-size: 12px;
+    color: var(--font-light);
+    background-color: #424656;
+    border-radius: 8px;
 
     .ellipsis {
       display: -webkit-inline-box;
-      padding: 4px 12px;
-      overflow: hidden;
-      font-size: 12px;
-      color: var(--font-light);
       text-overflow: ellipsis;
-      background-color: #424656;
-      border-radius: 8px;
       -webkit-line-clamp: 4;
       -webkit-box-orient: vertical;
     }
@@ -122,6 +124,10 @@
   .chat-item-reply {
     margin-right: 0;
     margin-left: auto;
+
+    &.pointer {
+      cursor: pointer;
+    }
   }
 }
 
@@ -147,4 +153,14 @@
 
 .is-me .chat-item-content {
   background-color: var(--color-primary);
+}
+
+.can-scroll-icon {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 4px;
+  background-image: url('@/assets/operate-icons/to_top.svg');
+  background-position: center;
+  background-size: contain;
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted, nextTick, provide } from 'vue'
 import throttle from 'lodash/throttle'
 import { useChatStore } from '@/stores/chat'
 import type { MessageItemType } from '@/services/types'
@@ -16,6 +16,9 @@ const goToBottom = () => {
     chatStore.clearNewMsgCount()
   }
 }
+
+// 提供虚拟列表 ref 给子组件使用
+provide('virtualListRef', virtualListRef)
 
 onMounted(() => {
   nextTick(() => {

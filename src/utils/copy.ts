@@ -7,12 +7,10 @@ export function copyToClip(text: string) {
       input.style.zIndex = '-1'
       document.body.appendChild(input)
       input.select()
-      if (document.execCommand('copy'))
-        document.execCommand('copy')
+      if (document.execCommand('copy')) document.execCommand('copy')
       document.body.removeChild(input)
       resolve(text)
-    }
-    catch (error) {
+    } catch (error) {
       reject(error)
     }
   })
