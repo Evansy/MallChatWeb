@@ -1,4 +1,8 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
 
 dependencies:
   '@alova/scene-vue':
@@ -7,6 +11,9 @@ dependencies:
   '@element-plus/icons-vue':
     specifier: ^2.1.0
     version: registry.npmmirror.com/@element-plus/icons-vue@2.1.0(vue@3.2.47)
+  '@imengyu/vue3-context-menu':
+    specifier: ^1.2.10
+    version: registry.npmmirror.com/@imengyu/vue3-context-menu@1.2.10
   alova:
     specifier: ^2.3.0
     version: registry.npmmirror.com/alova@2.3.0
@@ -870,6 +877,12 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  registry.npmmirror.com/@imengyu/vue3-context-menu@1.2.10:
+    resolution: {integrity: sha512-L+qIoqcewQ8SPk2PMvsaMD9HWxFouij0JAqYwn19Fz7giqz0rLpWMf9aJRpQ3ysOySEKPdilg8dLYYB96QmGHA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@imengyu/vue3-context-menu/-/vue3-context-menu-1.2.10.tgz}
+    name: '@imengyu/vue3-context-menu'
+    version: 1.2.10
+    dev: false
 
   registry.npmmirror.com/@jridgewell/gen-mapping@0.3.3:
     resolution: {integrity: sha512-HLhSWOLRi875zjjMG/r+Nv0oCW8umGb0BgEhyX3dDX3egwZtB8PqLnjz3yedt8R5StBrzcg4aBpnh8UA9D1BoQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@jridgewell/gen-mapping/-/gen-mapping-0.3.3.tgz}

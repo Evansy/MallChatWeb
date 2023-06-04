@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref, type PropType } from 'vue'
+import ContextMenu from '@imengyu/vue3-context-menu'
 import { useUserStore } from '@/stores/user'
 import { formatTimestamp } from '@/utils/computedTime'
 import type { MessageItemType } from '@/services/types'
-import type { PropType } from 'vue'
 import defaultAvatar from '@/assets/avatars/default.png'
 import RenderMsg from '@/components/RenderMsg'
 import MsgOption from '../MsgOption/index.vue'
 import type { TooltipTriggerType } from 'element-plus/es/components/tooltip/src/trigger'
+import { copyToClip } from '@/utils/copy'
 
 const props = defineProps({
   // 消息体
@@ -49,6 +50,23 @@ const chatCls = computed(() => ({
 const renderMsgRef = ref<HTMLElement | null>(null)
 const boxRef = ref<HTMLElement | null>(null)
 const tooltipPlacement = ref()
+
+/** 右键菜单 */
+function handleRightClick(e: MouseEvent, msg: MessageItemType) {
+  ContextMenu.showContextMenu({
+    theme: 'mac dark',
+    items: [
+      {
+        label: '复制',
+        onClick: () => copyToClip(msg.message.content),
+      },
+    ],
+    zIndex: 3,
+    minWidth: 230,
+    x: e.x,
+    y: e.y,
+  })
+}
 
 onMounted(() => {
   nextTick(() => {
@@ -103,7 +121,7 @@ onMounted(() => {
         <template #content>
           <MsgOption :msg="msg" />
         </template>
-        <div class="chat-item-content" ref="renderMsgRef">
+        <div class="chat-item-content" ref="renderMsgRef" @contextmenu.prevent.stop="handleRightClick($event, msg)">
           <RenderMsg :text="msg.message.content.trim()" :url-map="msg.message.urlTitleMap" :is-me="isCurrentUser" />
         </div>
       </el-tooltip>
