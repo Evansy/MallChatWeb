@@ -4,7 +4,7 @@ import throttle from 'lodash/throttle'
 import { useChatStore } from '@/stores/chat'
 import type { MessageItemType } from '@/services/types'
 import VirtualList from '@/components/VirtualList/index'
-import Item from './item.vue'
+import MsgItem from './MsgItem/index.vue'
 
 const chatStore = useChatStore()
 const virtualListRef = ref()
@@ -22,7 +22,6 @@ onMounted(() => {
     chatStore.chatListToBottomAction = () => {
       goToBottom()
     }
-    goToBottom()
   })
 })
 
@@ -62,12 +61,14 @@ const getKey = (item: MessageItemType) => item.message.id
       v-if="chatStore.chatMessageList?.length"
       ref="virtualListRef"
       class="virtual-list"
+      dataPropName="msg"
       :data="chatStore.chatMessageList"
       :data-key="getKey"
-      :item="Item"
+      :item="MsgItem"
       :size="20"
       @totop="onTotop"
       @scroll="onScroll"
+      @ok="goToBottom"
     />
     <template v-if="!chatStore.isLoading && chatStore.chatMessageList?.length === 0">
       <div class="empty">暂无消息，快来发送第一条消息吧~</div>
