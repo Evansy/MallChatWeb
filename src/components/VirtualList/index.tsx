@@ -178,12 +178,12 @@ export default defineComponent({
      * @param index 索引值
      * @description 如果索引值大于等于数据长度说明到底了则滚动到底部
      */
-    const scrollToIndex = (index: number) => {
+    const scrollToIndex = (index: number, smooth?: boolean) => {
       if (index >= props.data.length - 1) {
         scrollToBottom()
       } else {
         const offset = virtual.getOffset(index)
-        scrollToOffset(offset)
+        scrollToOffset(offset, smooth)
       }
     }
 
@@ -191,9 +191,10 @@ export default defineComponent({
      * 滚动到指定偏移量
      * @param offset 滚动条偏移量
      */
-    const scrollToOffset = (offset: number) => {
+    const scrollToOffset = (offset: number, smooth = false) => {
       if (rootRef.value) {
-        rootRef.value.scrollTop = offset
+        // rootRef.value.scrollTop = offset
+        rootRef.value.scroll({ left: 0, top: offset, behavior: smooth ? 'smooth' : 'auto' })
       }
     }
 
@@ -236,13 +237,13 @@ export default defineComponent({
     }
 
     // 滚动到底部
-    const scrollToBottom = () => {
+    const scrollToBottom = (smooth?: boolean) => {
       if (shepherd.value) {
         const offset = shepherd.value.offsetTop
-        scrollToOffset(offset)
+        scrollToOffset(offset, smooth)
         setTimeout(() => {
           if (getOffset() + getClientSize() < getScrollSize()) {
-            scrollToBottom()
+            scrollToBottom(smooth)
           }
         }, 3)
       }
