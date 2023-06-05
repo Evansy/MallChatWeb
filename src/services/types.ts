@@ -265,3 +265,26 @@ export type BadgeType = {
   // 是否佩戴 0否 1是
   wearing: IsYet
 }
+
+export type MarkItemType = {
+  /**
+   * 操作用户
+   */
+  uid: number
+  /**
+   * 消息id
+   */
+  msgId: number
+  /**
+   * 操作类型 1点赞 2举报
+   */
+  markType: MarkType
+  /**
+   * 数量
+   */
+  markCount: number
+  /**
+   * 动作类型 1确认 2取消
+   */
+  actType: ActType
+}
