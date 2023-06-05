@@ -80,7 +80,7 @@ const scrollToMsg = async (msg: MessageItemContentType) => {
 }
 
 /** 右键菜单 */
-function handleRightClick(e: MouseEvent, msg: MessageItemType) {
+const handleRightClick = (e: MouseEvent, msg: MessageItemType) => {
   ContextMenu.showContextMenu({
     theme: 'mac dark',
     items: [
