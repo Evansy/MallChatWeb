@@ -30,6 +30,10 @@ export enum WsResponseMessageType {
    * 7.禁用的用户
    */
   InValidUser,
+  /**
+   * 8.点赞、倒赞更新通知
+   */
+  WSMsgMarkItem,
 }
 
 /**

@@ -20,7 +20,7 @@ export default {
       if (count % 2 === 0) {
         document.title = `【新消息】${title}`
       } else {
-        document.title = `【】${title}`
+        document.title = `【\u3000\u3000\u3000】${title}`
       }
       // 累加计数
       count++

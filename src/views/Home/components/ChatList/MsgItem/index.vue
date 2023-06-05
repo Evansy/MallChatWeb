@@ -10,6 +10,7 @@ import RenderMsg from '@/components/RenderMsg'
 import MsgOption from '../MsgOption/index.vue'
 import type { TooltipTriggerType } from 'element-plus/es/components/tooltip/src/trigger'
 import { copyToClip } from '@/utils/copy'
+import { useLikeToggle } from '@/hooks/useLikeToggle'
 
 const props = defineProps({
   // 消息体
@@ -53,6 +54,7 @@ const renderMsgRef = ref<HTMLElement | null>(null)
 const boxRef = ref<HTMLElement | null>(null)
 const tooltipPlacement = ref()
 const virtualListRef = inject<Ref>('virtualListRef')
+const { isLike, isDisLike, likeCount, dislikeCount, onLike, onDisLike } = useLikeToggle(props.msg.message)
 
 // 滚动到消息
 const scrollToMsg = async (msg: MessageItemContentType) => {
@@ -78,7 +80,7 @@ const scrollToMsg = async (msg: MessageItemContentType) => {
 }
 
 /** 右键菜单 */
-function handleRightClick(e: MouseEvent, msg: MessageItemType) {
+const handleRightClick = (e: MouseEvent, msg: MessageItemType) => {
   ContextMenu.showContextMenu({
     theme: 'mac dark',
     items: [
@@ -159,6 +161,24 @@ onMounted(() => {
       >
         <i class="can-scroll-icon" v-if="msg.message.reply.canCallback" />
         <span class="ellipsis"> {{ msg.message.reply.username }}: {{ msg.message.reply.content }} </span>
+      </div>
+      <div v-if="likeCount + dislikeCount > 0" class="extra">
+        <transition name="fade">
+          <span v-if="likeCount > 0" :class="['extra-item like', { active: isLike }]" @click="onLike">
+            <IconLike />
+            <transition name="count-up" mode="out-in">
+              <span class="count" :key="likeCount">{{ likeCount }}</span>
+            </transition>
+          </span>
+        </transition>
+        <transition name="fade">
+          <span v-if="dislikeCount > 0" :class="['extra-item dlike', { active: isDisLike }]" @click="onDisLike">
+            <IconDislike />
+            <transition name="count-up" mode="out-in">
+              <span class="count" :key="dislikeCount">{{ dislikeCount }}</span>
+            </transition>
+          </span>
+        </transition>
       </div>
     </div>
   </div>
