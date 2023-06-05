@@ -210,6 +210,7 @@
 .can-scroll-icon {
   display: inline-block;
   width: 12px;
+  min-width: 12px;
   height: 12px;
   margin-right: 4px;
   background-image: url('@/assets/operate-icons/to_top.svg');
