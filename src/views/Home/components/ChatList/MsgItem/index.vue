@@ -11,6 +11,7 @@ import MsgOption from '../MsgOption/index.vue'
 import type { TooltipTriggerType } from 'element-plus/es/components/tooltip/src/trigger'
 import { copyToClip } from '@/utils/copy'
 import { useLikeToggle } from '@/hooks/useLikeToggle'
+import { ElTooltip } from 'element-plus'
 
 const props = defineProps({
   // 消息体
@@ -55,6 +56,7 @@ const boxRef = ref<HTMLElement | null>(null)
 const tooltipPlacement = ref()
 const virtualListRef = inject<Ref>('virtualListRef')
 const { isLike, isDisLike, likeCount, dislikeCount, onLike, onDisLike } = useLikeToggle(props.msg.message)
+const tooltipRef = ref<InstanceType<typeof ElTooltip> | null>(null)
 
 // 滚动到消息
 const scrollToMsg = async (msg: MessageItemContentType) => {
@@ -111,6 +113,11 @@ onMounted(() => {
     }
   })
 })
+
+// 触发Tooltip更新显示位置
+const updateTooltip = () => {
+  tooltipRef.value && tooltipRef.value.updatePopper()
+}
 </script>
 
 <template>
@@ -138,6 +145,7 @@ onMounted(() => {
       </div>
       <el-tooltip
         effect="light"
+        ref="tooltipRef"
         popper-class="option-tooltip"
         :trigger="tooltipTrigger"
         :placement="tooltipPlacement || 'bottom-end'"
@@ -150,7 +158,13 @@ onMounted(() => {
           <MsgOption :msg="msg" />
         </template>
         <div class="chat-item-content" ref="renderMsgRef" @contextmenu.prevent.stop="handleRightClick($event, msg)">
-          <RenderMsg :text="msg.message.content.trim()" :url-map="msg.message.urlTitleMap" :is-me="isCurrentUser" />
+          <RenderMsg
+            :text="msg.message.content.trim()"
+            :url-map="msg.message.urlTitleMap"
+            :is-me="isCurrentUser"
+            :msg="msg"
+            @updateTooltip="updateTooltip"
+          />
         </div>
       </el-tooltip>
       <div

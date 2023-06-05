@@ -139,6 +139,10 @@ export type MessageItemContentType = {
    * 消息中的链接
    */
   urlTitleMap: Record<string, string>
+  /**
+   * 消息发送时间
+   */
+  isCollapse?: boolean
 }
 
 export type MessageItemType = {
