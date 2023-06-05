@@ -83,6 +83,7 @@
     color: var(--font-light);
     background-color: #424656;
     border-radius: 8px;
+    word-break: break-all;
 
     &.pointer {
       cursor: pointer;
