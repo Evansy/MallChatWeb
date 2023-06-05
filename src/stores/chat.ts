@@ -95,7 +95,7 @@ export const useChatStore = defineStore('chat', () => {
       }
     })
   }
-
+  
   return {
     getMsgIndex,
     chatMessageList,
