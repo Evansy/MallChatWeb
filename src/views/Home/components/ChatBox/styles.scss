@@ -28,6 +28,7 @@
 .chat-msg-send {
   padding: 10px 20px 20px;
   font-size: 0;
+  word-break: break-all;
 
   .reply-msg-wrapper {
     display: flex;
