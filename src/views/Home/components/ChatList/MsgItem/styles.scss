@@ -47,6 +47,7 @@
     .send-time {
       display: none;
       user-select: none;
+      animation: fade-in 1s ease-in-out forwards;
     }
   }
 
@@ -138,6 +139,20 @@
 
   .chat-item-option {
     display: inline-flex;
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
   }
 }
 
