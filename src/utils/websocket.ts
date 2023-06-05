@@ -4,7 +4,7 @@ import { useChatStore } from '@/stores/chat'
 import { useGroupStore } from '@/stores/group'
 import { WsResponseMessageType, WsRequestMsgType } from './wsType'
 import type { LoginSuccessResType, LoginInitResType, WsReqMsgContentType, OnStatusChangeType } from './wsType'
-import type { MessageItemType } from '@/services/types'
+import type { MessageItemType, MarkItemType } from '@/services/types'
 import { OnlineStatus } from '@/services/types'
 import { worker } from './initWorker'
 import shakeTitle from '@/utils/shakeTitle'
@@ -175,6 +175,12 @@ class WS {
         chatStore.filterUser(data.uid)
         // 群成员列表删掉小黑子
         groupStore.filterUser(data.uid)
+        break
+      }
+      // 点赞、倒赞消息通知
+      case WsResponseMessageType.WSMsgMarkItem: {
+        const data = params.data as { markList: MarkItemType[] }
+        chatStore.updateMarkCount(data.markList)
         break
       }
       default: {

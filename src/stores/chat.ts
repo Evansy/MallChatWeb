@@ -1,7 +1,8 @@
 import { ref, reactive } from 'vue'
 import { defineStore } from 'pinia'
 import apis from '@/services/apis'
-import type { MessageItemType } from '@/services/types'
+import type { MessageItemType, MarkItemType } from '@/services/types'
+import { MarkType } from '@/services/types'
 import { computedTimeBlock } from '@/utils/computedTime'
 import shakeTitle from '@/utils/shakeTitle'
 
@@ -77,11 +78,30 @@ export const useChatStore = defineStore('chat', () => {
     return chatMessageList.value.findIndex((item) => item.message.id === msgId)
   }
 
+  // 更新点赞、举报数
+  const updateMarkCount = (markList: MarkItemType[]) => {
+    // 循环更新点赞数
+    console.log('点赞、倒赞消息通知更新', markList)
+    markList.forEach((mark: MarkItemType) => {
+      const { msgId, markType, markCount } = mark
+
+      const msgItem = chatMessageList.value.find((item) => item.message.id === msgId)
+      if (msgItem) {
+        if (markType === MarkType.Like) {
+          msgItem.message.messageMark.likeCount = markCount
+        } else if (markType === MarkType.DisLike) {
+          msgItem.message.messageMark.dislikeCount = markCount
+        }
+      }
+    })
+  }
+
   return {
     getMsgIndex,
     chatMessageList,
     pushMsg,
     clearNewMsgCount,
+    updateMarkCount,
     chatListToBottomAction,
     newMsgCount,
     isLoading,
