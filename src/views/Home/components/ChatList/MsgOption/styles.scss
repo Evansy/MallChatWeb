@@ -28,20 +28,11 @@
     background-image: url('@/assets/icons/icon_reply.svg');
   }
 
-  .like {
-    background-image: url('@/assets/icons/icon_like.svg');
-  }
-
   .like-active {
-    background-image: url('@/assets/icons/icon_liked.svg');
-  }
-
-  .dislike {
-    background-image: url('@/assets/icons/icon_like.svg');
-    transform: rotate(180deg);
+    color: #fe2c55;
   }
 
   .dislike-active {
-    background-image: url('@/assets/icons/icon_liked.svg');
+    color: #bebebe;
   }
 }

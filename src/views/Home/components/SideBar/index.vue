@@ -32,7 +32,7 @@ const mockData = ref([
     tag: '机器人',
     lastMsg: '欢迎使用MallChat',
     lastMsgTime: '13:54',
-  }
+  },
 ])
 
 // 最后一条消息变化就把MoakData更新
