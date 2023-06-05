@@ -10,6 +10,8 @@ module.exports = {
     'stylelint-config-recess-order',
     // 样式属性 vue 规则
     'stylelint-config-recommended-vue',
+    // 样式属性 vue 规则
+    'stylelint-config-recommended-vue/scss',
     // 接入 Prettier 规则
     'stylelint-config-prettier',
     'stylelint-prettier/recommended',
@@ -18,5 +20,12 @@ module.exports = {
   rules: {
     // 开启 Prettier 自动格式化功能
     'prettier/prettier': true,
+    'scss/at-import-partial-extension': null, // 解决不能引入scss文件
+    'selector-pseudo-class-no-unknown': [
+      true,
+      {
+        ignorePseudoClasses: ['global', 'v-deep', 'deep'],
+      },
+    ],
   },
 }

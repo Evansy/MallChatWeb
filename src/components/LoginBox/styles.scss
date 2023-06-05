@@ -1,13 +1,13 @@
-/* stylelint-disable selector-class-pattern */
-/* stylelint-disable selector-pseudo-class-no-unknown */
 :global(.login-box-modal) {
   border-radius: 8px !important;
 }
 
+/* stylelint-disable-next-line selector-class-pattern */
 :global(.login-box-modal .el-dialog--header) {
   padding: 0;
 }
 
+/* stylelint-disable-next-line selector-class-pattern */
 :global(.login-box-modal .el-dialog--headerbtn) {
   z-index: 5;
 }

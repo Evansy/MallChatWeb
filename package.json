@@ -16,7 +16,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "link:format": "prettier --write src/",
     "link:lint-staged": "lint-staged -c ./.husky/lintstagedrc.js",
-    "lint:style": "stylelint --fix \"src/**/*.{css,scss}\"",
+    "lint:style": "stylelint --fix \"src/**/*.{css,scss,vue}\"",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -56,7 +56,7 @@
     "postcss-scss": "^4.0.6",
     "prettier": "^2.8.8",
     "rimraf": "^5.0.1",
-    "rollup-plugin-visualizer": "^5.9.0",
+    "rollup-plugin-bundle-analyzer": "^1.6.6",
     "sass": "^1.62.1",
     "stylelint": "^15.6.3",
     "stylelint-config-prettier": "^9.0.5",
@@ -64,6 +64,7 @@
     "stylelint-config-recommended-vue": "^1.4.0",
     "stylelint-config-standard": "^33.0.0",
     "stylelint-config-standard-scss": "^9.0.0",
+    "stylelint-no-unsupported-browser-features": "^6.1.0",
     "stylelint-prettier": "^3.0.0",
     "typescript": "~4.8.4",
     "unplugin-auto-import": "^0.15.3",

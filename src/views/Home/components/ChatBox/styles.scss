@@ -1,5 +1,4 @@
 /* stylelint-disable selector-class-pattern */
-/* stylelint-disable selector-pseudo-class-no-unknown */
 .chat-box {
   display: flex;
   flex: 1;
@@ -38,7 +37,7 @@
     margin-bottom: 12px;
     font-size: 12px;
     color: var(--font-light);
-    word-wrap: break-word;
+    word-wrap: break-all;
     white-space: pre-wrap;
     background-color: #424656;
     border-radius: 8px;

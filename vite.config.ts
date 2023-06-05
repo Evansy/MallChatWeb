@@ -9,7 +9,7 @@ import IconsResolver from 'unplugin-icons/resolver'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import { visualizer } from 'rollup-plugin-visualizer'
+import bundleAnalyzer from 'rollup-plugin-bundle-analyzer'
 
 const pathSrc = path.resolve(__dirname, 'src')
 
@@ -40,12 +40,16 @@ export default defineConfig({
     }),
     Icons({ autoInstall: true }),
     // 打包分析
-    lifecycle === 'report' ? visualizer({ open: true, brotliSize: true, filename: 'report.html' }) : null,
+    lifecycle === 'report' ? bundleAnalyzer({}) : null,
   ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
+  },
+  // 去掉生产的 打印和 debugger
+  esbuild: {
+    drop: ['console', 'debugger'],
   },
   server: {
     port: 9988,

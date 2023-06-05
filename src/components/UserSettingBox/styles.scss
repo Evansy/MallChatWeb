@@ -1,14 +1,13 @@
 /* stylelint-disable selector-class-pattern */
-/* stylelint-disable selector-pseudo-class-no-unknown */
 :global(.setting-box-modal) {
   border-radius: 8px !important;
 }
 
-:global(.setting-box-modal .el-dialog--header) {
+:global(.setting-box-modal .el-dialog__header) {
   padding: 0;
 }
 
-:global(.setting-box-modal .el-dialog--headerbtn) {
+:global(.setting-box-modal .el-dialog__headerbtn) {
   z-index: 5;
 }
 

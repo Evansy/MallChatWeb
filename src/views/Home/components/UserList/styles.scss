@@ -14,7 +14,6 @@
   overscroll-behavior-y: contain;
   list-style-type: none;
 
-  /* stylelint-disable-next-line selector-pseudo-class-no-unknown */
   :deep(.el-loading-mask) {
     background-color: var(--color-background-black-mute);
   }
