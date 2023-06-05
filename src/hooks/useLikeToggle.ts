@@ -27,6 +27,11 @@ export const useLikeToggle = (message: MessageItemType['message']) => {
     const isConfirm = actType === ActType.Confirm
     message.messageMark.userLike = isConfirm ? IsYet.Yes : IsYet.No
     message.messageMark.likeCount = isConfirm ? likeCount + 1 : likeCount - 1
+    // 互斥操作
+    if (isDisLike.value) {
+      message.messageMark.userDislike = IsYet.No
+      message.messageMark.dislikeCount = dislikeCount.value - 1
+    }
   }
 
   /**
@@ -42,6 +47,11 @@ export const useLikeToggle = (message: MessageItemType['message']) => {
     const isConfirm = actType === ActType.Confirm
     message.messageMark.userDislike = isConfirm ? IsYet.Yes : IsYet.No
     message.messageMark.dislikeCount = isConfirm ? dislikeCount + 1 : dislikeCount - 1
+    // 互斥操作
+    if (isLike.value) {
+      message.messageMark.userLike = IsYet.No
+      message.messageMark.likeCount = likeCount.value - 1
+    }
   }
 
   return {
