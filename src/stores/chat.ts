@@ -81,7 +81,6 @@ export const useChatStore = defineStore('chat', () => {
   // 更新点赞、举报数
   const updateMarkCount = (markList: MarkItemType[]) => {
     // 循环更新点赞数
-    console.log('点赞、倒赞消息通知更新', markList)
     markList.forEach((mark: MarkItemType) => {
       const { msgId, markType, markCount } = mark
 
@@ -95,7 +94,7 @@ export const useChatStore = defineStore('chat', () => {
       }
     })
   }
-  
+
   return {
     getMsgIndex,
     chatMessageList,
