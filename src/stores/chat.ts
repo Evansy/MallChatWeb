@@ -22,9 +22,9 @@ export const useChatStore = defineStore('chat', () => {
   // 当前消息回复
   const currentMsgReply = reactive<Partial<MessageItemType>>({})
 
-  const getMsgList = async () => {
+  const getMsgList = async (size = pageSize) => {
     isLoading.value = true
-    const data = await apis.getMsgList({ params: { pageSize, cursor: cursor.value, roomId: 1 } }).send()
+    const data = await apis.getMsgList({ params: { pageSize: size, cursor: cursor.value, roomId: 1 } }).send()
     if (!data) return
     chatMessageList.value = [...computedTimeBlock(data.list), ...chatMessageList.value]
     cursor.value = data.cursor
@@ -62,16 +62,23 @@ export const useChatStore = defineStore('chat', () => {
     chatMessageList.value = chatMessageList.value.filter((item) => item.fromUser.uid !== uid)
   }
 
-  const loadMore = async () => {
+  const loadMore = async (size?: number) => {
     if (isLast.value && isLoading.value) return
-    await getMsgList()
+    await getMsgList(size)
   }
 
-  const clearNewMsgCount = () => { 
+  const clearNewMsgCount = () => {
     newMsgCount.value = 0
   }
 
+  // 查找消息在列表里面的索引，倒过来的索引
+  const getMsgIndex = (msgId: number) => {
+    if (!msgId || isNaN(Number(msgId))) return -1
+    return chatMessageList.value.findIndex((item) => item.message.id === msgId)
+  }
+
   return {
+    getMsgIndex,
     chatMessageList,
     pushMsg,
     clearNewMsgCount,

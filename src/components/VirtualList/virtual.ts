@@ -6,9 +6,9 @@
  */
 // @ts-nocheck
 export default class Virtual {
-  sizes: Map<string, number> = new Map<string, number>(); // 存储元素的尺寸的Map对象
-  offset: number;
-  
+  sizes: Map<string, number> = new Map<string, number>() // 存储元素的尺寸的Map对象
+  offset: number
+
   constructor(param, callUpdate) {
     this.init(param, callUpdate)
   }
@@ -95,7 +95,7 @@ export default class Virtual {
     if (this.calcType === 'INIT') {
       this.fixedSizeValue = size
       this.calcType = 'FIXED'
-       // 如果当前计算类型固定并且固定尺寸值不等于新的尺寸
+      // 如果当前计算类型固定并且固定尺寸值不等于新的尺寸
     } else if (this.calcType === 'FIXED' && this.fixedSizeValue !== size) {
       this.calcType = 'DYNAMIC'
       delete this.fixedSizeValue // 删除固定尺寸值
@@ -295,20 +295,20 @@ export default class Virtual {
    * @returns {number} - 填充大小
    */
   getPadBehind() {
-    const end = this.range.end; // 当前显示范围的结束索引
-    const lastIndex = this.getLastIndex(); // 最后一个索引
+    const end = this.range.end // 当前显示范围的结束索引
+    const lastIndex = this.getLastIndex() // 最后一个索引
 
     // 如果是固定尺寸类型就直接返回固定尺寸的填充大小
     if (this.isFixedType()) {
-      return (lastIndex - end) * this.fixedSizeValue;
+      return (lastIndex - end) * this.fixedSizeValue
     }
 
     // 如果上一次计算的索引等于最后一个索引，则返回当前索引的偏移量减去结束索引的偏移量
     if (this.lastCalcIndex === lastIndex) {
-      return this.getIndexOffset(lastIndex) - this.getIndexOffset(end);
+      return this.getIndexOffset(lastIndex) - this.getIndexOffset(end)
     } else {
       // 否则返回预估尺寸乘以剩余元素个数的填充尺寸
-      return (lastIndex - end) * this.getEstimateSize();
+      return (lastIndex - end) * this.getEstimateSize()
     }
   }
 

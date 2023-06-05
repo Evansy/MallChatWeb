@@ -20,8 +20,8 @@ const toggleGroupListShow = () => (groupStore.showGroupList = !groupStore.showGr
 </script>
 
 <template>
-  <aside class="side_toolbar">
-    <ElAvatar size="large" class="side_toolbar_avatar" :src="avatar || defaultAvatar" v-login="showSettingBox" />
+  <aside class="side-toolbar">
+    <ElAvatar size="large" class="side-toolbar-avatar" :src="avatar || defaultAvatar" v-login="showSettingBox" />
 
     <div class="operate-icons">
       <a
@@ -49,6 +49,18 @@ const toggleGroupListShow = () => (groupStore.showGroupList = !groupStore.showGr
           <i class="operate-icon icon-wechat" />
         </a>
       </el-tooltip>
+
+      <a
+        class="operate-icon-link"
+        href="https://curl.qcloud.com/qSaH0JLT"
+        target="_blank"
+        rel="noopener noreferrer"
+        title="tencent cloud"
+      >
+        <i class="operate-icon icon-tencent-cloud" />
+        <span class="operate-icon-text">618超优惠</span>
+      </a>
+
       <a
         class="operate-icon-link"
         target="_blank"

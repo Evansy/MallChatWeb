@@ -1,58 +1,59 @@
+/* stylelint-disable selector-class-pattern */
+/* stylelint-disable selector-pseudo-class-no-unknown */
 .chat-box {
-  flex: 1;
   display: flex;
+  flex: 1;
   align-items: stretch;
   padding: 16px;
   overflow: hidden;
 }
 
 .chat-wrapper {
-  flex: 1;
   position: relative;
   display: flex;
+  flex: 1;
   align-items: center;
   justify-content: center;
 }
 
 .chat {
-  height: 100%;
-  flex: 1;
-  border-radius: 8px;
-  background-color: var(--color-gray-bg);
   display: flex;
+  flex: 1;
   flex-direction: column;
+  height: 100%;
+  background-color: var(--color-gray-bg);
+  border-radius: 8px;
 }
-
 
 .chat-msg-send {
   padding: 10px 20px 20px;
   font-size: 0;
 
   .reply-msg-wrapper {
-    background-color: #424656;
-    font-size: 12px;
-    margin-bottom: 12px;
-    padding: 4px 12px;
-    border-radius: 8px;
-    color: var(--font-light);
     display: flex;
-    align-items: center;
     column-gap: 12px;
+    align-items: center;
+    padding: 4px 12px;
+    margin-bottom: 12px;
+    font-size: 12px;
+    color: var(--font-light);
     word-wrap: break-word;
     white-space: pre-wrap;
+    background-color: #424656;
+    border-radius: 8px;
   }
 
   .reply-msg-content {
+    display: -webkit-box;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
   }
 
   .reply-msg-icon {
-    cursor: pointer;
     margin-left: auto;
+    cursor: pointer;
     border-radius: 4px;
 
     &:hover {
@@ -67,10 +68,7 @@
 
   .chat-not-login-mask {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -79,8 +77,8 @@
   }
 
   .login-link {
-    margin-left: 4px;
     margin-right: 4px;
+    margin-left: 4px;
     color: var(--color-primary);
   }
 
@@ -93,18 +91,17 @@
 
   .msg-input {
     :deep(.el-textarea__inner) {
+      box-sizing: border-box;
       width: 100%;
-      background-color: #424656;
-      border-radius: 16px;
-      border: none;
       padding: 10px;
-      resize: none;
-      transition: .2s;
       font-size: 14px;
       color: #fff;
-      box-sizing: border-box;
-      transition: .2s;
+      resize: none;
+      background-color: #424656;
+      border: none;
+      border-radius: 16px;
       box-shadow: none;
+      transition: 0.2s;
 
       &:focus {
         outline: 2px solid #2287e1;
@@ -112,52 +109,52 @@
     }
   }
 
+  .emoji-button {
+    margin-right: 10px;
+  }
+
   .emoji-button,
   .send-button {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    padding-top: 4px;
+    font-size: 24px;
+    color: #fff;
+    cursor: pointer;
     background-color: var(--color-primary);
     border: 0;
-    padding: 0;
-    transition: .3s;
-    box-shadow: 0 0 5px 0 #08f;
-    color: #fff;
-    height: 40px;
-    width: 40px;
     border-radius: 12px;
-    font-size: 24px;
-    padding-top: 4px;
-    cursor: pointer;
+    box-shadow: 0 0 5px 0 #08f;
+    transition: 0.3s;
 
     &:hover {
       box-shadow: 0 0 10px 0 #08f;
     }
 
     &:disabled {
-      opacity: 0.3;
       cursor: not-allowed;
+      opacity: 0.3;
     }
-  }
-
-  .emoji-button {
-    margin-right: 10px;
   }
 }
 
 .emoji-list {
-  list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
   padding: 0;
   margin: 0;
   word-wrap: break-word;
-  display: flex;
-  flex-wrap: wrap;
+  list-style-type: none;
 }
 
 .emoji-item {
-  font-size: 24px;
-  line-height: 1;
   width: 28px;
   height: 28px;
   padding-top: 3px;
   padding-left: 2px;
+  font-size: 24px;
+  line-height: 1;
   cursor: pointer;
   border-radius: 4px;
 
@@ -166,8 +163,7 @@
   }
 }
 
-
-@media only screen and (min-width: 640px) {
+@media only screen and (width >=640px) {
   .chat-box {
     padding: 20px;
     padding-left: 0;

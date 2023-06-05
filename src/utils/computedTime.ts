@@ -2,7 +2,6 @@ import dayjs from 'dayjs'
 import type { Dayjs } from 'dayjs'
 import type { MessageItemType } from '@/services/types'
 
-
 // 5 分钟 5 * 60 * 1000;
 const intervalTime = 300000
 // 计数上限 20 条，到达 20 重置

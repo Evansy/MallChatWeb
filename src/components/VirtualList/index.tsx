@@ -1,12 +1,4 @@
-import { 
-  defineComponent,
-  onActivated,
-  onBeforeMount,
-  onMounted,
-  onUnmounted,
-  ref,
-  watch
-} from 'vue'
+import { defineComponent, onActivated, onBeforeMount, onMounted, onUnmounted, ref, watch } from 'vue'
 import Virtual from './virtual'
 import Item from './item'
 
@@ -18,7 +10,7 @@ interface Range {
 }
 
 interface DataSource {
-    [key: string]: any;
+  [key: string]: any
 }
 
 export default defineComponent({
@@ -69,6 +61,15 @@ export default defineComponent({
       type: Number,
       default: 0,
     },
+    // Item项的Props
+    itemProps: {
+      type: Object,
+    },
+    // 指定用什么名字传递数据
+    dataPropName: {
+      type: String,
+      default: 'source',
+    },
   },
   setup(props, { emit, expose }) {
     const range = ref<Range | null>(null)
@@ -108,7 +109,7 @@ export default defineComponent({
     }
     // 获取滚动条偏移量
     const getOffset = () => {
-        return rootRef.value ? Math.ceil(rootRef.value.scrollTop) : 0
+      return rootRef.value ? Math.ceil(rootRef.value.scrollTop) : 0
     }
     // 获取可视区域大小
     const getClientSize = () => {
@@ -122,9 +123,9 @@ export default defineComponent({
     }
 
     // 统一处理向外暴露事件
-    const emitEvent = (offset:number, clientSize:number, scrollSize :number) => {
-      emit('scroll', {offset, clientSize, scrollSize})
-      
+    const emitEvent = (offset: number, clientSize: number, scrollSize: number) => {
+      emit('scroll', { offset, clientSize, scrollSize })
+
       if (virtual.isFront() && !!props.data.length && offset - props.topThreshold <= 0) {
         emit('totop')
       } else if (virtual.isBehind() && offset + clientSize + props.bottomThreshold >= scrollSize) {
@@ -147,9 +148,7 @@ export default defineComponent({
     const getUniqueIdFromDataSources = () => {
       const { dataKey, data = [] } = props
       // 如果dataKey是函数 则调用传入的函数执行获取唯一标识
-      return data.map((dataSource: any) =>
-        typeof dataKey === 'function' ? dataKey(dataSource) : dataSource[dataKey],
-      )
+      return data.map((dataSource: any) => (typeof dataKey === 'function' ? dataKey(dataSource) : dataSource[dataKey]))
     }
     const onRangeChanged = (newRange: any) => {
       range.value = newRange
@@ -179,12 +178,12 @@ export default defineComponent({
      * @param index 索引值
      * @description 如果索引值大于等于数据长度说明到底了则滚动到底部
      */
-    const scrollToIndex = (index: number) => {
+    const scrollToIndex = (index: number, smooth?: boolean) => {
       if (index >= props.data.length - 1) {
         scrollToBottom()
       } else {
         const offset = virtual.getOffset(index)
-        scrollToOffset(offset)
+        scrollToOffset(offset, smooth)
       }
     }
 
@@ -192,10 +191,11 @@ export default defineComponent({
      * 滚动到指定偏移量
      * @param offset 滚动条偏移量
      */
-    const scrollToOffset = (offset: number) => {
-        if (rootRef.value) {
-            rootRef.value.scrollTop = offset
-        }
+    const scrollToOffset = (offset: number, smooth = false) => {
+      if (rootRef.value) {
+        // rootRef.value.scrollTop = offset
+        rootRef.value.scroll({ left: 0, top: offset, behavior: smooth ? 'smooth' : 'auto' })
+      }
     }
 
     /**
@@ -205,10 +205,10 @@ export default defineComponent({
     const getRenderSlots = () => {
       const slots = []
       const { start, end } = range.value! // 解构获取范围的起始、结束索引
-      const { data, dataKey, item } = props
+      const { data, dataKey, item, itemProps, dataPropName } = props
       for (let index = start; index <= end; index++) {
         const dataSource = data[index] as DataSource // 获取当前索引的数据项
-        if (dataSource) { 
+        if (dataSource) {
           // 取这个项里面的唯一标识拿来做key
           const uniqueKey = typeof dataKey === 'function' ? dataKey(dataSource) : dataSource[dataKey]
           // 如果唯一标识是字符串或者数字则渲染
@@ -219,6 +219,8 @@ export default defineComponent({
                 uniqueKey={uniqueKey}
                 source={dataSource}
                 component={item}
+                itemProps={itemProps}
+                dataPropName={dataPropName}
                 onItemResize={onItemResized}
               />,
             )
@@ -235,13 +237,13 @@ export default defineComponent({
     }
 
     // 滚动到底部
-    const scrollToBottom = () => {
+    const scrollToBottom = (smooth?: boolean) => {
       if (shepherd.value) {
         const offset = shepherd.value.offsetTop
-        scrollToOffset(offset)
+        scrollToOffset(offset, smooth)
         setTimeout(() => {
           if (getOffset() + getClientSize() < getScrollSize()) {
-            scrollToBottom()
+            scrollToBottom(smooth)
           }
         }, 3)
       }
@@ -265,6 +267,7 @@ export default defineComponent({
       } else if (props.offset) {
         scrollToOffset(props.offset)
       }
+      emit('ok')
     })
 
     onUnmounted(() => {
@@ -286,10 +289,8 @@ export default defineComponent({
       const { padFront, padBehind } = range.value!
       return (
         <div ref={rootRef} onScroll={onScroll}>
-          <div style={{padding: `${padFront}px 0px ${padBehind}px`}}>
-            {getRenderSlots()}
-          </div>
-          <div ref={shepherd} style={{ width: '100%', height: '0px' }}/>
+          <div style={{ padding: `${padFront}px 0px ${padBehind}px` }}>{getRenderSlots()}</div>
+          <div ref={shepherd} style={{ width: '100%', height: '0px' }} />
         </div>
       )
     }

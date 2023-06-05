@@ -7,7 +7,7 @@ on:
 # 要执行的任务
 jobs:
   # 任务名称
-  build:
+  build_and_deploy:
     # runs-on 指定job任务运行所需要的虚拟机环境（必填）
     runs-on: ubuntu-latest
     # 任务步骤

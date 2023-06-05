@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
 import weekday from 'dayjs/plugin/weekday'
+import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css'
 // import 'element-plus/dist/index.css'
 import { createPinia } from 'pinia'
 

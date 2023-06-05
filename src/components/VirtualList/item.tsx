@@ -25,6 +25,14 @@ export default defineComponent({
     uniqueKey: {
       type: [String, Number],
     },
+    itemProps: {
+      type: Object,
+      default: () => {},
+    },
+    dataPropName: {
+      type: String,
+      default: 'source',
+    },
   },
   emits: ['itemResize'],
   setup(props, { emit }) {
@@ -66,12 +74,16 @@ export default defineComponent({
     })
 
     return () => {
-      const { component: Comp, index, source, uniqueKey } = props
+      const { component: Comp, index, source, uniqueKey, itemProps, dataPropName } = props
+      const merged = {
+        ...itemProps,
+        [dataPropName]: source, // 数据源给到指定属性上
+      }
       // 渲染出传入自定义组件项-这里的Comp就是传入的自定义组件 (ts-ignore避免类型警告)
       return (
-        <div key={uniqueKey} ref={rootRef}>
-            {/* @ts-ignore */}
-          <Comp {...{source,index}} />
+        <div key={uniqueKey} ref={rootRef} {...{ index }}>
+          {/* @ts-ignore */}
+          <Comp {...merged} />
         </div>
       )
     }
