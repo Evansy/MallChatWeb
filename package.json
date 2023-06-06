@@ -17,7 +17,13 @@
     "link:format": "prettier --write src/",
     "link:lint-staged": "lint-staged -c ./.husky/lintstagedrc.js",
     "lint:style": "stylelint --fix \"src/**/*.{css,scss,vue}\"",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "commit": "git add . && git cz"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-customizable"
+    }
   },
   "dependencies": {
     "@alova/scene-vue": "^1.0.4",
@@ -47,6 +53,9 @@
     "@vue/eslint-config-prettier": "^7.1.0",
     "@vue/eslint-config-typescript": "^11.0.3",
     "@vue/tsconfig": "^0.1.3",
+    "commitizen": "^4.3.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "cz-customizable": "^6.9.2",
     "eslint": "^8.40.0",
     "eslint-plugin-vue": "^9.11.0",
     "husky": "^8.0.3",
