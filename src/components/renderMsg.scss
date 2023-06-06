@@ -1,0 +1,19 @@
+.msg-item {
+  &.collapse {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5; /* 指定需要显示的行数 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.collapse-box {
+  height: 20px;
+  text-align: center;
+
+  .collapse-icon {
+    height: 20px;
+    cursor: pointer;
+  }
+}
