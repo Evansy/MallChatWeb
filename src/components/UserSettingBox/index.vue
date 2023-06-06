@@ -7,9 +7,9 @@ import { useUserStore } from '@/stores/user'
 import { SexType, IsYet } from '@/services/types'
 import type { BadgeType } from '@/services/types'
 import apis from '@/services/apis'
-import { judgeClient } from '@/utils/detectDevice'
+import { useBasicLayout } from '@/hooks'
 
-const client = judgeClient()
+const { isMobile } = useBasicLayout()
 
 const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue'])
@@ -91,7 +91,7 @@ const onCancelEditName = async () => {
   <ElDialog
     class="setting-box-modal"
     v-model="value"
-    :width="client === 'PC' ? 580 : '85%'"
+    :width="isMobile ? '85%' : 580"
     :close-on-click-modal="false"
     center
   >

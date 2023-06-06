@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { ref, computed, provide } from 'vue'
-import type { ElInput } from 'element-plus'
+import { ref, computed, provide, watch } from 'vue'
+import type { ElInput, PopoverInstance } from 'element-plus'
 import { useWsLoginStore } from '@/stores/ws'
 import { useUserStore } from '@/stores/user'
 import { useChatStore } from '@/stores/chat'
 import apis from '@/services/apis'
-import { judgeClient } from '@/utils/detectDevice'
+import { useBasicLayout } from '@/hooks'
 import { emojis } from './constant'
 
-const client = judgeClient()
+const { isMobile } = useBasicLayout()
 
 import UserList from '../UserList/index.vue'
 import ChatList from '../ChatList/index.vue'
@@ -18,13 +18,20 @@ const isSelect = ref(false)
 const isSending = ref(false)
 const inputMsg = ref('')
 const msg_input_ref = ref<typeof ElInput>()
-
+const popperRef = ref<PopoverInstance>()
 const focusMsgInput = () => {
   setTimeout(() => msg_input_ref.value?.focus(), 10)
 }
 
 provide('focusMsgInput', focusMsgInput)
 
+/** 监听页面大小变化更新 popper  */
+watch(
+  () => isMobile.value,
+  () => {
+    popperRef.value?.popperRef?.popperInstanceRef?.update()
+  },
+)
 const sendMsgHandler = (e: Event | KeyboardEvent) => {
   // 中文输入法的时候，按 ENTER，会直接提交，不是选中输入法的选项
   // https://www.zhangxinxu.com/wordpress/2023/02/js-enter-submit-compositionupdate
@@ -130,10 +137,11 @@ const insertText = (emoji: string) => {
                 </div>
               </div>
               <el-popover
+                ref="popperRef"
                 placement="top-end"
                 effect="dark"
                 title=""
-                :width="client === 'PC' ? 418 : '95%'"
+                :width="isMobile ? '95%' : 418"
                 trigger="click"
               >
                 <template #reference>

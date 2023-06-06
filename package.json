@@ -23,6 +23,7 @@
     "@alova/scene-vue": "^1.0.4",
     "@element-plus/icons-vue": "^2.1.0",
     "@imengyu/vue3-context-menu": "^1.2.10",
+    "@vueuse/core": "^10.1.2",
     "alova": "^2.3.0",
     "dayjs": "^1.11.7",
     "dompurify": "^3.0.3",

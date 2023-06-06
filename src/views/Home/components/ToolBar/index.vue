@@ -4,9 +4,9 @@ import { useUserStore } from '@/stores/user'
 import { useGroupStore } from '@/stores/group'
 import defaultAvatar from '@/assets/avatars/default.png'
 import qrcode from '@/assets/qrcode.jpeg'
-import { judgeClient } from '@/utils/detectDevice'
+import { useBasicLayout } from '@/hooks'
 
-const client = judgeClient()
+const { isMobile } = useBasicLayout()
 const visible = ref(false)
 const userStore = useUserStore()
 const groupStore = useGroupStore()
@@ -43,7 +43,7 @@ const toggleGroupListShow = () => (groupStore.showGroupList = !groupStore.showGr
         <i class="operate-icon icon-bilibili" />
       </a>
 
-      <el-tooltip effect="dark" :placement="client === 'PC' ? 'right' : 'bottom'">
+      <el-tooltip effect="dark" :placement="isMobile ? 'bottom' : 'right'">
         <template #content> <img class="icon-wechat-qrcode" :src="qrcode" alt="wx qrcode" /></template>
         <a class="operate-icon-link" target="_blank" rel="noopener noreferrer" title="wechat">
           <i class="operate-icon icon-wechat" />

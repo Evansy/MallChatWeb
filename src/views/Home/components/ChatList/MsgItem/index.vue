@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, type Ref, type PropType, inject } from 'vue'
+import { useClipboard } from '@vueuse/core'
 import ContextMenu from '@imengyu/vue3-context-menu'
 import { useUserStore } from '@/stores/user'
 import { useChatStore, pageSize } from '@/stores/chat'
@@ -9,7 +10,6 @@ import defaultAvatar from '@/assets/avatars/default.png'
 import RenderMsg from '@/components/RenderMsg'
 import MsgOption from '../MsgOption/index.vue'
 import type { TooltipTriggerType } from 'element-plus/es/components/tooltip/src/trigger'
-import { copyToClip } from '@/utils/copy'
 import { useLikeToggle } from '@/hooks/useLikeToggle'
 
 const props = defineProps({
@@ -50,6 +50,10 @@ const chatCls = computed(() => ({
   right: (isCurrentUser.value && props.bubbleMode === 'spread') || props.bubbleMode === 'right',
 }))
 
+const { copy } = useClipboard({
+  legacy: true,
+})
+
 const renderMsgRef = ref<HTMLElement | null>(null)
 const boxRef = ref<HTMLElement | null>(null)
 const tooltipPlacement = ref()
@@ -86,7 +90,7 @@ const handleRightClick = (e: MouseEvent, msg: MessageItemType) => {
     items: [
       {
         label: '复制',
-        onClick: () => copyToClip(msg.message.content),
+        onClick: () => copy(msg.message.content),
       },
     ],
     zIndex: 3,
