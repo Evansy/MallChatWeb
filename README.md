@@ -54,6 +54,7 @@ MallChat 的【前端】项目，是一个既能购物又能即时聊天的电�
 |    Alova     | 轻量级的请求策略库，用起来负担比 axios 小 | https://alova.js.org/                                          |
 |     vite     | 极速的前端打包构建工具                    | [https://cn.vitejs.dev](https://cn.vitejs.dev)                 |
 |     pnpm     | 速度快、节省磁盘空间的软件包管理器        | [https://www.pnpm.cn](https://www.pnpm.cn)                     |
+|    VueUse    | VueUse 提供了许多实用工具方法和 Hooks     | [https://vueuse.org](https://vueuse.org)                       |
 
 #### 后端技术
 
