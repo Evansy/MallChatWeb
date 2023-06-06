@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, type Ref, type PropType, inject } from 'vue'
-import { useClipboard } from '@vueuse/core'
+import { useClipboard, useTextSelection } from '@vueuse/core'
 import ContextMenu from '@imengyu/vue3-context-menu'
 import { useUserStore } from '@/stores/user'
 import { useChatStore, pageSize } from '@/stores/chat'
@@ -50,6 +50,7 @@ const chatCls = computed(() => ({
   right: (isCurrentUser.value && props.bubbleMode === 'spread') || props.bubbleMode === 'right',
 }))
 
+const { text } = useTextSelection()
 const { copy } = useClipboard({
   legacy: true,
 })
@@ -90,7 +91,7 @@ const handleRightClick = (e: MouseEvent, msg: MessageItemType) => {
     items: [
       {
         label: '复制',
-        onClick: () => copy(msg.message.content),
+        onClick: () => copy(text.value || msg.message.content),
       },
     ],
     zIndex: 3,
