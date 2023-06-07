@@ -17,7 +17,8 @@
     "link:format": "prettier --write src/",
     "link:lint-staged": "lint-staged -c ./.husky/lintstagedrc.js",
     "lint:style": "stylelint --fix \"src/**/*.{css,scss,vue}\"",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "preinstall": "npx only-allow pnpm"
   },
   "dependencies": {
     "@alova/scene-vue": "^1.0.4",
