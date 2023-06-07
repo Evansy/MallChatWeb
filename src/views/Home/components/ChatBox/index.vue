@@ -41,6 +41,8 @@ const sendMsgHandler = (e: Event | KeyboardEvent) => {
   if (!inputMsg.value?.trim().length) {
     return
   }
+  /** 判断信息是否在发送中，是则 return 不走后面逻辑 */
+  if (isSending.value) return
 
   // 标记消息发送中
   isSending.value = true
