@@ -1,9 +1,6 @@
 import { defineComponent } from 'vue'
 import DOMPurify from 'dompurify'
 
-/**
- * @param {isFlash} props 是否是闪烁的消息,这里是单纯文字闪烁
- */
 export default defineComponent({
   props: ['urlMap', 'text', 'isMe'],
   setup(props) {
