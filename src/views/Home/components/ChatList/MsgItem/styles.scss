@@ -81,9 +81,9 @@
     overflow: hidden;
     font-size: 12px;
     color: var(--font-light);
+    word-break: break-all;
     background-color: #424656;
     border-radius: 8px;
-    word-break: break-all;
 
     &.pointer {
       cursor: pointer;
@@ -164,4 +164,22 @@
   background-image: url('@/assets/operate-icons/to_top.svg');
   background-position: center;
   background-size: contain;
+}
+
+@keyframes flash {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.3;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.is-flash {
+  animation: flash 1s infinite;
 }

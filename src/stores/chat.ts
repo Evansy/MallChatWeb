@@ -15,6 +15,18 @@ export const useChatStore = defineStore('chat', () => {
   const isLoading = ref(false) // 是否正在加载
   const isStartCount = ref(false) // 是否开始计数
   const cursor = ref()
+  const flashMsgId = ref<number | null>(null) // 记录当前回复的消息id 用于当前消息的闪烁
+  let timer: any = null // 消息闪烁计时器
+
+  // 开始闪烁
+  const startFlash = (replyId: number) => {
+    flashMsgId.value = replyId
+    // 以最后一次为准，清除上一次的定时器
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      flashMsgId.value = null
+    }, 2000)
+  }
 
   // 新消息计数
   const newMsgCount = ref(0)
@@ -90,5 +102,7 @@ export const useChatStore = defineStore('chat', () => {
     loadMore,
     currentMsgReply,
     filterUser,
+    startFlash,
+    flashMsgId,
   }
 })
