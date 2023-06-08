@@ -64,8 +64,6 @@ const scrollToMsg = async (msg: MessageItemContentType) => {
   if (index > -1) {
     // chatStore 记录一下点击的当前消息的 replyId 并在2s后清空 replyId, 开始消息闪烁
     virtualListRef?.value?.scrollToIndex(index, true)
-    // 跳转到回复的消息 高亮一下
-    chatStore.startFlash(reply.id)
   } else {
     // 如果没有加载过，就先加载，然后跳转
     const curMsgIndex = chatStore.getMsgIndex(id)
@@ -76,9 +74,9 @@ const scrollToMsg = async (msg: MessageItemContentType) => {
     // 跳转
     // FIXME 这时候新加载消息了，所以会有滚动冲突，故不加动画效果，否则会很怪异。
     setTimeout(virtualListRef?.value?.scrollToIndex(chatStore.getMsgIndex(reply.id), false), 0)
-    // 跳转到回复的消息 高亮一下
-    chatStore.startFlash(reply.id)
   }
+  // 跳转到回复的消息 高亮一下
+  chatStore.startFlash(reply.id)
 }
 
 /** 右键菜单 */
