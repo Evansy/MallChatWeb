@@ -1,4 +1,4 @@
-const prefix = import.meta.env.PROD ? 'https://api.mallchat.cn' : ''
+const prefix = import.meta.env.VITE_API_PREFIX
 export default {
   getGroupUserList: `${prefix}/capi/chat/public/member/page`,
   getMemberStatistic: `${prefix}/capi/chat/public/member/statistic`,
