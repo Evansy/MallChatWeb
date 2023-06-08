@@ -72,7 +72,7 @@
   width: 200px;
 }
 
-@media only screen and (width >=640px) {
+@media only screen and (min-width: 640px) {
   .side-toolbar {
     flex-direction: column;
     width: 80px;
@@ -98,7 +98,7 @@
   }
 }
 
-@media only screen and (width >=640px) {
+@media only screen and (min-width: 640px) {
   .side-toolbar {
     &-avatar {
       --el-avatar-size: 56px;

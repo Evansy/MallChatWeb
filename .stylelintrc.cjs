@@ -13,7 +13,6 @@ module.exports = {
     // 样式属性 vue 规则
     'stylelint-config-recommended-vue/scss',
     // 接入 Prettier 规则
-    'stylelint-config-prettier',
     'stylelint-prettier/recommended',
   ],
   // 配置 rules
@@ -27,5 +26,6 @@ module.exports = {
         ignorePseudoClasses: ['global', 'v-deep', 'deep'],
       },
     ],
+    'media-feature-range-notation': 'prefix',
   },
 }

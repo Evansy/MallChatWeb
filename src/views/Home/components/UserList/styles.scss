@@ -120,7 +120,7 @@
   pointer-events: none;
 }
 
-@media only screen and (width >=640px) {
+@media only screen and (min-width: 640px) {
   .user-list-wrapper {
     position: relative;
     top: 0;
