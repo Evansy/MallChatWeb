@@ -1,16 +1,11 @@
 import { defineComponent } from 'vue'
 import DOMPurify from 'dompurify'
-import styles from './RenderMsg.module.scss'
 
-/**
- * @param {isFlash} props 是否是闪烁的消息,这里是单纯文字闪烁
- */
 export default defineComponent({
-  props: ['urlMap', 'text', 'isMe', 'isFlash'],
+  props: ['urlMap', 'text', 'isMe'],
   setup(props) {
     return () => {
-      if (!props.urlMap || Object.keys(props.urlMap).length === 0)
-        return <div class={props.isFlash ? styles['is-flash'] : ''}>{props.text}</div>
+      if (!props.urlMap || Object.keys(props.urlMap).length === 0) return props.text
 
       // 先过滤所有标签
       const clean = DOMPurify.sanitize(props.text, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })
@@ -25,7 +20,7 @@ export default defineComponent({
           };" href="${url.includes('http') ? url : `//${url}`}">${title}</a>`,
         )
       }
-      return <div v-html={result} class={props.isFlash ? styles['is-flash'] : ''} />
+      return <div v-html={result} />
     }
   },
 })

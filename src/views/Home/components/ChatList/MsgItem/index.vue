@@ -158,7 +158,6 @@ onMounted(() => {
           @contextmenu.prevent.stop="handleRightClick($event, msg)"
           :class="{ 'is-flash': chatStore.flashMsgId === props.msg?.message.id }"
         >
-          <!-- 没有设置单纯文字的闪烁 props -->
           <RenderMsg :text="msg.message.content.trim()" :url-map="msg.message.urlTitleMap" :is-me="isCurrentUser" />
         </div>
       </el-tooltip>
