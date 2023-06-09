@@ -3,12 +3,12 @@
 }
 
 /* stylelint-disable-next-line selector-class-pattern */
-:global(.login-box-modal .el-dialog--header) {
+:global(.login-box-modal .el-dialog__header) {
   padding: 0;
 }
 
 /* stylelint-disable-next-line selector-class-pattern */
-:global(.login-box-modal .el-dialog--headerbtn) {
+:global(.login-box-modal .el-dialog__headerbtn) {
   z-index: 5;
 }
 

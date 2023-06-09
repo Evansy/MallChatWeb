@@ -93,7 +93,7 @@ const initConnection = () => {
   connection?.removeEventListener('close', onConnectClose)
   connection?.removeEventListener('error', onConnectError)
   // 建立链接
-  connection = new WebSocket('wss://api.mallchat.cn/websocket')
+  connection = new WebSocket(import.meta.env.VITE_WS_URL)
   // 收到消息
   connection.addEventListener('message', onConnectMsg)
   // 建立链接

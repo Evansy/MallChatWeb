@@ -10,6 +10,7 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import bundleAnalyzer from 'rollup-plugin-bundle-analyzer'
+import autoprefixer from 'autoprefixer'
 
 const pathSrc = path.resolve(__dirname, 'src')
 
@@ -50,6 +51,13 @@ export default defineConfig({
   // 去掉生产的 打印和 debugger
   esbuild: {
     drop: ['console', 'debugger'],
+  },
+  css: {
+    postcss: {
+      plugins: [
+        autoprefixer({}), // add options if needed
+      ],
+    },
   },
   server: {
     port: 9988,
