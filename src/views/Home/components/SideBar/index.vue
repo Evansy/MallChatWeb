@@ -21,7 +21,7 @@ const mockData = ref([
     name: lastMassage.value?.fromUser?.username,
     avatar: mallChatLogo,
     tag: '官方',
-    lastMsg: lastMassage.value.message.body.content || '欢迎使用MallChat',
+    lastMsg: lastMassage.value?.message?.body?.content || '欢迎使用MallChat',
     lastMsgTime: formatTimestamp(lastMassage.value?.message?.body?.sendTime),
   },
   {
