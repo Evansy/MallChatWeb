@@ -257,11 +257,11 @@
 
 .remove-enter-active,
 .remove-leave-active {
-  transition: opacity 0.3s, transform 0.3s, height 0.28s;
+  transition: opacity 0.12s, transform 0.12s, height 0.12s;
 }
 
 .remove-leave-to {
-  height: 20px; // 防抖动的核心，与send-time-block真实高度一致
+  height: 14px; // 防抖动的核心，与send-time-block真实高度一致
   opacity: 0;
   transform: scale(0);
 }

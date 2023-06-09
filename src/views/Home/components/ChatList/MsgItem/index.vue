@@ -55,7 +55,6 @@ const renderMsgRef = ref<HTMLElement | null>(null)
 const boxRef = ref<HTMLElement | null>(null)
 const tooltipPlacement = ref()
 const virtualListRef = inject<Ref>('virtualListRef')
-const isShowRecall = ref(false) // 控制撤回文本回显-防止页面抖动
 const isShowMenu = ref(false) // 是否显示菜单
 // 弹出定位
 const menuOptions = ref({
@@ -118,8 +117,8 @@ onMounted(() => {
 
 <template>
   <span v-if="isShowTimeBlock && msg.timeBlock" class="send-time-block">{{ msg.timeBlock }}</span>
-  <span v-if="isRecall && isShowRecall" class="send-time-block">{{ message.body }}</span>
-  <transition name="remove" @after-leave="isShowRecall = true">
+  <span v-if="isRecall" class="send-time-block">{{ message.body }}</span>
+  <transition name="remove">
     <div :class="chatCls" v-if="!isRecall">
       <div class="chat-item-avatar">
         <img :src="fromUser.avatar || defaultAvatar" />
