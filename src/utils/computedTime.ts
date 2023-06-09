@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import type { Dayjs } from 'dayjs'
-import type { MessageItemType } from '@/services/types'
+import type { MessageType } from '@/services/types'
 
 // 5 分钟 5 * 60 * 1000;
 const intervalTime = 300000
@@ -25,7 +25,7 @@ const timeToStr = (time: number) => {
 }
 
 // 超过5分钟，或者超过20条消息，就添加展示时间
-const checkTimeInterval = (cur: MessageItemType, pre: MessageItemType) => {
+const checkTimeInterval = (cur: MessageType, pre: MessageType) => {
   // 如果有一个超过 5 分钟了或者计数达到 20 条了
   if ((pre && cur.message.sendTime - pre.message.sendTime > intervalTime) || computedCount >= computedCountMax) {
     // 重置计数
@@ -39,7 +39,7 @@ const checkTimeInterval = (cur: MessageItemType, pre: MessageItemType) => {
   }
 }
 
-export const computedTimeBlock = (list: MessageItemType[], needFirst = true) => {
+export const computedTimeBlock = (list: MessageType[], needFirst = true) => {
   if (!list || list.length === 0) return []
   // 是否需要保留 传入 list 第一个，如果是接口拉回来的消息列表就要保留，如果接收到新消息，需要拿当前消息列表最后一个拿来做时间间隔计算的话，就不需要保留第一个
   const temp = needFirst ? [list[0]] : []

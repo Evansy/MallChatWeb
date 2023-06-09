@@ -44,6 +44,10 @@
       user-select: none;
     }
 
+    .user-ip {
+      user-select: none;
+    }
+
     .send-time {
       display: inline-block;
       user-select: none;
@@ -60,7 +64,7 @@
     word-break: break-word;
     white-space: pre-line;
     background-color: #383c4b;
-    border-radius: 5px 20px 20px;
+    border-radius: 2px 18px 18px;
   }
 
   &-option {
@@ -174,7 +178,7 @@
 
   .chat-item-content {
     margin-left: auto;
-    border-radius: 20px 5px 20px 20px;
+    border-radius: 18px 2px 18px 18px;
   }
 
   .extra,
@@ -249,4 +253,15 @@
 .count-up-leave-to {
   opacity: 0;
   transform: translateY(-5px);
+}
+
+.remove-enter-active,
+.remove-leave-active {
+  transition: opacity 0.3s, transform 0.3s, height 0.28s;
+}
+
+.remove-leave-to {
+  height: 20px; // 防抖动的核心，与send-time-block真实高度一致
+  opacity: 0;
+  transform: scale(0);
 }

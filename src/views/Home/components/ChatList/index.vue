@@ -2,7 +2,7 @@
 import { ref, onMounted, nextTick, provide } from 'vue'
 import throttle from 'lodash/throttle'
 import { useChatStore } from '@/stores/chat'
-import type { MessageItemType } from '@/services/types'
+import type { MessageType } from '@/services/types'
 import VirtualList from '@/components/VirtualList/index'
 import MsgItem from './MsgItem/index.vue'
 
@@ -54,11 +54,11 @@ const onScroll = throttle((eventData) => {
   }
 }, 100)
 
-const getKey = (item: MessageItemType) => item.message.id
+const getKey = (item: MessageType) => item.message.id
 </script>
 
 <template>
-  <div class="chat-msg-list">
+  <div class="chat-msg-list" @contextmenu.prevent>
     <el-icon v-if="chatStore.isLoading" :size="14" class="loading"><IEpLoading />消息加载中</el-icon>
     <VirtualList
       v-if="chatStore.chatMessageList?.length"

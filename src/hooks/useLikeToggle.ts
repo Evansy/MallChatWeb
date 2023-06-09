@@ -1,14 +1,14 @@
 import { computed } from 'vue'
 import apis from '@/services/apis'
 import { ActType, MarkType, IsYet } from '@/services/types'
-import type { MessageItemType } from '@/services/types'
+import type { MsgType } from '@/services/types'
 
 /**
  * 统一点赞倒赞操作Hook
  * @param message 消息
  * @description 引入该Hook后，可直接使用isLike(是否已点赞)、isDisLike(是否已倒赞)、onLike(点赞方法)、onDisLike(倒赞方法)
  */
-export const useLikeToggle = (message: MessageItemType['message']) => {
+export const useLikeToggle = (message: MsgType) => {
   const isLike = computed(() => message.messageMark.userLike === IsYet.Yes)
   const isDisLike = computed(() => message.messageMark.userDislike === IsYet.Yes)
   const likeCount = computed(() => message.messageMark.likeCount)

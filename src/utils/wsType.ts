@@ -34,6 +34,8 @@ export enum WsResponseMessageType {
    * 8.点赞、倒赞更新通知
    */
   WSMsgMarkItem,
+  /** 消息撤回 */
+  WSMsgRecall,
 }
 
 /**

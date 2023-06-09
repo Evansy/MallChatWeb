@@ -4,7 +4,7 @@ import { useChatStore } from '@/stores/chat'
 import { useGroupStore } from '@/stores/group'
 import { WsResponseMessageType, WsRequestMsgType } from './wsType'
 import type { LoginSuccessResType, LoginInitResType, WsReqMsgContentType, OnStatusChangeType } from './wsType'
-import type { MessageItemType, MarkItemType } from '@/services/types'
+import type { MessageType, MarkItemType, RevokedMsgType } from '@/services/types'
 import { OnlineStatus } from '@/services/types'
 import { worker } from './initWorker'
 import shakeTitle from '@/utils/shakeTitle'
@@ -157,7 +157,7 @@ class WS {
       }
       // 收到消息
       case WsResponseMessageType.ReceiveMessage: {
-        chatStore.pushMsg(params.data as MessageItemType)
+        chatStore.pushMsg(params.data as MessageType)
         break
       }
       // 用户下线
@@ -181,6 +181,12 @@ class WS {
       case WsResponseMessageType.WSMsgMarkItem: {
         const data = params.data as { markList: MarkItemType[] }
         chatStore.updateMarkCount(data.markList)
+        break
+      }
+      // 消息撤回通知
+      case WsResponseMessageType.WSMsgRecall: {
+        const { data } = params as { data: RevokedMsgType }
+        chatStore.updateRecallStatus(data)
         break
       }
       default: {
