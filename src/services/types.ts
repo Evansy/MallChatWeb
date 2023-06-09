@@ -1,15 +1,15 @@
+/**
+ * 类型定义文件
+ * 注意：请使用TSDoc规范进行注释，以便在使用时能够获得良好提示。
+ * @see TSDoc规范https://tsdoc.org/
+ **/
+
+/***/
 export type ListResponse<T extends unknown> = {
-  /**
-   * 游标（下次翻页带上这参数）
-   */
+  /** 游标（下次翻页带上这参数）*/
   cursor: string
-  /**
-   * 是否最后一页
-   */
+  /** 是否最后一页 */
   isLast: boolean
-  /**
-   *
-   */
   list: T[]
 }
 
@@ -52,24 +52,6 @@ export type GroupStatisticType = {
   totalNum: number
 }
 
-/**
- *  1正常文本 2.爆赞 （点赞超过10）3.危险发言（举报超5）
- */
-export enum MessageType {
-  /**
-   * 1正常文本
-   */
-  Normal = 1,
-  /**
-   * 2.爆赞 （点赞超过10）
-   */
-  Hot,
-  /**
-   * 3.危险发言（举报超5）
-   */
-  Danger,
-}
-
 export type MessageReplyType = {
   /**
    * 是否可消息跳转 0否 1是
@@ -93,98 +75,6 @@ export type MessageReplyType = {
   username: string
 }
 
-export type MessageItemContentType = {
-  /**
-   * 消息内容
-   */
-  content: string
-  /**
-   * 消息id
-   */
-  id: number
-  /**
-   * 消息标记
-   */
-  messageMark: {
-    /**
-     * 点赞数
-     */
-    likeCount: number
-    /**
-     * 该用户是否已经点赞 0否 1是
-     */
-    userLike: IsYet
-    /**
-     * 点赞数
-     */
-    dislikeCount: number
-    /**
-     * 到赞数
-     */
-    userDislike: IsYet
-  }
-  /**
-   * 父消息，如果没有父消息，返回的是null
-   */
-  reply: MessageReplyType | null
-  /**
-   * 消息发送时间
-   */
-  sendTime: number
-  /**
-   * 消息类型 1正常文本 2.爆赞 （点赞超过10）3.危险发言（举报超5）
-   */
-  type: MessageType
-  /**
-   * 消息中的链接
-   */
-  urlTitleMap: Record<string, string>
-}
-
-export type MessageItemType = {
-  /**
-   * 发送者信息
-   */
-  fromUser: {
-    /**
-     * 头像
-     */
-    avatar: string
-    /**
-     * 徽章标识，如果没有展示null
-     */
-    badge: {
-      /**
-       * 徽章说明
-       */
-      describe: string
-      /**
-       * 徽章图像
-       */
-      img: string
-    } | null
-    /**
-     * 用户名称
-     */
-    username: string
-    /**
-     * 用户ID
-     */
-    uid: number
-    /**
-     * 用户归属地
-     */
-    locPlace: string
-  }
-  /**
-   * 消息详情
-   */
-  message: MessageItemContentType
-
-  // 是否显示时间，有值才显示
-  timeBlock?: string
-}
-
 export enum ActType {
   /**
    * 确认
@@ -200,12 +90,6 @@ export enum MarkType {
   DisLike,
 }
 
-export type SendMsgReq = {
-  content: string
-  replyMsgId?: number
-  roomId: number
-}
-
 export type MarkMsgReq = {
   // actType	动作类型 1确认 2取消
   actType: ActType
@@ -218,6 +102,11 @@ export type MarkMsgReq = {
 export enum SexType {
   Man = 1,
   Female,
+}
+
+export enum PowerType {
+  User,
+  Admin,
 }
 
 export type UserInfoType = {
@@ -245,6 +134,10 @@ export type UserInfoType = {
    * 徽章，本地字段，有值用本地，无值用远端
    */
   badge?: string
+  /**
+   * 权限
+   */
+  power?: number
 }
 
 // 是否拥有 0否 1是
@@ -287,4 +180,128 @@ export type MarkItemType = {
    * 动作类型 1确认 2取消
    */
   actType: ActType
+}
+
+export type RevokedMsgType = {
+  /** 消息ID */
+  msgId: number
+  /** 会话ID */
+  roomId?: number
+  /** 撤回人ID */
+  recallUid?: number
+}
+
+export enum MsgTypeType {
+  /** 文本 */
+  Text = 1,
+  /** 撤回 */
+  Recall,
+}
+
+// -------------------- ⬇消息体类型定义⬇ ----------------
+
+/**
+ * 消息返回体
+ */
+export type MessageType = {
+  /** 发送者信息 */
+  fromUser: MsgUserType
+  /** 消息主体 */
+  message: MsgType
+  /** 发送时间 */
+  sendTime: string
+  /** 时间段（可选） */
+  timeBlock?: string
+}
+
+/**
+ * 消息中用户信息
+ */
+export type MsgUserType = {
+  /** 用户ID */
+  uid: number
+  /** 用户名 */
+  username: string
+  /** 头像 */
+  avatar: string
+  /** 归属地 */
+  locPlace: string
+  /** 徽章 */
+  badge?: {
+    /** 徽章地址 */
+    img: string
+    /** 描述 */
+    describe: string // 描述
+  }
+}
+
+/**
+ * 消息互动信息
+ */
+export type MessageMarkType = {
+  /** 点赞 */
+  userLike: number
+  /** 举报 */
+  userDislike: number
+  /** 点赞数 */
+  likeCount: number
+  /** 举报数 */
+  dislikeCount: number
+}
+
+/**
+ * 消息内容
+ */
+export type MsgType = {
+  id: number
+  type: number
+  /** TODO：不同消息类型不同Body 未来后端增加其它类型后变更为`联合类型`, `条件类型` */
+  body: BodyType | any
+  sendTime: number
+  messageMark: MessageMarkType
+}
+
+/**
+ * 消息
+ */
+export type BodyType = {
+  /** 消息内容 */
+  content: string
+  /** 回复 */
+  reply: {
+    id: number
+    username: string
+    type: number
+    /** 根据不同类型回复的消息展示也不同-`过渡版` */
+    body: any
+    /**
+     * 是否可消息跳转
+     * @enum {number}  `0`否 `1`是
+     */
+    canCallback: number
+    /** 跳转间隔的消息条数  */
+    gapCount: number
+  }
+  /**
+   * 消息链接映射
+   * @deprecated 即将废弃？
+   */
+  urlTitleMap: Record<string, string>
+}
+
+/**
+ * 发送消息载体
+ */
+export type MessageReq = {
+  /** 会话id */
+  roomId: number
+  /** 消息类型 */
+  msgType: number
+  /** 消息体 */
+  body: {
+    /** 文本消息内容 */
+    content: string
+    /** 回复的消息id */
+    replyMsgId?: number
+  }
 }

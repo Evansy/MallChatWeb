@@ -14,4 +14,8 @@ export default {
   setUserBadge: `${prefix}/capi/user/badge`,
   // 消息标记
   markMsg: `${prefix}/capi/chat/msg/mark`,
+  // 拉黑用户
+  blockUser: `${prefix}/capi/user/black`,
+  // 撤回消息
+  recallMsg: `${prefix}/capi/chat/msg/recall`,
 }

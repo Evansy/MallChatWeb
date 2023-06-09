@@ -21,8 +21,8 @@ const mockData = ref([
     name: lastMassage.value?.fromUser?.username,
     avatar: mallChatLogo,
     tag: '官方',
-    lastMsg: lastMassage.value?.message?.content || '欢迎使用MallChat',
-    lastMsgTime: formatTimestamp(lastMassage.value?.message?.sendTime),
+    lastMsg: lastMassage.value.message.body.content || '欢迎使用MallChat',
+    lastMsgTime: formatTimestamp(lastMassage.value?.message?.body?.sendTime),
   },
   {
     id: 2,
@@ -38,7 +38,7 @@ const mockData = ref([
 // 最后一条消息变化就把MoakData更新
 watch(lastMassage, (newVal) => {
   mockData.value[0].name = newVal?.fromUser?.username
-  mockData.value[0].lastMsg = newVal?.message?.content
+  mockData.value[0].lastMsg = newVal?.message?.body?.content
   mockData.value[0].lastMsgTime = formatTimestamp(newVal?.message?.sendTime)
 })
 </script>
