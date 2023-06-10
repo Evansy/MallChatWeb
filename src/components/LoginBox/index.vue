@@ -31,7 +31,13 @@ watchEffect(() => {
       <img class="login-logo" src="@/assets/logo.jpeg" alt="MallChat" />
       <p class="login-slogan">边聊边买，岂不快哉~</p>
       <div class="login-qrcode-wrapper" v-loading="!loginQrCode">
-        <QrCode class="login-qrcode" v-if="loginQrCode" :value="loginQrCode" :size="328" :margin="5" />
+        <QrCode
+          class="login-qrcode"
+          v-if="loginQrCode"
+          :value="loginQrCode"
+          :size="328"
+          :margin="5"
+        />
       </div>
 
       <p class="login-desc" v-if="loginStatus === LoginStatus.Waiting">

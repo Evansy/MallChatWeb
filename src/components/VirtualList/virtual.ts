@@ -313,6 +313,8 @@ export default class Virtual {
   }
 
   getEstimateSize() {
-    return this.isFixedType() ? this.fixedSizeValue : this.firstRangeAverageSize || this.param.estimateSize
+    return this.isFixedType()
+      ? this.fixedSizeValue
+      : this.firstRangeAverageSize || this.param.estimateSize
   }
 }

@@ -56,7 +56,10 @@ export enum WsRequestMsgType {
   Authorization,
 }
 
-export type WsReqMsgContentType = { type: WsRequestMsgType; data?: Record<string, unknown> }
+export type WsReqMsgContentType = {
+  type: WsRequestMsgType
+  data?: Record<string, unknown>
+}
 export type LoginInitResType = { loginUrl: string }
 
 export type LoginSuccessResType = Pick<UserInfoType, 'avatar' | 'name' | 'uid'> & {

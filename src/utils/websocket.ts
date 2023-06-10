@@ -3,9 +3,15 @@ import { useUserStore } from '@/stores/user'
 import { useChatStore } from '@/stores/chat'
 import { useGroupStore } from '@/stores/group'
 import { WsResponseMessageType, WsRequestMsgType } from './wsType'
-import type { LoginSuccessResType, LoginInitResType, WsReqMsgContentType, OnStatusChangeType } from './wsType'
+import type {
+  LoginSuccessResType,
+  LoginInitResType,
+  WsReqMsgContentType,
+  OnStatusChangeType,
+} from './wsType'
 import type { MessageType, MarkItemType, RevokedMsgType } from '@/services/types'
 import { OnlineStatus } from '@/services/types'
+import { computedToken } from '@/services/request'
 import { worker } from './initWorker'
 import shakeTitle from '@/utils/shakeTitle'
 
@@ -33,7 +39,6 @@ class WS {
   }
 
   onWorkerMsg = (e: MessageEvent<any>) => {
-    // console.log(e)
     const params: { type: string; value: unknown } = JSON.parse(e.data)
     switch (params.type) {
       case 'message': {
@@ -89,7 +94,9 @@ class WS {
   }
 
   #send(msg: WsReqMsgContentType) {
-    worker.postMessage(`{"type":"message","value":${typeof msg === 'string' ? msg : JSON.stringify(msg)}}`)
+    worker.postMessage(
+      `{"type":"message","value":${typeof msg === 'string' ? msg : JSON.stringify(msg)}}`,
+    )
   }
 
   send = (params: WsReqMsgContentType) => {
@@ -129,6 +136,8 @@ class WS {
         userStore.userInfo = { ...userStore.userInfo, ...rest }
         localStorage.setItem('USER_INFO', JSON.stringify(rest))
         localStorage.setItem('TOKEN', token)
+        // 更新一下请求里面的 token.
+        computedToken()
         loginStore.loginStatus = LoginStatus.Success
         // 关闭登录弹窗
         loginStore.showLogin = false

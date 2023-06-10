@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { computed, type PropType } from 'vue'
 import apis from '@/services/apis'
-import { ContextMenu, ContextMenuSeparator, ContextMenuItem, type MenuOptions } from '@imengyu/vue3-context-menu'
+import {
+  ContextMenu,
+  ContextMenuSeparator,
+  ContextMenuItem,
+  type MenuOptions,
+} from '@imengyu/vue3-context-menu'
 import { useUserStore } from '@/stores/user'
 import { copyToClip } from '@/utils/copy'
 import { useChatStore } from '@/stores/chat'

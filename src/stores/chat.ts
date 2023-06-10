@@ -27,7 +27,11 @@ export const useChatStore = defineStore('chat', () => {
 
   const getMsgList = async (size = pageSize) => {
     isLoading.value = true
-    const data = await apis.getMsgList({ params: { pageSize: size, cursor: cursor.value, roomId: 1 } }).send()
+    const data = await apis
+      .getMsgList({
+        params: { pageSize: size, cursor: cursor.value, roomId: 1 },
+      })
+      .send()
     if (!data) return
     const computedList = computedTimeBlock(data.list)
     computedList.forEach((msg) => {

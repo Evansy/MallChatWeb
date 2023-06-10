@@ -27,7 +27,10 @@ const timeToStr = (time: number) => {
 // 超过5分钟，或者超过20条消息，就添加展示时间
 const checkTimeInterval = (cur: MessageType, pre: MessageType) => {
   // 如果有一个超过 5 分钟了或者计数达到 20 条了
-  if ((pre && cur.message.sendTime - pre.message.sendTime > intervalTime) || computedCount >= computedCountMax) {
+  if (
+    (pre && cur.message.sendTime - pre.message.sendTime > intervalTime) ||
+    computedCount >= computedCountMax
+  ) {
     // 重置计数
     computedCount = 0
     // 返回时间标记

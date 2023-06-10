@@ -14,6 +14,7 @@ import autoprefixer from 'autoprefixer'
 
 const pathSrc = path.resolve(__dirname, 'src')
 
+const isProd = process.env.NODE_ENV === 'production'
 const lifecycle = process.env.npm_lifecycle_event
 
 // https://vitejs.dev/config/
@@ -50,7 +51,7 @@ export default defineConfig({
   },
   // 去掉生产的 打印和 debugger
   esbuild: {
-    drop: ['console', 'debugger'],
+    drop: isProd ? ['console', 'debugger'] : [],
   },
   css: {
     postcss: {

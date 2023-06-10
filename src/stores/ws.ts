@@ -22,5 +22,11 @@ export const useWsLoginStore = defineStore('wsLogin', () => {
     loginStatus.value = LoginStatus.Init
   }
 
-  return { loginQrCode, loginStatus, showLogin, resetLoginState, getLoginQrCode }
+  return {
+    loginQrCode,
+    loginStatus,
+    showLogin,
+    resetLoginState,
+    getLoginQrCode,
+  }
 })

@@ -101,8 +101,13 @@ const insertText = (emoji: string) => {
           <ChatList @start-replying="focusMsgInput" />
           <div class="chat-msg-send">
             <div v-if="Object.keys(currentMsgReply).length" class="reply-msg-wrapper">
-              <span> {{ currentMsgReply.fromUser?.username }}: {{ currentMsgReply.message?.body.content }}</span>
-              <el-icon class="reply-msg-icon" :size="14" @click="onClearReply"><IEpClose /></el-icon>
+              <span>
+                {{ currentMsgReply.fromUser?.username }}:
+                {{ currentMsgReply.message?.body.content }}</span
+              >
+              <el-icon class="reply-msg-icon" :size="14" @click="onClearReply">
+                <IEpClose />
+              </el-icon>
             </div>
             <div class="msg-input-box">
               <div class="msg-input-wrapper">
@@ -149,7 +154,9 @@ const insertText = (emoji: string) => {
                   </li>
                 </ul>
               </el-popover>
-              <button class="send-button" :disabled="!inputMsg.length" @click="sendMsgHandler">🚀</button>
+              <button class="send-button" :disabled="!inputMsg.length" @click="sendMsgHandler"
+                >🚀</button
+              >
             </div>
           </div>
         </div>

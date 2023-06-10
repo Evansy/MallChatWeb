@@ -8,5 +8,6 @@
     "ignoreDeprecations": "5.0",
     "verbatimModuleSyntax": true
   },
+  "lib": ["WebWorker"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

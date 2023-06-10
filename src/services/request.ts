@@ -15,7 +15,7 @@ function getToken() {
   }
 }
 
-const token = getToken()
+export const computedToken = getToken()
 
 export const alovaIns = createAlova({
   // 假设我们需要与这个域名的服务器交互
@@ -30,7 +30,7 @@ export const alovaIns = createAlova({
   // 设置全局的请求拦截器，与axios相似
   beforeRequest({ config }) {
     // 假设我们需要添加token到请求头
-    config.headers.Authorization = `Bearer ${token()}`
+    config.headers.Authorization = `Bearer ${computedToken()}`
 
     config.headers['Content-Type'] = 'application/json; charset=utf-8'
   },
@@ -42,7 +42,7 @@ export const alovaIns = createAlova({
       // 这边抛出错误时，将会进入请求失败拦截器内
       if (json.errMsg) {
         // 空 token 且 状态码 401 不弹提示
-        if (!token() && response.status === 401) {
+        if (!computedToken() && response.status === 401) {
           //
         } else {
           ElMessage.error(json.errMsg)

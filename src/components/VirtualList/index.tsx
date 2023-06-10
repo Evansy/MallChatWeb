@@ -1,4 +1,12 @@
-import { defineComponent, onActivated, onBeforeMount, onMounted, onUnmounted, ref, watch } from 'vue'
+import {
+  defineComponent,
+  onActivated,
+  onBeforeMount,
+  onMounted,
+  onUnmounted,
+  ref,
+  watch,
+} from 'vue'
 import Virtual from './virtual'
 import Item from './item'
 
@@ -148,7 +156,9 @@ export default defineComponent({
     const getUniqueIdFromDataSources = () => {
       const { dataKey, data = [] } = props
       // 如果dataKey是函数 则调用传入的函数执行获取唯一标识
-      return data.map((dataSource: any) => (typeof dataKey === 'function' ? dataKey(dataSource) : dataSource[dataKey]))
+      return data.map((dataSource: any) =>
+        typeof dataKey === 'function' ? dataKey(dataSource) : dataSource[dataKey],
+      )
     }
     const onRangeChanged = (newRange: any) => {
       range.value = newRange
@@ -194,7 +204,11 @@ export default defineComponent({
     const scrollToOffset = (offset: number, smooth = false) => {
       if (rootRef.value) {
         // rootRef.value.scrollTop = offset
-        rootRef.value.scroll({ left: 0, top: offset, behavior: smooth ? 'smooth' : 'auto' })
+        rootRef.value.scroll({
+          left: 0,
+          top: offset,
+          behavior: smooth ? 'smooth' : 'auto',
+        })
       }
     }
 
@@ -210,7 +224,8 @@ export default defineComponent({
         const dataSource = data[index] as DataSource // 获取当前索引的数据项
         if (dataSource) {
           // 取这个项里面的唯一标识拿来做key
-          const uniqueKey = typeof dataKey === 'function' ? dataKey(dataSource) : dataSource[dataKey]
+          const uniqueKey =
+            typeof dataKey === 'function' ? dataKey(dataSource) : dataSource[dataKey]
           // 如果唯一标识是字符串或者数字则渲染
           if (typeof uniqueKey === 'string' || typeof uniqueKey === 'number') {
             slots.push(

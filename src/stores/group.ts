@@ -10,11 +10,20 @@ import { uniqueUserList } from '@/utils/unique'
 const sorAction = (pre: UserItem, next: UserItem) => {
   if (pre.activeStatus === OnlineStatus.Online && next.activeStatus === OnlineStatus.Online) {
     return next.lastOptTime < pre.lastOptTime ? -1 : 1
-  } else if (pre.activeStatus !== OnlineStatus.Online && next.activeStatus !== OnlineStatus.Online) {
+  } else if (
+    pre.activeStatus !== OnlineStatus.Online &&
+    next.activeStatus !== OnlineStatus.Online
+  ) {
     return next.lastOptTime < pre.lastOptTime ? -1 : 1
-  } else if (pre.activeStatus === OnlineStatus.Online && next.activeStatus !== OnlineStatus.Online) {
+  } else if (
+    pre.activeStatus === OnlineStatus.Online &&
+    next.activeStatus !== OnlineStatus.Online
+  ) {
     return -1
-  } else if (pre.activeStatus !== OnlineStatus.Online && next.activeStatus === OnlineStatus.Online) {
+  } else if (
+    pre.activeStatus !== OnlineStatus.Online &&
+    next.activeStatus === OnlineStatus.Online
+  ) {
     return 1
   } else {
     return next.lastOptTime < pre.lastOptTime ? -1 : 1
@@ -79,5 +88,14 @@ export const useGroupStore = defineStore('group', () => {
     userList.value = userList.value.filter((item) => item.uid !== uid)
   }
 
-  return { userList, loading, loadMore, getGroupUserList, countInfo, batchUpdateUserStatus, showGroupList, filterUser }
+  return {
+    userList,
+    loading,
+    loadMore,
+    getGroupUserList,
+    countInfo,
+    batchUpdateUserStatus,
+    showGroupList,
+    filterUser,
+  }
 })

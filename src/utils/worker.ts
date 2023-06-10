@@ -1,5 +1,3 @@
-/* eslint-disable no-restricted-globals */
-
 // 发消息给主进程
 const postMsg = ({ type, value }: { type: string; value?: object }) => {
   self.postMessage(JSON.stringify({ type, value }))

@@ -59,7 +59,9 @@ const getKey = (item: MessageType) => item.message.id
 
 <template>
   <div class="chat-msg-list" @contextmenu.prevent>
-    <el-icon v-if="chatStore.isLoading" :size="14" class="loading"><IEpLoading />消息加载中</el-icon>
+    <el-icon v-if="chatStore.isLoading" :size="14" class="loading">
+      <IEpLoading />消息加载中
+    </el-icon>
     <VirtualList
       v-if="chatStore.chatMessageList?.length"
       ref="virtualListRef"

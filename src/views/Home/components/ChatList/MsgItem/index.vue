@@ -47,7 +47,7 @@ const isCurrentUser = computed(() => props.msg?.fromUser.uid === userStore?.user
 const chatCls = computed(() => ({
   'chat-item': true,
   'is-me': isCurrentUser.value,
-  right: (isCurrentUser.value && props.bubbleMode === 'spread') || props.bubbleMode === 'right',
+  'right': (isCurrentUser.value && props.bubbleMode === 'spread') || props.bubbleMode === 'right',
 }))
 
 const { message, fromUser } = toRefs(props.msg)
@@ -61,7 +61,9 @@ const menuOptions = ref({
   x: 0,
   y: 0,
 })
-const { isLike, isDisLike, likeCount, dislikeCount, onLike, onDisLike } = useLikeToggle(props.msg.message)
+const { isLike, isDisLike, likeCount, dislikeCount, onLike, onDisLike } = useLikeToggle(
+  props.msg.message,
+)
 const isRecall = computed(() => message.value.type === MsgTypeType.Recall)
 
 // 滚动到消息
@@ -138,7 +140,9 @@ onMounted(() => {
           </el-tooltip>
           <span class="user-name">{{ fromUser.username }}</span>
           <span class="user-ip">({{ fromUser.locPlace || '未知' }})</span>
-          <span class="send-time" v-if="isShowTime">{{ formatTimestamp(msg.message.sendTime) }}</span>
+          <span class="send-time" v-if="isShowTime">
+            {{ formatTimestamp(msg.message.sendTime) }}
+          </span>
         </div>
         <el-tooltip
           effect="light"
@@ -153,8 +157,16 @@ onMounted(() => {
           <template #content>
             <MsgOption :msg="msg" />
           </template>
-          <div class="chat-item-content" ref="renderMsgRef" @contextmenu.prevent.stop="handleRightClick($event)">
-            <RenderMsg :text="message.body.content" :url-map="message.body.urlTitleMap" :is-me="isCurrentUser" />
+          <div
+            class="chat-item-content"
+            ref="renderMsgRef"
+            @contextmenu.prevent.stop="handleRightClick($event)"
+          >
+            <RenderMsg
+              :text="message.body.content"
+              :url-map="message.body.urlTitleMap"
+              :is-me="isCurrentUser"
+            />
           </div>
         </el-tooltip>
         <div
@@ -164,11 +176,17 @@ onMounted(() => {
           @click="scrollToMsg(message)"
         >
           <i class="can-scroll-icon" v-if="message.body.reply.canCallback" />
-          <span class="ellipsis"> {{ message.body.reply.username }}: {{ message.body.reply.body }} </span>
+          <span class="ellipsis">
+            {{ message.body.reply.username }}: {{ message.body.reply.body }}
+          </span>
         </div>
         <div v-if="likeCount + dislikeCount > 0" class="extra">
           <transition name="fade">
-            <span v-if="likeCount > 0" :class="['extra-item like', { active: isLike }]" @click="onLike">
+            <span
+              v-if="likeCount > 0"
+              :class="['extra-item like', { active: isLike }]"
+              @click="onLike"
+            >
               <IconLike />
               <transition name="count-up" mode="out-in">
                 <span class="count" :key="likeCount">{{ likeCount }}</span>
@@ -176,7 +194,11 @@ onMounted(() => {
             </span>
           </transition>
           <transition name="fade">
-            <span v-if="dislikeCount > 0" :class="['extra-item dlike', { active: isDisLike }]" @click="onDisLike">
+            <span
+              v-if="dislikeCount > 0"
+              :class="['extra-item dlike', { active: isDisLike }]"
+              @click="onDisLike"
+            >
               <IconDislike />
               <transition name="count-up" mode="out-in">
                 <span class="count" :key="dislikeCount">{{ dislikeCount }}</span>

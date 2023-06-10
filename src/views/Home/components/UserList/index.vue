@@ -48,7 +48,11 @@ const hiddenGroupListShow = () => (groupStore.showGroupList = false)
 
 <template>
   <div class="user-list-box">
-    <div class="user-list-mask" @click="hiddenGroupListShow" :class="groupStore.showGroupList ? 'show' : ''" />
+    <div
+      class="user-list-mask"
+      @click="hiddenGroupListShow"
+      :class="groupStore.showGroupList ? 'show' : ''"
+    />
     <div class="user-list-wrapper" :class="groupStore.showGroupList ? 'show' : ''">
       <div class="user-list-header">在线人数：{{ statistic.onlineNum || 0 }}</div>
       <TransitionGroup
