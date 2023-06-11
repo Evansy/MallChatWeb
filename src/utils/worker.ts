@@ -91,6 +91,7 @@ const initConnection = () => {
   connection?.removeEventListener('close', onConnectClose)
   connection?.removeEventListener('error', onConnectError)
   // 建立链接
+  // 本地配置到 .env 里面修改。生产配置在 .env.production 里面
   connection = new WebSocket(import.meta.env.VITE_WS_URL)
   // 收到消息
   connection.addEventListener('message', onConnectMsg)
