@@ -13,18 +13,28 @@ export default defineComponent({
 
       // 先过滤所有标签
       const clean = sanitize(props.text)
-
       // 再替换标签，保证用户输入的内容是干净的
-      let result = clean
-      for (const [url, title] of Object.entries(props.urlMap)) {
-        result = result?.replace(
-          url,
-          `<a rel="noopener noreferrer nofollow" target="_blank" class="msg-content-link" style="color: ${
-            props.isMe ? 'var(--color-white)' : 'var(--color-primary)'
-          };" href="${url.includes('http') ? url : `//${url}`}">${sanitize(title as string)}</a>`,
-        )
-      }
-      return <div v-html={result} />
+      const result = clean
+      const keys = Object.keys(props.urlMap) // 获取所有匹配的字符串
+
+      // 使用匹配字符串创建动态正则表达式，并将文本拆分为片段数组
+      const fragments = result.split(new RegExp(`(${keys.join('|')})`))
+      const color = props.isMe ? '#fff' : 'var(--color-primary)'
+      const chunks = fragments.map((item) =>
+        keys.includes(item) ? (
+          <a
+            rel="noopener noreferrer nofollow"
+            target="_blank"
+            class="msg-content-link"
+            style={color}
+          >
+            {props.urlMap[item]}
+          </a>
+        ) : (
+          item
+        ),
+      )
+      return chunks
     }
   },
 })
