@@ -20,9 +20,6 @@ dependencies:
   dayjs:
     specifier: ^1.11.8
     version: registry.npmmirror.com/dayjs@1.11.8
-  dompurify:
-    specifier: ^3.0.3
-    version: registry.npmmirror.com/dompurify@3.0.3
   element-plus:
     specifier: ^2.3.6
     version: registry.npmmirror.com/element-plus@2.3.6(vue@3.3.4)
@@ -2630,12 +2627,6 @@ packages:
     dependencies:
       domelementtype: registry.npmmirror.com/domelementtype@2.3.0
     dev: true
-
-  registry.npmmirror.com/dompurify@3.0.3:
-    resolution: {integrity: sha512-axQ9zieHLnAnHh0sfAamKYiqXMJAVwu+LM/alQ7WDagoWessyWvMSFyW65CqF3owufNu8HBcE4cM2Vflu7YWcQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/dompurify/-/dompurify-3.0.3.tgz}
-    name: dompurify
-    version: 3.0.3
-    dev: false
 
   registry.npmmirror.com/domutils@3.1.0:
     resolution: {integrity: sha512-H78uMmQtI2AhgDJjWeQmHwJJ2bLPD3GMmO7Zja/ZZh84wkm+4ut+IUnUdRa8uCGX88DiVx1j6FRe1XfxEgjEZA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/domutils/-/domutils-3.1.0.tgz}

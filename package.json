@@ -26,7 +26,6 @@
     "@imengyu/vue3-context-menu": "^1.2.10",
     "alova": "^2.6.0",
     "dayjs": "^1.11.8",
-    "dompurify": "^3.0.3",
     "element-plus": "^2.3.6",
     "gsap": "^3.12.1",
     "lodash": "^4.17.21",
