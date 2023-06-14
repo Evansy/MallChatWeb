@@ -46,8 +46,9 @@ export default defineComponent({
      */
     const dispatchSizeChange = () => {
       const { uniqueKey } = props
-      const size = rootRef.value ? rootRef.value.offsetHeight : 0 // 当前项的高度
-      emit('itemResize', uniqueKey, size)
+      // 使用 getBoundingClientRect 获取元素的大小 更为准确些
+      const rect = rootRef.value ? rootRef.value.getBoundingClientRect() : 0
+      emit('itemResize', uniqueKey, rect ? rect.height : 0)
     }
 
     onMounted(() => {
