@@ -17,6 +17,12 @@ const goToBottom = () => {
   }
 }
 
+// 回到最新消息
+const goToNewMessage = () => {
+  // 未读消息数 = 总数 - 新消息数
+  virtualListRef.value.scrollToIndex(chatStore.chatMessageList.length - chatStore.newMsgCount)
+}
+
 // 提供虚拟列表 ref 给子组件使用
 provide('virtualListRef', virtualListRef)
 
@@ -29,14 +35,12 @@ onMounted(() => {
 })
 
 // 到顶部时触发函数 记录旧的滚动高度，加载更多消息后滚动回加载时那条消息的位置
-const onTotop = throttle(async () => {
-  const oldScrollTop = virtualListRef.value.getScrollSize()
+const onTotop = async () => {
+  if (chatStore.isLoading) return
+  const oldIndex = virtualListRef.value.getSizes()
   await chatStore.loadMore()
-  nextTick(() => {
-    const newScrollTop = virtualListRef.value.getScrollSize() - oldScrollTop
-    virtualListRef.value.scrollToOffset(newScrollTop)
-  })
-}, 1600)
+  virtualListRef.value.scrollToIndex(virtualListRef.value.getSizes() - oldIndex)
+}
 
 // 滚动时触发函数，主要处理新消息提示
 const onScroll = throttle((eventData) => {
@@ -78,8 +82,8 @@ const getKey = (item: MessageType) => item.message.id
     <template v-if="!chatStore.isLoading && chatStore.chatMessageList?.length === 0">
       <div class="empty">暂无消息，快来发送第一条消息吧~</div>
     </template>
-    <span class="new-msgs-tips" v-show="chatStore.newMsgCount > 0" @click="goToBottom">
-      {{ chatStore.newMsgCount }}条新消息
+    <span class="new-msgs-tips" v-show="chatStore.newMsgCount > 0" @click="goToNewMessage">
+      {{ chatStore.newMsgCount }} 条新消息
       <el-icon :size="10"><IEpArrowDownBold /></el-icon>
     </span>
   </div>

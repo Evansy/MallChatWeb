@@ -186,13 +186,15 @@ export default defineComponent({
     /**
      * 滚动到指定索引
      * @param index 索引值
+     * @param smooth 是否平滑滚动
+     * @param topDistance 顶部间隔距离
      * @description 如果索引值大于等于数据长度说明到底了则滚动到底部
      */
-    const scrollToIndex = (index: number, smooth?: boolean) => {
+    const scrollToIndex = (index: number, smooth?: boolean, topDistance = 0) => {
       if (index >= props.data.length - 1) {
         scrollToBottom()
       } else {
-        const offset = virtual.getOffset(index)
+        const offset = virtual.getOffset(index) - topDistance
         scrollToOffset(offset, smooth)
       }
     }

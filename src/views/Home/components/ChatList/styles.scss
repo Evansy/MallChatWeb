@@ -17,14 +17,14 @@
   perspective: 1000;
 
   .loading {
-    display: flex;
+    position: absolute;
+    z-index: 20;
     gap: 4px;
-    align-items: center;
-    justify-content: center;
     width: 100%;
-    margin-bottom: 4px;
+    padding: 16px 0;
     font-size: 14px;
-    color: #999;
+    color: #eee;
+    background: linear-gradient(180deg, rgb(50 54 68 / 100%) 0%, rgb(50 54 68 / 0%) 85%);
 
     svg {
       @keyframes rotate {
@@ -61,14 +61,14 @@
   align-items: center;
   padding: 2px 12px;
   font-size: 14px;
-  line-height: 1;
+  color: var(--el-color-primary-light-3);
   cursor: pointer;
-  background-color: var(--color-gray-bg);
-  border: 1px solid #fff;
+  background-color: var(--color-dark-bg);
   border-radius: 12px;
+  box-shadow: 0 0 1px 1px var(--el-box-shadow-dark);
 
   &:hover {
-    background-color: var(--color-primary);
+    background-color: #1a1c22;
   }
 }
 

@@ -32,6 +32,9 @@ export const useChatStore = defineStore('chat', () => {
         params: { pageSize: size, cursor: cursor.value, roomId: 1 },
       })
       .send()
+      .catch(() => {
+        isLoading.value = false
+      })
     if (!data) return
     const computedList = computedTimeBlock(data.list)
     computedList.forEach((msg) => {
