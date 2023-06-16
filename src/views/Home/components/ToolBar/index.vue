@@ -17,74 +17,102 @@ const showSettingBox = () => (visible.value = true)
 const onToMallChat = () => window.open('https://github.com/zongzibinbin/MallChat', '_blank')
 const onToMallChatWeb = () => window.open('https://github.com/Evansy/MallChatWeb', '_blank')
 const toggleGroupListShow = () => (groupStore.showGroupList = !groupStore.showGroupList)
+const iconsOperate = ref([
+  {
+    text: '项目文档',
+    class: '',
+    iconClass: 'icon-yuque',
+    rel: 'noopener noreferrer',
+    title: '语雀',
+    target: '_blank',
+    href: 'https://www.yuque.com/snab/planet/cef1mcko4fve0ur3',
+    vlogin: false,
+    order: 0,
+  },
+  {
+    text: '',
+    class: '',
+    iconClass: 'icon-bilibili',
+    rel: 'noopener noreferrer',
+    title: 'bilibili',
+    target: '_blank',
+    href: 'https://space.bilibili.com/146719540',
+    vlogin: false,
+    order: 1,
+  },
+  {
+    text: '618超优惠',
+    class: '',
+    iconClass: 'icon-tencent-cloud',
+    rel: 'noopener noreferrer',
+    title: 'tencent cloud',
+    target: '_blank',
+    href: 'https://curl.qcloud.com/qSaH0JLT',
+    vlogin: false,
+    order: 3,
+  },
+  {
+    text: '后端源码',
+    class: '',
+    iconClass: 'icon-github',
+    rel: 'noopener noreferrer',
+    title: 'MallChatWeb Server',
+    target: '_blank',
+    href: 'https://github.com/zongzibinbin/MallChat',
+    vlogin: onToMallChat,
+    order: 4,
+  },
+  {
+    text: '前端源码',
+    class: '',
+    iconClass: 'icon-github',
+    rel: 'noopener noreferrer',
+    title: 'MallChatWeb Web',
+    target: '_blank',
+    href: 'https://github.com/Evansy/MallChatWeb',
+    vlogin: onToMallChatWeb,
+    order: 5,
+  },
+])
 </script>
 
 <template>
   <aside class="side-toolbar">
-    <ElAvatar
-      size="large"
-      class="side-toolbar-avatar"
-      :src="avatar || defaultAvatar"
-      v-login="showSettingBox"
-    />
+    <ElAvatar class="side-toolbar-avatar" :src="avatar || defaultAvatar" v-login="showSettingBox" />
 
     <div class="operate-icons">
-      <a
-        class="operate-icon-link"
-        href="https://www.yuque.com/snab/planet/cef1mcko4fve0ur3"
-        target="_blank"
-        rel="noopener noreferrer"
-        title="语雀"
-      >
-        <i class="operate-icon icon-yuque" /><span class="operate-icon-text">项目文档</span>
-      </a>
-      <a
-        class="operate-icon-link"
-        href="https://space.bilibili.com/146719540"
-        target="_blank"
-        rel="noopener noreferrer"
-        title="bilibili"
-      >
-        <i class="operate-icon icon-bilibili" />
-      </a>
-
       <el-tooltip effect="dark" :placement="client === 'PC' ? 'right' : 'bottom'">
         <template #content>
-          <img class="icon-wechat-qrcode" :src="qrcode" alt="wx qrcode" />
+          <img class="icon-wechat-qrcode" width="200" :src="qrcode" alt="wx qrcode" />
         </template>
-        <a class="operate-icon-link" target="_blank" rel="noopener noreferrer" title="wechat">
+        <a
+          class="operate-icons-item"
+          style="order: 2"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="wechat"
+        >
           <i class="operate-icon icon-wechat" />
         </a>
       </el-tooltip>
-
       <a
-        class="operate-icon-link"
-        href="https://curl.qcloud.com/qSaH0JLT"
-        target="_blank"
-        rel="noopener noreferrer"
-        title="tencent cloud"
+        class="operate-icons-item"
+        v-for="(item, index) in iconsOperate"
+        :key="index"
+        :class="item.class"
+        :target="item.target"
+        :rel="item.rel"
+        :title="item.title"
+        :href="item.href"
+        v-login="item.vlogin"
+        :style="{
+          order: item.order,
+        }"
       >
-        <i class="operate-icon icon-tencent-cloud" />
-        <span class="operate-icon-text">618超优惠</span>
-      </a>
-
-      <a
-        class="operate-icon-link"
-        target="_blank"
-        rel="noopener noreferrer"
-        title="MallChatWeb Server"
-        v-login="onToMallChat"
-      >
-        <i class="operate-icon icon-github" /><span class="operate-icon-text">后端源码</span>
-      </a>
-      <a
-        class="operate-icon-link"
-        target="_blank"
-        rel="noopener noreferrer"
-        title="MallChatWeb Web"
-        v-login="onToMallChatWeb"
-      >
-        <i class="operate-icon icon-github" /><span class="operate-icon-text">前端源码</span>
+        <i class="operate-icon" :class="[item.iconClass]" />
+        <span class="operate-icons-text">
+          {{ item.text }}
+        </span>
       </a>
     </div>
 

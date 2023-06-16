@@ -1,37 +1,65 @@
 .side-toolbar {
+  // background-color: #fff;
   display: flex;
   align-items: center;
-  padding: 16px;
-  padding-bottom: 0;
+  height: 56px;
+  padding: 0 10px;
   color: var(--font-main);
 
-  &_avatar {
-    cursor: pointer;
-
-    --el-avatar-size: 32px;
+  &-avatar {
+    --el-avatar-size: 36px;
   }
 }
 
 .operate-icons {
   display: flex;
-  column-gap: 8px;
-  align-items: flex-start;
-  margin-left: 16px;
-  font-size: 0;
+
+  // flex: 1;
+  width: calc(100vw - 76px);
+  height: 100%;
+  margin-left: 10px;
+  overflow-y: scroll;
+  font-size: 12px;
+  -webkit-overflow-scrolling: touch;
+
+  &-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px;
+
+    // margin: 0 5px;
+    height: 56px;
+  }
+
+  .operate-icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+
+  &-text {
+    margin-top: 2px;
+    color: inherit;
+  }
 }
 
-.operate-icon {
-  display: inline-block;
-  width: 28px;
-  height: 28px;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-}
+// .operate-icon {
+//   display: inline-block;
+//   width: 28px;
+//   height: 28px;
+//   background-repeat: no-repeat;
+//   background-position: center;
+//   background-size: cover;
+// }
 
-.menu-icon {
-  margin-left: auto;
-}
+// .menu-icon {
+//   margin-left: auto;
+// }
 
 .icon-github {
   background-image: url('@/assets/icons/icon_github.svg');
@@ -57,51 +85,77 @@
   background-image: url('@/assets/icons/icon_yuque.png');
 }
 
-.operate-icon-text {
-  margin-top: 4px;
-  font-size: 12px;
-}
+// .operate-icon-text {
+//   margin-top: 4px;
+//   font-size: 12px;
+// }
 
-.operate-icon-link {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+// .operate-icon-link {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+// }
 
-.icon-wechat-qrcode {
-  width: 200px;
-}
+// .icon-wechat-qrcode {
+//   width: 200px;
+// }
+
+// @media only screen and (min-width: 640px) {
+//   .side-toolbar {
+//     flex-direction: column;
+//     width: 80px;
+//     height: 100%;
+//     padding: 20px 0;
+//   }
+
+//   .operate-icons {
+//     flex-direction: column;
+//     row-gap: 16px;
+//     align-items: center;
+//     margin-top: auto;
+//     margin-left: 0;
+//   }
+
+//   .operate-icon-text {
+//     margin-top: 2px;
+//     font-size: 8px;
+//   }
+
+//   .menu-icon {
+//     display: none;
+//   }
+// }
 
 @media only screen and (min-width: 640px) {
   .side-toolbar {
     flex-direction: column;
+    justify-content: space-between;
     width: 80px;
     height: 100%;
-    padding: 20px 0;
-  }
+    padding: 16px 0;
 
-  .operate-icons {
-    flex-direction: column;
-    row-gap: 16px;
-    align-items: center;
-    margin-top: auto;
-    margin-left: 0;
-  }
-
-  .operate-icon-text {
-    margin-top: 2px;
-    font-size: 8px;
+    &-avatar {
+      --el-avatar-size: 48px;
+    }
   }
 
   .menu-icon {
     display: none;
   }
-}
 
-@media only screen and (min-width: 640px) {
-  .side-toolbar {
-    &-avatar {
-      --el-avatar-size: 56px;
+  .operate-icons {
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    margin-left: 0;
+
+    &-item {
+      margin-top: 5px;
+    }
+
+    .operate-icon {
+      width: 30px;
+      height: 30px;
     }
   }
 }
