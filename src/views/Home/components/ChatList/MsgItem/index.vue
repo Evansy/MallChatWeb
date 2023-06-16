@@ -219,8 +219,8 @@ onMounted(() => {
   z-index: 3;
   padding: 0;
   line-height: 12px;
-  color: #fff;
-  background-color: #383c4b !important;
+  color: var(--font-main);
+  background-color: var(--background-2) !important;
   border: none !important;
 }
 </style>

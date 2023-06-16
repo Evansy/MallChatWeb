@@ -15,7 +15,7 @@
   list-style-type: none;
 
   :deep(.el-loading-mask) {
-    background-color: var(--color-background-black-mute);
+    background-color: var(--background-mask);
   }
 
   &-box {
@@ -28,7 +28,7 @@
     &.show {
       position: fixed;
       inset: 66px 0 0;
-      background-color: rgba($color: #000, $alpha: 50%);
+      background-color: var(--background-black-half);
     }
   }
 
@@ -44,7 +44,7 @@
     // content-visibility: auto;
 
     &:hover {
-      background-color: rgba(#fff, 0.1);
+      background-color: var(--background-mask);
     }
 
     &.item-online {
@@ -72,8 +72,8 @@
     bottom: 6px;
     width: 10px;
     height: 10px;
-    background-color: greenyellow;
-    border: 1px solid #fff;
+    background-color: var(--color-online);
+    border: 1px solid var(--color-white);
     border-radius: 50px;
   }
 
@@ -82,7 +82,7 @@
     width: 24px;
     height: 24px;
     margin-right: 8px;
-    border: 1px solid #fff;
+    border: 1px solid var(--color-white);
     border-radius: 50%;
   }
 
@@ -96,7 +96,7 @@
     width: 200px;
     height: 100%;
     padding: 8px 12px;
-    background-color: var(--color-gray-bg);
+    background-color: var(--background-secondary);
     border-radius: 8px;
     transition: transform 0.3s ease;
     transform: translateX(100%);

@@ -41,7 +41,9 @@ watchEffect(() => {
       </div>
 
       <p class="login-desc" v-if="loginStatus === LoginStatus.Waiting">
-        <ElIcon :size="32" class="login-desc-icon" color="#67c23a"><IEpSuccessFilled /></ElIcon>
+        <ElIcon :size="32" class="login-desc-icon" color="var(--color-wechat)"
+          ><IEpSuccessFilled
+        /></ElIcon>
         扫码成功~，点击“登录”继续登录
       </p>
       <p class="login-desc" v-if="loginStatus === LoginStatus.Init">

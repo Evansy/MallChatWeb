@@ -20,7 +20,7 @@ export default defineComponent({
         result = result?.replace(
           url,
           `<a rel="noopener noreferrer nofollow" target="_blank" class="msg-content-link" style="color: ${
-            props.isMe ? '#fff' : 'var(--color-primary)'
+            props.isMe ? 'var(--color-white)' : 'var(--color-primary)'
           };" href="${url.includes('http') ? url : `//${url}`}">${sanitize(title as string)}</a>`,
         )
       }

@@ -12,8 +12,8 @@
   width: 100vw;
   height: 100%;
   height: 100dvh;
-  color: white;
-  background-color: var(--color-dark-bg);
+  color: var(--font-main);
+  background-color: var(--background-wrapper);
 }
 
 @media only screen and (min-width: 640px) {
@@ -31,6 +31,6 @@
 .footer {
   margin-top: 4vh;
   font-size: 12px;
-  color: #fff;
+  color: var(--font-main);
   text-align: center;
 }

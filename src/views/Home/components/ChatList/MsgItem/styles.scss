@@ -29,7 +29,7 @@
     align-items: center;
     margin-bottom: 8px;
     font-size: 12px;
-    color: #999;
+    color: var(--font-light);
     white-space: nowrap;
 
     .user-name:hover {
@@ -62,10 +62,10 @@
     padding: 8px 12px;
     font-size: 15px;
     line-height: 22px;
-    color: #fff;
+    color: var(--font-main);
     word-break: break-word;
     white-space: pre-line;
-    background-color: #383c4b;
+    background-color: var(--background-2);
     border-radius: 2px 18px 18px;
   }
 
@@ -89,7 +89,7 @@
     font-size: 12px;
     color: var(--font-light);
     word-break: break-all;
-    background-color: #424656;
+    background-color: var(--background-3);
     border-radius: 8px;
 
     &.pointer {
@@ -115,8 +115,8 @@
       padding: 0 6px;
       margin-right: 4px;
       cursor: pointer;
-      background-color: #2b2d31;
-      border: 1px solid #2b2d31;
+      background-color: var(--border-1);
+      border: 1px solid var(--border-base);
       border-radius: 8px;
 
       svg {
@@ -143,12 +143,12 @@
 
     .active {
       &.like {
-        color: #fe2c55;
-        border-color: #b52c47;
+        color: var(--font-pink);
+        border-color: var(--border-pink);
       }
 
       &.dlike {
-        color: #989898;
+        color: var(--font-light);
         border-color: var(--el-color-info);
       }
     }

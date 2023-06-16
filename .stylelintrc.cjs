@@ -27,5 +27,8 @@ module.exports = {
       },
     ],
     'media-feature-range-notation': 'prefix',
+    'color-function-notation': 'legacy',
+    // 由于使用了Element UI组件库，修改组件样式时会出现`.tj-form-item__label``这种带有下划线的类名，stylelint就会报错。这里使用正则表达式允许选择器中出现短横线和下划线。
+    'selector-class-pattern': '^[a-z][a-zA-Z0-9_-]+$',
   },
 }

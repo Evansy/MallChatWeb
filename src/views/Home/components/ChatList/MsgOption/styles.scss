@@ -13,19 +13,19 @@
   }
 
   &-item:hover {
-    background-color: rgba($color: #272a37, $alpha: 40%);
+    background-color: var(--background-dark);
   }
 
   .icon {
     display: inline-block;
     width: 18px;
     height: 18px;
-    color: #fff;
+    color: var(--font-main);
     border-radius: 50%;
   }
 
   .icon:hover {
-    color: #165dff;
+    color: var(--color-primary);
   }
 
   .more,
@@ -35,10 +35,10 @@
   }
 
   .like-active {
-    color: #fe2c55;
+    color: var(--font-pink);
   }
 
   .dislike-active {
-    color: #bebebe;
+    color: var(--color-light-1);
   }
 }
