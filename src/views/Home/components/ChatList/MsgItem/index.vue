@@ -75,7 +75,7 @@ const scrollToMsg = async (msg: MsgType) => {
   // 如果消息已经加载过了，就直接跳转
   const index = chatStore.getMsgIndex(reply.id)
   if (index > -1) {
-    virtualListRef?.value?.scrollToIndex(index, true)
+    virtualListRef?.value?.scrollToIndex(index, true, 12)
   } else {
     // 如果没有加载过，就先加载，然后跳转
     const curMsgIndex = chatStore.getMsgIndex(id)
@@ -85,7 +85,7 @@ const scrollToMsg = async (msg: MsgType) => {
     await chatStore.loadMore(needLoadPageSize)
     // 跳转
     // FIXME 这时候新加载消息了，所以会有滚动冲突，故不加动画效果，否则会很怪异。
-    setTimeout(virtualListRef?.value?.scrollToIndex(chatStore.getMsgIndex(reply.id), false), 0)
+    setTimeout(virtualListRef?.value?.scrollToIndex(chatStore.getMsgIndex(reply.id), false, 12), 0)
     // TODO 跳转到的消息 高亮一下
   }
 }
