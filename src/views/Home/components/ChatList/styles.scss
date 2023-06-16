@@ -23,8 +23,8 @@
     width: 100%;
     padding: 16px 0;
     font-size: 14px;
-    color: #eee;
-    background: linear-gradient(180deg, rgb(50 54 68 / 100%) 0%, rgb(50 54 68 / 0%) 85%);
+    color: var(--font-light-1);
+    background: linear-gradient(180deg, rgb(50, 54, 68) 0%, transparent 85%);
 
     svg {
       @keyframes rotate {
@@ -63,7 +63,8 @@
   font-size: 14px;
   color: var(--el-color-primary-light-3);
   cursor: pointer;
-  background-color: var(--color-dark-bg);
+  background-color: var(--background-secondary);
+  border: 1px solid var(--color-white);
   border-radius: 12px;
   box-shadow: 0 0 1px 1px var(--el-box-shadow-dark);
 

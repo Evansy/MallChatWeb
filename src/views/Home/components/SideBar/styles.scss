@@ -12,9 +12,9 @@
     width: 280px;
     height: 60px;
     padding: 12px 10px;
-    color: var(--el-color-info-light-7);
+    color: var(--color-light-3);
     cursor: pointer;
-    background-color: var(--color-gray-bg);
+    background-color: var(--background-secondary);
     border-radius: 8px;
 
     .el-avatar {
@@ -35,8 +35,8 @@
         margin-left: 4px;
         font-size: 12px;
         font-weight: bold;
-        color: #c59512;
-        background-color: #efe2bb;
+        color: var(--color-gold);
+        background-color: var(--background-4);
         border-radius: 4px;
         transform: scale(0.8);
       }
@@ -58,7 +58,7 @@
     }
 
     &:hover {
-      background-color: #484d5f;
+      background-color: var(--hover-bg-1);
       transition: 0.3s;
     }
 
@@ -67,7 +67,7 @@
     }
 
     &.active {
-      background-color: var(--vt-c-indigo);
+      background-color: var(--color-text);
     }
   }
 }

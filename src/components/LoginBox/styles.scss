@@ -2,12 +2,10 @@
   border-radius: 8px !important;
 }
 
-/* stylelint-disable-next-line selector-class-pattern */
 :global(.login-box-modal .el-dialog__header) {
   padding: 0;
 }
 
-/* stylelint-disable-next-line selector-class-pattern */
 :global(.login-box-modal .el-dialog__headerbtn) {
   z-index: 5;
 }
@@ -32,7 +30,7 @@
   margin-top: 12px;
   margin-bottom: 16px;
   font-size: 14px;
-  color: rgb(0 0 0 / 45%);
+  color: var(--font-light);
 }
 
 .login-desc {
@@ -48,5 +46,5 @@
 
 .login-desc-bold {
   font-weight: bold;
-  color: #2aae67;
+  color: var(--color-wechat);
 }

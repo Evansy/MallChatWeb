@@ -1,11 +1,11 @@
 .mx-context-menu {
   padding: 6px;
-  background-color: #424656; // #292929
+  background-color: var(--background-3);
   border-radius: 6px;
 
   .mx-context-menu-item {
     padding: 2px 4px;
-    color: #e1e1e1;
+    color: var(--font-light-1);
     border-radius: 4px;
 
     .label {
@@ -15,7 +15,7 @@
   }
 
   .mx-context-menu-item:hover {
-    background-color: #383c4b;
+    background-color: var(--background-2);
   }
 
   .mx-icon-placeholder {
@@ -29,10 +29,10 @@
   }
 
   .mx-context-menu-item-sperator {
-    background-color: #424656;
+    background-color: var(--background-3);
   }
 
   .mx-context-menu-item-sperator::after {
-    background-color: #383c4b;
+    background-color: var(--background-3);
   }
 }

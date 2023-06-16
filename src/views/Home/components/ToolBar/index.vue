@@ -88,7 +88,7 @@ const toggleGroupListShow = () => (groupStore.showGroupList = !groupStore.showGr
       </a>
     </div>
 
-    <el-icon class="menu-icon" color="#fff" :size="32" @click="toggleGroupListShow">
+    <el-icon class="menu-icon" color="var(--font-main)" :size="32" @click="toggleGroupListShow">
       <IEpFold />
     </el-icon>
 

@@ -109,7 +109,7 @@ const onCancelEditName = async () => {
         />
         <el-icon
           size="20"
-          color="#fff"
+          color="var(--font-main)"
           class="setting-avatar-sex"
           v-if="userInfo.sex && [SexType.Man, SexType.Female].includes(userInfo.sex)"
           :style="{
@@ -199,7 +199,7 @@ const onCancelEditName = async () => {
               <!-- <el-button size="small" v-if="badge.wearing === IsYet.Yes">卸下</el-button> -->
             </template>
             <el-tooltip effect="dark" :content="badge.describe" placement="top">
-              <el-icon class="badge-item-info" color="#fff"><IEpInfoFilled /></el-icon>
+              <el-icon class="badge-item-info" color="var(--font-main)"><IEpInfoFilled /></el-icon>
             </el-tooltip>
           </div>
         </li>

@@ -94,7 +94,7 @@ const insertText = (emoji: string) => {
   <div class="chat-box">
     <div class="chat-wrapper">
       <template v-if="isSelect">
-        <ElIcon :size="160" color="#999"><IEpChatDotRound /></ElIcon>
+        <ElIcon :size="160" color="var(--font-light)"><IEpChatDotRound /></ElIcon>
       </template>
       <template v-else>
         <div class="chat">
