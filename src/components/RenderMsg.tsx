@@ -28,7 +28,7 @@ export default defineComponent({
             rel="noopener noreferrer nofollow"
             target="_blank"
             class="msg-content-link"
-            style={color}
+            style={{ color }}
           >
             {props.urlMap[item]}
           </a>
