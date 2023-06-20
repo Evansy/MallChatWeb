@@ -36,11 +36,16 @@ const mockData = ref([
 ])
 
 // 最后一条消息变化就把MoakData更新
-watch(lastMassage, (newVal) => {
-  mockData.value[0].name = newVal?.fromUser?.username
-  mockData.value[0].lastMsg = newVal?.message?.body?.content
-  mockData.value[0].lastMsgTime = formatTimestamp(newVal?.message?.sendTime)
-})
+watch(
+  lastMassage,
+  (newVal) => {
+    const { fromUser, message } = newVal
+    mockData.value[0].name = fromUser?.username
+    mockData.value[0].lastMsg = message.type === 2 ? '撤回了一条消息' : message.body?.content
+    mockData.value[0].lastMsgTime = formatTimestamp(message.sendTime)
+  },
+  { deep: true },
+)
 </script>
 
 <template>
