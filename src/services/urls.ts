@@ -3,6 +3,10 @@ const prefix = import.meta.env.PROD ? import.meta.env.VITE_API_PREFIX : ''
 export default {
   getGroupUserList: `${prefix}/capi/chat/public/member/page`,
   getMemberStatistic: `${prefix}/capi/chat/public/member/statistic`,
+  getUserInfoBatch: `${prefix}/capi/user/public/summary/userInfo/batch`,
+  getBadgesBatch: `${prefix}/capi/user/public/badges/batch`,
+  // 房间内的所有群成员列表-@专用
+  getAllUserBaseInfo: `${prefix}/capi/chat/member/list`,
   getMsgList: `${prefix}/capi/chat/public/msg/page`,
   sendMsg: `${prefix}/capi/chat/msg`,
   // 获取用户信息详情

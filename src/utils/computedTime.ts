@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import type { Dayjs } from 'dayjs'
+import type { Dayjs, OpUnitType, ConfigType } from 'dayjs'
 import type { MessageType } from '@/services/types'
 
 // 5 分钟 5 * 60 * 1000;
@@ -73,4 +73,34 @@ export const formatTimestamp = (timestamp: number): string => {
   } else {
     return date.format('MM月DD日 HH:mm')
   }
+}
+
+/**
+ * 消息间隔判断
+ * @param {ConfigType} time 输入时间
+ * @param {OpUnitType} unit 间隔单位
+ * @param {number} diff 间隔值
+ * @returns boolean 输入时间是否间隔 now 间隔值以上。
+ */
+export const isDiffNow = ({
+  time,
+  unit,
+  diff,
+}: {
+  unit: OpUnitType
+  time: ConfigType
+  diff: number
+}): boolean => {
+  return dayjs().diff(dayjs(time), unit) > diff
+}
+
+/**
+ * 距离现在 10 分钟了
+ * @param {ConfigType} time 输入时间
+ * @param {OpUnitType} unit 间隔单位
+ * @param {number} diff 间隔值
+ * @returns boolean 输入时间是否间隔 now 间隔值以上。
+ */
+export const isDiffNow10Min = (time: ConfigType): boolean => {
+  return isDiffNow({ time, unit: 'minute', diff: 10 })
 }

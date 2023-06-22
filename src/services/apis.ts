@@ -7,6 +7,10 @@ import type {
   UserInfoType,
   BadgeType,
   MessageReq,
+  CacheUserItem,
+  CacheBadgeItem,
+  CacheUserReq,
+  CacheBadgeReq,
 } from '@/services/types'
 import { alovaIns } from './request'
 import urls from './urls'
@@ -20,6 +24,15 @@ export default {
   getGroupList: (params?: any) => getRequest<ListResponse<UserItem>>(urls.getGroupUserList, params),
   /** 获取群成员统计 */
   getMemberStatistic: () => getRequest<GroupStatisticType>(urls.getMemberStatistic),
+  /** 房间内的所有群成员列表-@专用 */
+  getAllUserBaseInfo: (params?: any) =>
+    getRequest<Pick<CacheUserItem, 'avatar' | 'name' | 'uid'>[]>(urls.getAllUserBaseInfo, params),
+  /** 批量获取成员详细信息 */
+  getUserInfoBatch: (users: CacheUserReq[]) =>
+    postRequest<CacheUserItem[]>(urls.getUserInfoBatch, { reqList: users }),
+  /** 批量获取徽章信息 */
+  getBadgesBatch: (badges: CacheBadgeReq[]) =>
+    postRequest<CacheBadgeItem[]>(urls.getBadgesBatch, { reqList: badges }),
   /** 获取消息列表 */
   getMsgList: (params?: any) => getRequest<ListResponse<MessageType>>(urls.getMsgList, params),
   /** 发送消息 */

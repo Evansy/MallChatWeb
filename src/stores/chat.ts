@@ -1,14 +1,16 @@
 import { ref, reactive, computed } from 'vue'
 import { defineStore } from 'pinia'
 import apis from '@/services/apis'
-import type { MessageType, MarkItemType, RevokedMsgType } from '@/services/types'
+import type { MessageType, MarkItemType, RevokedMsgType, CacheUserReq } from '@/services/types'
 import { MarkType } from '@/services/types'
 import { computedTimeBlock } from '@/utils/computedTime'
+import { useCachedStore } from '@/stores/cached'
 import shakeTitle from '@/utils/shakeTitle'
 
 export const pageSize = 20
 
 export const useChatStore = defineStore('chat', () => {
+  const cachedStore = useCachedStore()
   const messageMap = reactive<Map<number, MessageType>>(new Map<number, MessageType>()) // 消息Map
   const replyMapping = reactive<Map<number, number[]>>(new Map<number, number[]>()) // 回复消息映射
 
@@ -28,23 +30,41 @@ export const useChatStore = defineStore('chat', () => {
   const getMsgList = async (size = pageSize) => {
     isLoading.value = true
     const data = await apis
-      .getMsgList({
-        params: { pageSize: size, cursor: cursor.value, roomId: 1 },
-      })
+      .getMsgList({ params: { pageSize: size, cursor: cursor.value, roomId: 1 } })
       .send()
       .catch(() => {
         isLoading.value = false
       })
     if (!data) return
     const computedList = computedTimeBlock(data.list)
+
+    /** 收集需要请求用户详情的 uid */
+    const uidCollectYet: Set<number> = new Set() // 去重用
+    const uidCollects: CacheUserReq[] = []
+    const collectUidItem = (uid: number) => {
+      // 去重 uid
+      if (uidCollectYet.has(uid)) return
+      // 尝试取缓存user, 如果有 lastModifyTime 说明缓存过了，没有就一定是要缓存的用户了
+      const cacheUser = cachedStore.userCachedList[uid]
+      uidCollects.push({ uid, lastModifyTime: cacheUser?.lastModifyTime })
+      // 添加收集过的 uid
+      uidCollectYet.add(uid)
+    }
     computedList.forEach((msg) => {
-      const replyId = msg.message.body?.reply?.id
-      if (replyId) {
-        const messageIds = replyMapping.get(replyId) || []
+      const replyItem = msg.message.body?.reply
+      if (replyItem?.id) {
+        const messageIds = replyMapping.get(replyItem.id) || []
         messageIds.push(msg.message.id)
-        replyMapping.set(replyId, messageIds)
+        replyMapping.set(replyItem.id, messageIds)
+
+        // 查询被回复用户的信息，被回复的用户信息里暂时无 uid
+        // collectUidItem(replyItem.uid)
       }
+      // 查询消息发送者的信息
+      collectUidItem(msg.fromUser.uid)
     })
+    // 获取用户信息缓存
+    cachedStore.getBatchUserInfo(uidCollects)
     // 为保证获取的历史消息在前面
     const newList = [...computedList, ...chatMessageList.value]
     messageMap.clear() // 清空Map

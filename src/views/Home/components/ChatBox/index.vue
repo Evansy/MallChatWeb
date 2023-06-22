@@ -4,6 +4,7 @@ import type { ElInput } from 'element-plus'
 import { useWsLoginStore } from '@/stores/ws'
 import { useUserStore } from '@/stores/user'
 import { useChatStore } from '@/stores/chat'
+import { useUserInfo } from '@/hooks/useCached'
 import apis from '@/services/apis'
 import { judgeClient } from '@/utils/detectDevice'
 import { emojis } from './constant'
@@ -66,6 +67,8 @@ const onShowLoginBoxHandler = () => (loginStore.showLogin = true)
 const userStore = useUserStore()
 const isSign = computed(() => userStore.isSign)
 const currentMsgReply = computed(() => (userStore.isSign && chatStore.currentMsgReply) || {})
+const currentReplUid = computed(() => currentMsgReply?.value.fromUser?.uid as number)
+const currentReplyUser = useUserInfo(currentReplUid)
 
 // 置空回复的消息
 const onClearReply = () => (chatStore.currentMsgReply = {})
@@ -102,8 +105,7 @@ const insertText = (emoji: string) => {
           <div class="chat-msg-send">
             <div v-if="Object.keys(currentMsgReply).length" class="reply-msg-wrapper">
               <span>
-                {{ currentMsgReply.fromUser?.username }}:
-                {{ currentMsgReply.message?.body.content }}</span
+                {{ currentReplyUser?.name }}: {{ currentMsgReply.message?.body.content }}</span
               >
               <el-icon class="reply-msg-icon" :size="14" @click="onClearReply">
                 <IEpClose />

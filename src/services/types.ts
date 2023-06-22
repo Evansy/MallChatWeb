@@ -18,71 +18,91 @@ export enum OnlineStatus {
   Offline,
 }
 
-export type UserItem = {
-  /**
-   * 在线状态
-   */
-  activeStatus: OnlineStatus
-  /**
-   * 头像
-   */
+export type CacheBadgeReq = {
+  /** 最后更新时间 更新超过 10 分钟异步去更新。 */
+  lastModifyTime?: number
+  /** 徽章 ID */
+  itemId: number
+}
+
+export type CacheBadgeItem = {
+  /** 是否需要更新数据源。 */
+  needRefresh?: boolean
+  /** 最后更新时间 更新超过 10 分钟异步去更新。 */
+  lastModifyTime: number
+  /** 徽章说明 */
+  describe: string
+  /** 徽章图标 */
+  img: string
+  /** 徽章 ID */
+  itemId: number
+}
+
+export type CacheUserReq = {
+  /** 最后更新时间 更新超过 10 分钟异步去更新。 */
+  lastModifyTime?: number
+  /** uid */
+  uid: number
+}
+
+export type CacheUserItem = {
+  /** 是否需要更新数据源。 */
+  needRefresh?: boolean
+  /** 最后更新时间 更新超过 10 分钟异步去更新。 */
+  lastModifyTime: number
+  /** 获得的徽章 */
+  itemIds: number[]
+  /** 佩戴的徽章 */
+  wearingItemId: number
+  /** 归属地 */
+  locPlace: string
+  /** 头像 */
   avatar: string
-  /**
-   * 最后一次上下线时间
-   */
+  /** 最后一次上下线时间 */
   lastOptTime: number
-  /**
-   * 用户名称
-   */
+  /** 用户名称 */
   name: string
-  /**
-   * uid
-   */
+  /** uid */
+  uid: number
+}
+
+export type UserItem = {
+  /** 在线状态 */
+  activeStatus: OnlineStatus
+  /** 头像 */
+  avatar: string
+  /** 最后一次上下线时间 */
+  lastOptTime: number
+  /** 用户名称 */
+  name: string
+  /** uid */
   uid: number
 }
 
 export type GroupStatisticType = {
-  /**
-   * 在线人数
-   */
+  /** 在线人数 */
   onlineNum: number
-  /**
-   * 总人数
-   */
+  /** 总人数 */
   totalNum: number
 }
 
 export type MessageReplyType = {
-  /**
-   * 是否可消息跳转 0否 1是
-   */
+  /** 是否可消息跳转 0否 1是 */
   canCallback: number
-  /**
-   * 是否可消息跳转 0否 1是
-   */
+  /** 是否可消息跳转 0否 1是 */
   content: string
-  /**
-   * 跳转间隔的消息条数
-   */
+  /** 跳转间隔的消息条数 */
   gapCount: number
-  /**
-   * 消息id
-   */
+  /** 消息id */
   id: number
-  /**
-   * 用户名称
-   */
+  /** 用户名称 */
   username: string
 }
 
 export enum ActType {
-  /**
-   * 确认
-   */
+  /** 确认 */
   Confirm = 1,
-  /**
-   * 取消
-   */
+  /** 取消 */
   Cancel,
 }
 export enum MarkType {
@@ -110,33 +130,19 @@ export enum PowerType {
 }
 
 export type UserInfoType = {
-  /**
-   * 用户唯一标识
-   */
+  /** 用户唯一标识 */
   uid: number
-  /**
-   * 用户头像
-   */
+  /** 用户头像 */
   avatar: string
-  /**
-   * 用户名
-   */
+  /** 用户名 */
   name: string
-  /**
-   * 剩余改名次数
-   */
+  /** 剩余改名次数 */
   modifyNameChance: number
-  /**
-   * 性别 1为男性，2为女性
-   */
+  /** 性别 1为男性，2为女性 */
   sex: SexType
-  /**
-   * 徽章，本地字段，有值用本地，无值用远端
-   */
+  /** 徽章，本地字段，有值用本地，无值用远端 */
   badge?: string
-  /**
-   * 权限
-   */
+  /** 权限 */
   power?: number
 }
 
@@ -160,25 +166,15 @@ export type BadgeType = {
 }
 
 export type MarkItemType = {
-  /**
-   * 操作用户
-   */
+  /** 操作用户 */
   uid: number
-  /**
-   * 消息id
-   */
+  /** 消息id */
   msgId: number
-  /**
-   * 操作类型 1点赞 2举报
-   */
+  /** 操作类型 1点赞 2举报 */
   markType: MarkType
-  /**
-   * 数量
-   */
+  /** 数量 */
   markCount: number
-  /**
-   * 动作类型 1确认 2取消
-   */
+  /** 动作类型 1确认 2取消 */
   actType: ActType
 }
 

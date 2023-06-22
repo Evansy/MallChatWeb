@@ -3,6 +3,7 @@ import { computed, nextTick, onMounted, ref, toRefs, type Ref, type PropType, in
 import { useUserStore } from '@/stores/user'
 import { useChatStore, pageSize } from '@/stores/chat'
 import { formatTimestamp } from '@/utils/computedTime'
+import { useUserInfo, useBadgeInfo } from '@/hooks/useCached'
 import type { MessageType, MsgType } from '@/services/types'
 import defaultAvatar from '@/assets/avatars/default.png'
 import RenderMsg from '@/components/RenderMsg'
@@ -40,9 +41,13 @@ const props = defineProps({
   },
 })
 
+const { message, fromUser } = toRefs(props.msg)
+
 const userStore = useUserStore()
 const chatStore = useChatStore()
-const myBadge = computed(() => userStore?.userInfo.badge)
+const userInfo = useUserInfo(fromUser.value.uid)
+const wearingItemId = computed(() => userInfo?.value?.wearingItemId)
+const badgeInfo = useBadgeInfo(wearingItemId)
 const isCurrentUser = computed(() => props.msg?.fromUser.uid === userStore?.userInfo.uid)
 const chatCls = computed(() => ({
   'chat-item': true,
@@ -50,7 +55,6 @@ const chatCls = computed(() => ({
   'right': (isCurrentUser.value && props.bubbleMode === 'spread') || props.bubbleMode === 'right',
 }))
 
-const { message, fromUser } = toRefs(props.msg)
 const renderMsgRef = ref<HTMLElement | null>(null)
 const boxRef = ref<HTMLElement | null>(null)
 const tooltipPlacement = ref()
@@ -123,23 +127,19 @@ onMounted(() => {
   <transition name="remove">
     <div :class="chatCls" v-if="!isRecall">
       <div class="chat-item-avatar">
-        <img :src="fromUser.avatar || defaultAvatar" />
+        <img :src="userInfo.avatar || defaultAvatar" />
       </div>
       <div class="chat-item-box" ref="boxRef">
         <div class="chat-item-user-info">
           <el-tooltip
             effect="dark"
-            :content="fromUser?.badge?.describe"
+            :content="badgeInfo?.describe"
             :placement="isCurrentUser ? 'top-end' : 'top-start'"
           >
-            <img
-              v-show="fromUser?.badge?.img"
-              class="user-badge"
-              :src="(isCurrentUser ? myBadge : undefined) ?? fromUser?.badge?.img"
-            />
+            <img v-show="badgeInfo?.img" class="user-badge" :src="badgeInfo?.img" />
           </el-tooltip>
-          <span class="user-name">{{ fromUser.username }}</span>
-          <span class="user-ip">({{ fromUser.locPlace || '未知' }})</span>
+          <span class="user-name">{{ userInfo.name }}</span>
+          <span class="user-ip">({{ userInfo.locPlace || '未知' }})</span>
           <span class="send-time" v-if="isShowTime">
             {{ formatTimestamp(msg.message.sendTime) }}
           </span>
