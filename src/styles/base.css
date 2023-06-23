@@ -1,6 +1,7 @@
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
   --color-primary: #1d90f5;
+  --color-link: #002aff;
   --color-wechat: #2aae67;
   --color-online: greenyellow;
   --color-white: #fff;

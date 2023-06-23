@@ -26,7 +26,8 @@ const mockData = computed(() => {
       name: lastUserInfo.value.name,
       avatar: mallChatLogo,
       tag: '官方',
-      lastMsg: message.type === 2 ? '撤回了一条消息' : message.body?.content || '欢迎使用MallChat',
+      lastMsg:
+        message?.type === 2 ? '撤回了一条消息' : message?.body?.content || '欢迎使用MallChat',
       lastMsgTime: formatTimestamp(message?.sendTime),
     },
     {
