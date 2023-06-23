@@ -19,4 +19,10 @@ import 'element-plus/es/components/message/style/css'
   background-position: center;
   background-size: cover;
 }
+
+@supports (background-image: url('@/assets/login_bg.webp')) {
+  .app-wrapper {
+    background-image: url('@/assets/login_bg.webp');
+  }
+}
 </style>

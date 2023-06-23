@@ -83,6 +83,12 @@ export const useChatStore = defineStore('chat', () => {
   const pushMsg = (msg: MessageType) => {
     messageMap.set(msg.message.id, msg)
 
+    // 获取用户信息缓存
+    // 尝试取缓存user, 如果有 lastModifyTime 说明缓存过了，没有就一定是要缓存的用户了
+    const uid = msg.fromUser.uid
+    const cacheUser = cachedStore.userCachedList[uid]
+    cachedStore.getBatchUserInfo([{ uid, lastModifyTime: cacheUser?.lastModifyTime }])
+
     // tab 在后台获得新消息，就开始闪烁！
     if (document.hidden && !shakeTitle.isShaking) {
       shakeTitle.start()
