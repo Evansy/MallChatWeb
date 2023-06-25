@@ -65,7 +65,7 @@ export const useGroupStore = defineStore('group', () => {
       // 添加收集过的 uid
       uidCollectYet.add(uid)
     }
-    tempNew.forEach((user) => collectUidItem(user.uid))
+    data.list?.forEach((user) => collectUidItem(user.uid))
     // 获取用户信息缓存
     cachedStore.getBatchUserInfo(uidCollects)
   }
