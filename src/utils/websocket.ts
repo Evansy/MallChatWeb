@@ -139,7 +139,8 @@ class WS {
         localStorage.setItem('USER_INFO', JSON.stringify(rest))
         localStorage.setItem('TOKEN', token)
         // 更新一下请求里面的 token.
-        computedToken()
+        computedToken.clear()
+        computedToken.get()
         loginStore.loginStatus = LoginStatus.Success
         // 关闭登录弹窗
         loginStore.showLogin = false
