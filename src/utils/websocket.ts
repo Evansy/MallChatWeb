@@ -87,6 +87,8 @@ class WS {
         this.#tasks.forEach((task) => {
           this.send(task)
         })
+        // 清空消息列表
+        this.#tasks = []
       } else {
         // 如果没登录，而且已经请求了登录二维码，就要更新登录二维码。
         loginStore.loginQrCode && loginStore.getLoginQrCode()
