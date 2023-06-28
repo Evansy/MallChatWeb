@@ -1,20 +1,31 @@
 import { ref, reactive } from 'vue'
 import apis from '@/services/apis'
 import { defineStore } from 'pinia'
+import { useCachedStore } from '@/stores/cached'
 import type { UserItem } from '@/services/types'
 import { pageSize } from './chat'
 import cloneDeep from 'lodash/cloneDeep'
 import { OnlineStatus } from '@/services/types'
+import type { CacheUserReq } from '@/services/types'
 import { uniqueUserList } from '@/utils/unique'
 
 const sorAction = (pre: UserItem, next: UserItem) => {
   if (pre.activeStatus === OnlineStatus.Online && next.activeStatus === OnlineStatus.Online) {
     return next.lastOptTime < pre.lastOptTime ? -1 : 1
-  } else if (pre.activeStatus !== OnlineStatus.Online && next.activeStatus !== OnlineStatus.Online) {
+  } else if (
+    pre.activeStatus !== OnlineStatus.Online &&
+    next.activeStatus !== OnlineStatus.Online
+  ) {
     return next.lastOptTime < pre.lastOptTime ? -1 : 1
-  } else if (pre.activeStatus === OnlineStatus.Online && next.activeStatus !== OnlineStatus.Online) {
+  } else if (
+    pre.activeStatus === OnlineStatus.Online &&
+    next.activeStatus !== OnlineStatus.Online
+  ) {
     return -1
-  } else if (pre.activeStatus !== OnlineStatus.Online && next.activeStatus === OnlineStatus.Online) {
+  } else if (
+    pre.activeStatus !== OnlineStatus.Online &&
+    next.activeStatus === OnlineStatus.Online
+  ) {
     return 1
   } else {
     return next.lastOptTime < pre.lastOptTime ? -1 : 1
@@ -22,6 +33,7 @@ const sorAction = (pre: UserItem, next: UserItem) => {
 }
 
 export const useGroupStore = defineStore('group', () => {
+  const cachedStore = useCachedStore()
   // 消息列表
   const userList = ref<UserItem[]>([])
   const isLast = ref(false)
@@ -42,6 +54,20 @@ export const useGroupStore = defineStore('group', () => {
     cursor.value = data.cursor
     isLast.value = data.isLast
     loading.value = false
+
+    /** 收集需要请求用户详情的 uid */
+    const uidCollectYet: Set<number> = new Set() // 去重用
+    const uidCollects: CacheUserReq[] = []
+    const collectUidItem = (uid: number) => {
+      if (uidCollectYet.has(uid)) return
+      const cacheUser = cachedStore.userCachedList[uid]
+      uidCollects.push({ uid, lastModifyTime: cacheUser?.lastModifyTime })
+      // 添加收集过的 uid
+      uidCollectYet.add(uid)
+    }
+    data.list?.forEach((user) => collectUidItem(user.uid))
+    // 获取用户信息缓存
+    cachedStore.getBatchUserInfo(uidCollects)
   }
 
   // 获取群成员数量统计
@@ -79,5 +105,14 @@ export const useGroupStore = defineStore('group', () => {
     userList.value = userList.value.filter((item) => item.uid !== uid)
   }
 
-  return { userList, loading, loadMore, getGroupUserList, countInfo, batchUpdateUserStatus, showGroupList, filterUser }
+  return {
+    userList,
+    loading,
+    loadMore,
+    getGroupUserList,
+    countInfo,
+    batchUpdateUserStatus,
+    showGroupList,
+    filterUser,
+  }
 })

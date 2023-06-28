@@ -4,6 +4,8 @@
   "compilerOptions": {
     "composite": true,
     "types": ["node", "element-plus/global"],
-    "allowJs": true
+    "allowJs": true,
+    "ignoreDeprecations": "5.0",
+    "verbatimModuleSyntax": true
   }
 }

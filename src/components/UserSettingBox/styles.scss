@@ -1,14 +1,12 @@
-/* stylelint-disable selector-class-pattern */
-/* stylelint-disable selector-pseudo-class-no-unknown */
 :global(.setting-box-modal) {
   border-radius: 8px !important;
 }
 
-:global(.setting-box-modal .el-dialog--header) {
+:global(.setting-box-modal .el-dialog__header) {
   padding: 0;
 }
 
-:global(.setting-box-modal .el-dialog--headerbtn) {
+:global(.setting-box-modal .el-dialog__headerbtn) {
   z-index: 5;
 }
 
@@ -40,7 +38,7 @@
   z-index: 10;
   padding: 2px;
   background-color: var(--avatar-sex-bg-color);
-  border: 1px solid #fff;
+  border: 1px solid var(--color-white);
   border-radius: 50%;
 
   --avatar-sex-bg-man: var(--color-primary);
@@ -92,7 +90,7 @@
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  background-color: rgba($color: #000, $alpha: 20%);
+  background-color: var(--hover-bg-2);
   border-radius: 50%;
   opacity: 0;
 }
@@ -103,7 +101,7 @@
   align-items: center;
   justify-content: center;
   width: 30%;
-  background-color: rgba($color: #000, $alpha: 20%);
+  background-color: var(--hover-bg-2);
   border-radius: 50%;
 
   &:hover {
@@ -139,9 +137,9 @@
   margin-left: 8px;
 }
 
-@media only screen and (width >=640px) {
+@media only screen and (min-width: 640px) {
   .badge-list {
-    column-gap: 16px;
+    gap: 16px;
   }
 
   .badge-item {

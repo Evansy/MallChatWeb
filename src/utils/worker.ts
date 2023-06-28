@@ -1,5 +1,3 @@
-/* eslint-disable no-restricted-globals */
-
 // 发消息给主进程
 const postMsg = ({ type, value }: { type: string; value?: object }) => {
   self.postMessage(JSON.stringify({ type, value }))
@@ -93,7 +91,8 @@ const initConnection = () => {
   connection?.removeEventListener('close', onConnectClose)
   connection?.removeEventListener('error', onConnectError)
   // 建立链接
-  connection = new WebSocket('wss://api.mallchat.cn/websocket')
+  // 本地配置到 .env 里面修改。生产配置在 .env.production 里面
+  connection = new WebSocket(import.meta.env.VITE_WS_URL)
   // 收到消息
   connection.addEventListener('message', onConnectMsg)
   // 建立链接

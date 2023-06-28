@@ -1,4 +1,4 @@
-export function copyToClip(text: string) {
+export const copyToClip = (text: string) => {
   return new Promise((resolve, reject) => {
     try {
       const input: HTMLTextAreaElement = document.createElement('textarea')

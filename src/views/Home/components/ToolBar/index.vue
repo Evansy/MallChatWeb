@@ -21,7 +21,12 @@ const toggleGroupListShow = () => (groupStore.showGroupList = !groupStore.showGr
 
 <template>
   <aside class="side-toolbar">
-    <ElAvatar size="large" class="side-toolbar-avatar" :src="avatar || defaultAvatar" v-login="showSettingBox" />
+    <ElAvatar
+      size="large"
+      class="side-toolbar-avatar"
+      :src="avatar || defaultAvatar"
+      v-login="showSettingBox"
+    />
 
     <div class="operate-icons">
       <a
@@ -44,7 +49,9 @@ const toggleGroupListShow = () => (groupStore.showGroupList = !groupStore.showGr
       </a>
 
       <el-tooltip effect="dark" :placement="client === 'PC' ? 'right' : 'bottom'">
-        <template #content> <img class="icon-wechat-qrcode" :src="qrcode" alt="wx qrcode" /></template>
+        <template #content>
+          <img class="icon-wechat-qrcode" :src="qrcode" alt="wx qrcode" />
+        </template>
         <a class="operate-icon-link" target="_blank" rel="noopener noreferrer" title="wechat">
           <i class="operate-icon icon-wechat" />
         </a>
@@ -81,7 +88,9 @@ const toggleGroupListShow = () => (groupStore.showGroupList = !groupStore.showGr
       </a>
     </div>
 
-    <el-icon class="menu-icon" color="#fff" :size="32" @click="toggleGroupListShow"><IEpFold /></el-icon>
+    <el-icon class="menu-icon" color="var(--font-main)" :size="32" @click="toggleGroupListShow">
+      <IEpFold />
+    </el-icon>
 
     <UserSettingBox v-model="visible" />
   </aside>

@@ -1,47 +1,44 @@
 .msg-option {
   display: inline-flex;
+  padding: 2px 4px;
 
   &-item {
     display: inline-flex;
     align-items: center;
-    margin-right: 4px;
+    padding: 0 2px;
     font-size: 12px;
     line-height: 12px;
     cursor: pointer;
+    border-radius: 4px;
+  }
+
+  &-item:hover {
+    background-color: var(--background-dark);
   }
 
   .icon {
     display: inline-block;
-    width: 22px;
-    height: 22px;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 14px;
+    width: 18px;
+    height: 18px;
+    color: var(--font-main);
     border-radius: 50%;
   }
 
   .icon:hover {
-    background-color: rgba($color: #fff, $alpha: 20%);
+    color: var(--color-primary);
   }
 
+  .more,
   .reply {
-    background-image: url('@/assets/icons/icon_reply.svg');
-  }
-
-  .like {
-    background-image: url('@/assets/icons/icon_like.svg');
+    width: 14px;
+    height: 14px;
   }
 
   .like-active {
-    background-image: url('@/assets/icons/icon_liked.svg');
-  }
-
-  .dislike {
-    background-image: url('@/assets/icons/icon_like.svg');
-    transform: rotate(180deg);
+    color: var(--font-pink);
   }
 
   .dislike-active {
-    background-image: url('@/assets/icons/icon_liked.svg');
+    color: var(--color-light-1);
   }
 }

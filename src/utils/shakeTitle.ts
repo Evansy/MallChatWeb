@@ -16,12 +16,8 @@ export default {
     this.isShaking = true
     // 开始计时
     timer = setInterval(() => {
-      // count 除 2 取余，来判断显示还是为空
-      if (count % 2 === 0) {
-        document.title = `【新消息】${title}`
-      } else {
-        document.title = `【】${title}`
-      }
+      // count 按位与 判断二进制尾数，来判断显示还是为空
+      document.title = `【${count & 1 ? '新消息' : '\u3000\u3000\u3000'}】${title}`
       // 累加计数
       count++
     }, 1000)

@@ -2,10 +2,17 @@ import { useWsLoginStore, LoginStatus } from '@/stores/ws'
 import { useUserStore } from '@/stores/user'
 import { useChatStore } from '@/stores/chat'
 import { useGroupStore } from '@/stores/group'
+import { useCachedStore } from '@/stores/cached'
 import { WsResponseMessageType, WsRequestMsgType } from './wsType'
-import type { LoginSuccessResType, LoginInitResType, WsReqMsgContentType, OnStatusChangeType } from './wsType'
-import type { MessageItemType } from '@/services/types'
+import type {
+  LoginSuccessResType,
+  LoginInitResType,
+  WsReqMsgContentType,
+  OnStatusChangeType,
+} from './wsType'
+import type { MessageType, MarkItemType, RevokedMsgType } from '@/services/types'
 import { OnlineStatus } from '@/services/types'
+import { computedToken } from '@/services/request'
 import { worker } from './initWorker'
 import shakeTitle from '@/utils/shakeTitle'
 
@@ -21,7 +28,7 @@ class WS {
 
     // 后台重试次数达到上限之后，tab 获取焦点再重试
     document.addEventListener('visibilitychange', () => {
-      if (document.hidden && !this.#connectReady) {
+      if (!document.hidden && !this.#connectReady) {
         worker.postMessage('{"type":"initWS"}')
       }
 
@@ -33,7 +40,6 @@ class WS {
   }
 
   onWorkerMsg = (e: MessageEvent<any>) => {
-    // console.log(e)
     const params: { type: string; value: unknown } = JSON.parse(e.data)
     switch (params.type) {
       case 'message': {
@@ -89,7 +95,9 @@ class WS {
   }
 
   #send(msg: WsReqMsgContentType) {
-    worker.postMessage(`{"type":"message","value":${typeof msg === 'string' ? msg : JSON.stringify(msg)}}`)
+    worker.postMessage(
+      `{"type":"message","value":${typeof msg === 'string' ? msg : JSON.stringify(msg)}}`,
+    )
   }
 
   send = (params: WsReqMsgContentType) => {
@@ -109,6 +117,7 @@ class WS {
     const userStore = useUserStore()
     const chatStore = useChatStore()
     const groupStore = useGroupStore()
+    const cachedStore = useCachedStore()
     switch (params.type) {
       // 获取登录二维码
       case WsResponseMessageType.LoginQrCode: {
@@ -129,6 +138,9 @@ class WS {
         userStore.userInfo = { ...userStore.userInfo, ...rest }
         localStorage.setItem('USER_INFO', JSON.stringify(rest))
         localStorage.setItem('TOKEN', token)
+        // 更新一下请求里面的 token.
+        computedToken.clear()
+        computedToken.get()
         loginStore.loginStatus = LoginStatus.Success
         // 关闭登录弹窗
         loginStore.showLogin = false
@@ -144,6 +156,8 @@ class WS {
             uid: rest.uid,
           },
         ])
+        // 初始化所有用户基本信息
+        cachedStore.initAllUserBaseInfo()
         break
       }
       // 用户 token 过期
@@ -157,7 +171,7 @@ class WS {
       }
       // 收到消息
       case WsResponseMessageType.ReceiveMessage: {
-        chatStore.pushMsg(params.data as MessageItemType)
+        chatStore.pushMsg(params.data as MessageType)
         break
       }
       // 用户下线
@@ -175,6 +189,18 @@ class WS {
         chatStore.filterUser(data.uid)
         // 群成员列表删掉小黑子
         groupStore.filterUser(data.uid)
+        break
+      }
+      // 点赞、倒赞消息通知
+      case WsResponseMessageType.WSMsgMarkItem: {
+        const data = params.data as { markList: MarkItemType[] }
+        chatStore.updateMarkCount(data.markList)
+        break
+      }
+      // 消息撤回通知
+      case WsResponseMessageType.WSMsgRecall: {
+        const { data } = params as { data: RevokedMsgType }
+        chatStore.updateRecallStatus(data)
         break
       }
       default: {

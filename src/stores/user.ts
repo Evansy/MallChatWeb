@@ -15,7 +15,6 @@ export const useUserStore = defineStore('user', () => {
   }
 
   // 从 local读取
-  // console.count('trigger how many times')
   if (!Object.keys(userInfo.value).length && Object.keys(localUserInfo).length) {
     userInfo.value = localUserInfo
   }

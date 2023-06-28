@@ -5,9 +5,9 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "msedge",
+      "type": "chrome",
       "request": "launch",
-      "name": "vuejs: edge",
+      "name": "vuejs: chrome",
       "preLaunchTask": "vue: start",
       "url": "http://localhost:9988",
       "webRoot": "${workspaceFolder}/src"

@@ -2,23 +2,53 @@ import type {
   ListResponse,
   UserItem,
   GroupStatisticType,
-  MessageItemType,
+  MessageType,
   MarkMsgReq,
   UserInfoType,
   BadgeType,
-  SendMsgReq,
+  MessageReq,
+  CacheUserItem,
+  CacheBadgeItem,
+  CacheUserReq,
+  CacheBadgeReq,
 } from '@/services/types'
 import { alovaIns } from './request'
 import urls from './urls'
 
+const getRequest = <T>(url: string, config?: any) => alovaIns.Get<T>(url, config)
+const postRequest = <T>(url: string, params?: any) => alovaIns.Post<T, unknown>(url, params)
+const putRequest = <T>(url: string, params?: any) => alovaIns.Put<T, unknown>(url, params)
+
 export default {
-  getGroupList: (params?: any) => alovaIns.Get<ListResponse<UserItem>, unknown>(urls.getGroupUserList, params),
-  getMemberStatistic: () => alovaIns.Get<GroupStatisticType, unknown>(urls.getMemberStatistic),
-  getMsgList: (params?: any) => alovaIns.Get<ListResponse<MessageItemType>, unknown>(urls.getMsgList, params),
-  sendMsg: (data?: SendMsgReq) => alovaIns.Post<MessageItemType, unknown>(urls.sendMsg, data),
-  markMsg: (data?: MarkMsgReq) => alovaIns.Put<void, unknown>(urls.markMsg, data),
-  getUserDetail: () => alovaIns.Get<UserInfoType, unknown>(urls.getUserInfoDetail, { localCache: 0 }),
-  getBadgeList: () => alovaIns.Get<BadgeType[], unknown>(urls.getBadgeList, { localCache: 0 }),
-  setUserBadge: (badgeId: number) => alovaIns.Put<void, unknown>(urls.setUserBadge, { badgeId }),
-  modifyUserName: (name: string) => alovaIns.Put<void, unknown>(urls.modifyUserName, { name }),
+  /** 获取群成员列表 */
+  getGroupList: (params?: any) => getRequest<ListResponse<UserItem>>(urls.getGroupUserList, params),
+  /** 获取群成员统计 */
+  getMemberStatistic: () => getRequest<GroupStatisticType>(urls.getMemberStatistic),
+  /** 房间内的所有群成员列表-@专用 */
+  getAllUserBaseInfo: (params?: any) =>
+    getRequest<Pick<CacheUserItem, 'avatar' | 'name' | 'uid'>[]>(urls.getAllUserBaseInfo, params),
+  /** 批量获取成员详细信息 */
+  getUserInfoBatch: (users: CacheUserReq[]) =>
+    postRequest<CacheUserItem[]>(urls.getUserInfoBatch, { reqList: users }),
+  /** 批量获取徽章信息 */
+  getBadgesBatch: (badges: CacheBadgeReq[]) =>
+    postRequest<CacheBadgeItem[]>(urls.getBadgesBatch, { reqList: badges }),
+  /** 获取消息列表 */
+  getMsgList: (params?: any) => getRequest<ListResponse<MessageType>>(urls.getMsgList, params),
+  /** 发送消息 */
+  sendMsg: (data?: MessageReq) => postRequest<MessageType>(urls.sendMsg, data),
+  /** 标记消息，点赞等 */
+  markMsg: (data?: MarkMsgReq) => alovaIns.Put<void>(urls.markMsg, data),
+  /** 获取用户详细信息 */
+  getUserDetail: () => getRequest<UserInfoType>(urls.getUserInfoDetail, { localCache: 0 }),
+  /** 获取勋章列表 */
+  getBadgeList: () => getRequest<BadgeType[]>(urls.getBadgeList, { localCache: 0 }),
+  /** 设置用户勋章 */
+  setUserBadge: (badgeId: number) => putRequest<void>(urls.setUserBadge, { badgeId }),
+  /** 修改用户名 */
+  modifyUserName: (name: string) => putRequest<void>(urls.modifyUserName, { name }),
+  /** 撤回消息 */
+  recallMsg: (data: { msgId: number; roomId: number }) => putRequest<void>(urls.recallMsg, data),
+  /** 拉黑用户 */
+  blockUser: (data: { uid: number }) => putRequest<void>(urls.blockUser, data),
 }

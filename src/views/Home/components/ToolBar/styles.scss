@@ -3,7 +3,7 @@
   align-items: center;
   padding: 16px;
   padding-bottom: 0;
-  color: #fff;
+  color: var(--font-main);
 
   &_avatar {
     cursor: pointer;
@@ -72,7 +72,7 @@
   width: 200px;
 }
 
-@media only screen and (width >=640px) {
+@media only screen and (min-width: 640px) {
   .side-toolbar {
     flex-direction: column;
     width: 80px;
@@ -98,16 +98,10 @@
   }
 }
 
-@media only screen and (width >=640px) {
+@media only screen and (min-width: 640px) {
   .side-toolbar {
     &-avatar {
       --el-avatar-size: 56px;
     }
-  }
-}
-
-@media only screen and (width >=1200px) {
-  .side-toolbar {
-    width: 100px;
   }
 }

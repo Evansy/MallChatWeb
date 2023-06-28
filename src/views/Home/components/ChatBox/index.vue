@@ -4,6 +4,7 @@ import type { ElInput } from 'element-plus'
 import { useWsLoginStore } from '@/stores/ws'
 import { useUserStore } from '@/stores/user'
 import { useChatStore } from '@/stores/chat'
+import { useUserInfo } from '@/hooks/useCached'
 import apis from '@/services/apis'
 import { judgeClient } from '@/utils/detectDevice'
 import { emojis } from './constant'
@@ -25,37 +26,36 @@ const focusMsgInput = () => {
 
 provide('focusMsgInput', focusMsgInput)
 
-const sendMsgHandler = (e: Event | KeyboardEvent) => {
-  // 中文输入法的时候，按 ENTER，会直接提交，不是选中输入法的选项
-  // https://www.zhangxinxu.com/wordpress/2023/02/js-enter-submit-compositionupdate
-  const event = e as KeyboardEvent
-  if (typeof event.keyCode === 'number' && event.keyCode !== 13) return
-  // 空消息禁止发送
-  if (!inputMsg.value?.trim().length) {
+const sendMsgHandler = (e: Event) => {
+  // 处理输入法状态下的回车事件
+  if ((e as KeyboardEvent).isComposing) {
+    return e.preventDefault()
+  }
+  // 空消息或正在发送时禁止发送
+  if (!inputMsg.value?.trim().length || isSending.value) {
     return
   }
 
-  // 标记消息发送中
-  isSending.value = true
+  // 构造消息体
+  const messageBody = {
+    content: inputMsg.value,
+    replyMsgId: currentMsgReply.value.message?.id,
+  }
 
+  isSending.value = true
   // 发送消息
   apis
-    .sendMsg({ content: inputMsg.value, replyMsgId: currentMsgReply.value.message?.id, roomId: 1 })
+    .sendMsg({ roomId: 1, msgType: 1, body: messageBody })
     .send()
     .then((res) => {
-      // 消息列表新增一条消息
-      chatStore.pushMsg(res)
-      // 清空输入列表
-      inputMsg.value = ''
-      // 置空回复的消息
-      onClearReply()
+      chatStore.pushMsg(res) // 消息列表新增一条消息
+      inputMsg.value = '' // 清空输入列表
+      onClearReply() // 置空回复的消息
     })
     .finally(() => {
       isSending.value = false
-      // 输入框重新获取焦点
-      focusMsgInput()
-      // 滚动到消息列表底部
-      chatStore.chatListToBottomAction?.()
+      focusMsgInput() // 输入框重新获取焦点
+      chatStore.chatListToBottomAction?.() // 滚动到消息列表底部
     })
 }
 
@@ -67,6 +67,8 @@ const onShowLoginBoxHandler = () => (loginStore.showLogin = true)
 const userStore = useUserStore()
 const isSign = computed(() => userStore.isSign)
 const currentMsgReply = computed(() => (userStore.isSign && chatStore.currentMsgReply) || {})
+const currentReplUid = computed(() => currentMsgReply?.value.fromUser?.uid as number)
+const currentReplyUser = useUserInfo(currentReplUid)
 
 // 置空回复的消息
 const onClearReply = () => (chatStore.currentMsgReply = {})
@@ -95,15 +97,19 @@ const insertText = (emoji: string) => {
   <div class="chat-box">
     <div class="chat-wrapper">
       <template v-if="isSelect">
-        <ElIcon :size="160" color="#999"><IEpChatDotRound /></ElIcon>
+        <ElIcon :size="160" color="var(--font-light)"><IEpChatDotRound /></ElIcon>
       </template>
       <template v-else>
         <div class="chat">
           <ChatList @start-replying="focusMsgInput" />
           <div class="chat-msg-send">
             <div v-if="Object.keys(currentMsgReply).length" class="reply-msg-wrapper">
-              <span>{{ currentMsgReply.fromUser?.username }}: {{ currentMsgReply.message?.content }}</span>
-              <el-icon class="reply-msg-icon" :size="14" @click="onClearReply"><IEpClose /></el-icon>
+              <span>
+                {{ currentReplyUser?.name }}: {{ currentMsgReply.message?.body.content }}</span
+              >
+              <el-icon class="reply-msg-icon" :size="14" @click="onClearReply">
+                <IEpClose />
+              </el-icon>
             </div>
             <div class="msg-input-box">
               <div class="msg-input-wrapper">
@@ -150,7 +156,9 @@ const insertText = (emoji: string) => {
                   </li>
                 </ul>
               </el-popover>
-              <button class="send-button" :disabled="!inputMsg.length" @click="sendMsgHandler">🚀</button>
+              <button class="send-button" :disabled="!inputMsg.length" @click="sendMsgHandler"
+                >🚀</button
+              >
             </div>
           </div>
         </div>
