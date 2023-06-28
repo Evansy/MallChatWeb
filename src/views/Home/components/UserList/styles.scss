@@ -14,9 +14,8 @@
   overscroll-behavior-y: contain;
   list-style-type: none;
 
-  /* stylelint-disable-next-line selector-pseudo-class-no-unknown */
   :deep(.el-loading-mask) {
-    background-color: var(--color-background-black-mute);
+    background-color: var(--background-mask);
   }
 
   &-box {
@@ -29,27 +28,7 @@
     &.show {
       position: fixed;
       inset: 66px 0 0;
-      background-color: rgba($color: #000, $alpha: 50%);
-    }
-  }
-
-  &-item {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 5px 2px;
-    cursor: default;
-    filter: grayscale(1);
-    border-radius: 4px;
-
-    // content-visibility: auto;
-
-    &:hover {
-      background-color: rgba(#fff, 0.1);
-    }
-
-    &.item-online {
-      filter: grayscale(0);
+      background-color: var(--background-black-half);
     }
   }
 
@@ -63,30 +42,6 @@
     color: var(--font-light);
   }
 
-  .item-avatar-wrapper {
-    position: relative;
-  }
-
-  .item-online-status {
-    position: absolute;
-    right: 6px;
-    bottom: 6px;
-    width: 10px;
-    height: 10px;
-    background-color: greenyellow;
-    border: 1px solid #fff;
-    border-radius: 50px;
-  }
-
-  .item-avatar {
-    display: block;
-    width: 24px;
-    height: 24px;
-    margin-right: 8px;
-    border: 1px solid #fff;
-    border-radius: 50%;
-  }
-
   &-wrapper {
     position: absolute;
     top: 0;
@@ -97,7 +52,7 @@
     width: 200px;
     height: 100%;
     padding: 8px 12px;
-    background-color: var(--color-gray-bg);
+    background-color: var(--background-secondary);
     border-radius: 8px;
     transition: transform 0.3s ease;
     transform: translateX(100%);
@@ -121,7 +76,7 @@
   pointer-events: none;
 }
 
-@media only screen and (width >=640px) {
+@media only screen and (min-width: 640px) {
   .user-list-wrapper {
     position: relative;
     top: 0;

@@ -6,3 +6,7 @@ interface ImportMetaEnv {
   /** WS 地址 */
   readonly VITE_WS_URL: string
 }
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv
+}

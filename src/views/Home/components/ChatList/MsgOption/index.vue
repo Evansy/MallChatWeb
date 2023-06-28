@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { inject } from 'vue'
+import { inject, type PropType } from 'vue'
 import { useLikeToggle } from '@/hooks/useLikeToggle'
 import { useChatStore } from '@/stores/chat'
-import type { PropType } from 'vue'
-import type { MessageItemType } from '@/services/types'
+import type { MessageType } from '@/services/types'
 
 const props = defineProps({
   msg: {
-    type: Object as PropType<MessageItemType>,
+    type: Object as PropType<MessageType>,
     required: true,
   },
 })
@@ -20,7 +19,7 @@ const { isLike, isDisLike, onLike, onDisLike } = useLikeToggle(props.msg.message
 /**
  * 回复消息
  */
-const onReplyMsg = async (msgFromUser: MessageItemType) => {
+const onReplyMsg = async (msgFromUser: MessageType) => {
   if (!msgFromUser) return
   chatStore.currentMsgReply = msgFromUser
   focusMsgInput?.()
@@ -30,16 +29,18 @@ const onReplyMsg = async (msgFromUser: MessageItemType) => {
 <template>
   <div class="msg-option">
     <span class="msg-option-item" title="回复">
-      <i class="icon reply" v-login="() => onReplyMsg(msg)" />
+      <IconReply class="icon reply" v-login="() => onReplyMsg(msg)" />
     </span>
     <span class="msg-option-item" title="点赞">
       <IconLike :class="['icon', { 'like-active': isLike }]" v-login="() => onLike()" />
-      {{ msg.message.messageMark.likeCount }}
     </span>
     <span class="msg-option-item" title="不喜欢">
       <IconDislike :class="['icon', { 'dislike-active': isDisLike }]" v-login="() => onDisLike()" />
-      {{ msg.message.messageMark.dislikeCount }}
     </span>
+    <!-- TODO -->
+    <!-- <span class="msg-option-item" title="更多">
+      <IconMore class="icon more" />
+    </span> -->
   </div>
 </template>
 

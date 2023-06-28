@@ -1,5 +1,3 @@
-/* stylelint-disable selector-class-pattern */
-/* stylelint-disable selector-pseudo-class-no-unknown */
 .chat-box {
   display: flex;
   flex: 1;
@@ -21,13 +19,14 @@
   flex: 1;
   flex-direction: column;
   height: 100%;
-  background-color: var(--color-gray-bg);
+  background-color: var(--background-secondary);
   border-radius: 8px;
 }
 
 .chat-msg-send {
   padding: 10px 20px 20px;
   font-size: 0;
+  word-break: break-all;
 
   .reply-msg-wrapper {
     display: flex;
@@ -37,9 +36,9 @@
     margin-bottom: 12px;
     font-size: 12px;
     color: var(--font-light);
-    word-wrap: break-word;
+    word-wrap: break-all;
     white-space: pre-wrap;
-    background-color: #424656;
+    background-color: var(--background-3);
     border-radius: 8px;
   }
 
@@ -57,7 +56,7 @@
     border-radius: 4px;
 
     &:hover {
-      background-color: var(--color-gray-bg);
+      background-color: var(--background-secondary);
     }
   }
 
@@ -95,16 +94,16 @@
       width: 100%;
       padding: 10px;
       font-size: 14px;
-      color: #fff;
+      color: var(--font-main);
       resize: none;
-      background-color: #424656;
+      background-color: var(--background-3);
       border: none;
       border-radius: 16px;
       box-shadow: none;
       transition: 0.2s;
 
       &:focus {
-        outline: 2px solid #2287e1;
+        outline: 2px solid var(--hover-primary);
       }
     }
   }
@@ -120,16 +119,16 @@
     padding: 0;
     padding-top: 4px;
     font-size: 24px;
-    color: #fff;
+    color: var(--font-main);
     cursor: pointer;
     background-color: var(--color-primary);
     border: 0;
     border-radius: 12px;
-    box-shadow: 0 0 5px 0 #08f;
+    box-shadow: 0 0 5px 0 var(--hover-primary);
     transition: 0.3s;
 
     &:hover {
-      box-shadow: 0 0 10px 0 #08f;
+      box-shadow: 0 0 10px 0 var(--hover-primary);
     }
 
     &:disabled {
@@ -159,11 +158,11 @@
   border-radius: 4px;
 
   &:hover {
-    background-color: #424656;
+    background-color: var(--background-3);
   }
 }
 
-@media only screen and (width >=640px) {
+@media only screen and (min-width: 640px) {
   .chat-box {
     padding: 20px;
     padding-left: 0;

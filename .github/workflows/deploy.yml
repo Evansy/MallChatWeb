@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 # 要执行的任务
 jobs:
   # 任务名称

@@ -2,16 +2,12 @@
 
 #app {
   min-height: 100vh;
-
-  /* margin: 0 auto; */
   font-weight: normal;
 }
 
 /* width */
 ::-webkit-scrollbar {
   width: 4px;
-
-  /* background-color: transparent; */
 }
 
 /* Track */
@@ -21,22 +17,14 @@
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #666;
+  background-color: var(--font-gray);
   border-radius: 2px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: var(--hover-bg-1);
 }
-
-/*
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-} */
 
 [hidden] {
   display: none !important;

@@ -16,11 +16,12 @@ const handler = (fn: Function) => {
 const vLogin: Directive = {
   mounted(el, binding) {
     if (typeof binding.value !== 'function') return
-    el.addEventListener('click', handler.bind(null, binding.value))
+    el.fn = handler.bind(el, binding.value)
+    el.addEventListener('click', el.fn)
   },
   unmounted(el, binding) {
     if (typeof binding.value !== 'function') return
-    el.removeEventListener('click', handler.bind(null, binding.value))
+    el.removeEventListener('click', el.fn)
   },
 }
 

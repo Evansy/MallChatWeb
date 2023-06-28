@@ -3,7 +3,7 @@ import { computed, ref, watchEffect, onMounted, nextTick } from 'vue'
 
 import { pageSize } from '@/stores/chat'
 import { useGroupStore } from '@/stores/group'
-import { OnlineStatus } from '@/services/types'
+import UserItem from './UserItem/index.vue'
 
 const groupListLastElRef = ref<HTMLDivElement>()
 const groupStore = useGroupStore()
@@ -48,7 +48,11 @@ const hiddenGroupListShow = () => (groupStore.showGroupList = false)
 
 <template>
   <div class="user-list-box">
-    <div class="user-list-mask" @click="hiddenGroupListShow" :class="groupStore.showGroupList ? 'show' : ''" />
+    <div
+      class="user-list-mask"
+      @click="hiddenGroupListShow"
+      :class="groupStore.showGroupList ? 'show' : ''"
+    />
     <div class="user-list-wrapper" :class="groupStore.showGroupList ? 'show' : ''">
       <div class="user-list-header">在线人数：{{ statistic.onlineNum || 0 }}</div>
       <TransitionGroup
@@ -58,19 +62,7 @@ const hiddenGroupListShow = () => (groupStore.showGroupList = false)
         class="user-list"
         v-loading.lock="groupStore.loading"
       >
-        <li
-          class="user-list-item"
-          :class="user.activeStatus === OnlineStatus.Online ? 'item-online' : ''"
-          v-for="user in groupUserList"
-          :key="user.uid"
-        >
-          <div class="item-avatar-wrapper">
-            <img class="item-avatar" :src="user.avatar" />
-            <i class="item-online-status" />
-          </div>
-          <!-- {{ dayjs(user.lastOptTime).format('HH:mm:ss') }} -->
-          {{ user.name }}
-        </li>
+        <UserItem v-for="user in groupUserList" :key="user.uid" :user="user" />
         <li class="list-last-visible-el" key="visible_el" ref="groupListLastElRef">&nbsp;</li>
       </TransitionGroup>
       <template v-if="groupUserList?.length === 0">

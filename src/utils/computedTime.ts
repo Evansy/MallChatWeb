@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
-import type { Dayjs } from 'dayjs'
-import type { MessageItemType } from '@/services/types'
+import type { Dayjs, OpUnitType, ConfigType } from 'dayjs'
+import type { MessageType } from '@/services/types'
 
 // 5 分钟 5 * 60 * 1000;
 const intervalTime = 300000
@@ -25,9 +25,12 @@ const timeToStr = (time: number) => {
 }
 
 // 超过5分钟，或者超过20条消息，就添加展示时间
-const checkTimeInterval = (cur: MessageItemType, pre: MessageItemType) => {
+const checkTimeInterval = (cur: MessageType, pre: MessageType) => {
   // 如果有一个超过 5 分钟了或者计数达到 20 条了
-  if ((pre && cur.message.sendTime - pre.message.sendTime > intervalTime) || computedCount >= computedCountMax) {
+  if (
+    (pre && cur.message.sendTime - pre.message.sendTime > intervalTime) ||
+    computedCount >= computedCountMax
+  ) {
     // 重置计数
     computedCount = 0
     // 返回时间标记
@@ -39,7 +42,7 @@ const checkTimeInterval = (cur: MessageItemType, pre: MessageItemType) => {
   }
 }
 
-export const computedTimeBlock = (list: MessageItemType[], needFirst = true) => {
+export const computedTimeBlock = (list: MessageType[], needFirst = true) => {
   if (!list || list.length === 0) return []
   // 是否需要保留 传入 list 第一个，如果是接口拉回来的消息列表就要保留，如果接收到新消息，需要拿当前消息列表最后一个拿来做时间间隔计算的话，就不需要保留第一个
   const temp = needFirst ? [list[0]] : []
@@ -70,4 +73,34 @@ export const formatTimestamp = (timestamp: number): string => {
   } else {
     return date.format('MM月DD日 HH:mm')
   }
+}
+
+/**
+ * 消息间隔判断
+ * @param {ConfigType} time 输入时间
+ * @param {OpUnitType} unit 间隔单位
+ * @param {number} diff 间隔值
+ * @returns boolean 输入时间是否间隔 now 间隔值以上。
+ */
+export const isDiffNow = ({
+  time,
+  unit,
+  diff,
+}: {
+  unit: OpUnitType
+  time: ConfigType
+  diff: number
+}): boolean => {
+  return dayjs().diff(dayjs(time), unit) > diff
+}
+
+/**
+ * 距离现在 10 分钟了
+ * @param {ConfigType} time 输入时间
+ * @param {OpUnitType} unit 间隔单位
+ * @param {number} diff 间隔值
+ * @returns boolean 输入时间是否间隔 now 间隔值以上。
+ */
+export const isDiffNow10Min = (time: ConfigType): boolean => {
+  return isDiffNow({ time, unit: 'minute', diff: 10 })
 }
