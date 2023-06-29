@@ -2,7 +2,7 @@
 const postMsg = ({ type, value }: { type: string; value?: object }) => {
   self.postMessage(JSON.stringify({ type, value }))
 }
-
+//dawdawdwdwad
 // ws instance
 let connection: WebSocket
 // 心跳 timer
