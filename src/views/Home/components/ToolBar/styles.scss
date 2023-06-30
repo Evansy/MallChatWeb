@@ -28,6 +28,8 @@
 
 .operate-icon {
   display: inline-block;
+  width: 28px;
+  height: 28px;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -108,5 +110,12 @@
     &-avatar {
       --el-avatar-size: 56px;
     }
+  }
+}
+
+@media only screen and (max-width: 640px) {
+  .operate-icon {
+    width: 8vw;
+    height: 8vw;
   }
 }

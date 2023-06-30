@@ -84,10 +84,9 @@ const operateBtns = [
             rel="noopener noreferrer"
             :title="item.title"
           >
-            <i
-              :class="`operate-icon ${item.icon}`"
-              :style="client === 'PC' ? 'width:28px;height:28px;' : 'width: 8vw; height: 8vw'"
-            /><span class="operate-icon-text">{{ item.text }}</span>
+            <i :class="`operate-icon ${item.icon}`" /><span class="operate-icon-text">{{
+              item.text
+            }}</span>
           </a>
           <a
             v-else
@@ -97,22 +96,18 @@ const operateBtns = [
             rel="noopener noreferrer"
             :title="item.title"
           >
-            <i
-              :class="`operate-icon ${item.icon}`"
-              :style="client === 'PC' ? 'width:28px;height:28px;' : 'width: 8vw; height: 8vw'"
-            /><span class="operate-icon-text">{{ item.text }}</span>
+            <i :class="`operate-icon ${item.icon}`" /><span class="operate-icon-text">{{
+              item.text
+            }}</span>
           </a>
         </div>
 
         <el-tooltip v-else effect="dark" :placement="client === 'PC' ? 'right' : 'bottom'">
           <template #content>
-            <img style="width: 200px" class="icon-wechat-qrcode" :src="qrcode" alt="wx qrcode" />
+            <img class="icon-wechat-qrcode" :src="qrcode" alt="wx qrcode" />
           </template>
           <div class="operate-box">
-            <i
-              class="operate-icon icon-wechat"
-              :style="client === 'PC' ? 'width:28px;height:28px;' : 'width: 8vw; height: 8vw'"
-            />
+            <i class="operate-icon icon-wechat" />
           </div>
         </el-tooltip>
       </div>
