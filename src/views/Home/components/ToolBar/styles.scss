@@ -15,9 +15,15 @@
 .operate-icons {
   display: flex;
   column-gap: 8px;
-  align-items: flex-start;
-  margin-left: 16px;
+  align-items: center;
+  margin-left: 15px;
+  overflow-x: scroll;
   font-size: 0;
+  scrollbar-width: none; /* firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome Safari */
+  }
 }
 
 .operate-icon {
@@ -62,13 +68,14 @@
   font-size: 12px;
 }
 
-.operate-icon-link {
+.operate-icon-link,
+.operate-box {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.icon-wechat-qrcode {
+.operate-box .icon-wechat-qrcode {
   width: 200px;
 }
 
@@ -103,5 +110,12 @@
     &-avatar {
       --el-avatar-size: 56px;
     }
+  }
+}
+
+@media only screen and (max-width: 640px) {
+  .operate-icon {
+    width: 8vw;
+    height: 8vw;
   }
 }
