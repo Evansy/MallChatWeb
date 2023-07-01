@@ -9,12 +9,15 @@ let connection: WebSocket
 let heartTimer: number | null = null
 
 // 重连次数上限
-const reconnectCountMax = 100
+// const reconnectCountMax = 100
+const reconnectCountMax = 5
 let reconnectCount = 0
 // 重连 timer
 let timer: null | number = null
 // 重连🔐
 let lockReconnect = false
+
+let storeToken: string
 
 // 往 ws 发消息
 const connectionSend = (value: object) => {
@@ -58,7 +61,7 @@ const onCloseHandler = () => {
 
   // 断线重连
   timer = setTimeout(() => {
-    initConnection()
+    initConnection(storeToken)
     reconnectCount++
     // 标识已经开启重连任务
     lockReconnect = false
@@ -82,17 +85,19 @@ const onConnectOpen = () => {
   sendHeartPack()
 }
 // ws 连接 接收到消息
-const onConnectMsg = (e: any) => postMsg({ type: 'message', value: e.data })
+const onConnectMsg = (e: any) => {
+  postMsg({ type: 'message', value: e.data })
+}
 
 // 初始化 ws 连接
-const initConnection = () => {
+const initConnection = (token: string) => {
   connection?.removeEventListener('message', onConnectMsg)
   connection?.removeEventListener('open', onConnectOpen)
   connection?.removeEventListener('close', onConnectClose)
   connection?.removeEventListener('error', onConnectError)
   // 建立链接
   // 本地配置到 .env 里面修改。生产配置在 .env.production 里面
-  connection = new WebSocket(import.meta.env.VITE_WS_URL)
+  connection = new WebSocket(import.meta.env.VITE_WS_URL + '?' + token)
   // 收到消息
   connection.addEventListener('message', onConnectMsg)
   // 建立链接
@@ -108,7 +113,8 @@ self.onmessage = (e: MessageEvent<string>) => {
   switch (type) {
     case 'initWS': {
       reconnectCount = 0
-      initConnection()
+      storeToken = value
+      initConnection(value)
       break
     }
     case 'message': {
