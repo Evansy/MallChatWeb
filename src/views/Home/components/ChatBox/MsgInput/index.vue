@@ -388,6 +388,10 @@ const onInputKeyDown = (e: KeyboardEvent) => {
       onSelectPerson(personList.value[activeIndex.value])
     }
   } else {
+    // 禁止处理换行
+    if ((e.ctrlKey && e.key === 'Enter') || (e.shiftKey && e.key === 'Enter')) return
+
+    // 仅回车就发送
     if (e.key === 'Enter') {
       emit('send', e)
     }
