@@ -11,17 +11,21 @@ import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import bundleAnalyzer from 'rollup-plugin-bundle-analyzer'
 import autoprefixer from 'autoprefixer'
+import mkcert from 'vite-plugin-mkcert'
 
 const pathSrc = path.resolve(__dirname, 'src')
 
 const isProd = process.env.NODE_ENV === 'production'
 const lifecycle = process.env.npm_lifecycle_event
 
+const isHttpsLifecycle = lifecycle === 'dev:https'
+
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const envConfig = loadEnv(mode, process.cwd())
   return {
     plugins: [
+      isHttpsLifecycle ? mkcert() : null,
       vue(),
       vueJsx(),
       AutoImport({
@@ -64,6 +68,7 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       port: 9988,
+      https: isHttpsLifecycle,
       proxy: {
         // string shorthand
         // '/foo': 'http://localhost:4567/foo',

@@ -5,12 +5,15 @@ import type { MessageType, MarkItemType, RevokedMsgType, CacheUserReq } from '@/
 import { MarkType } from '@/services/types'
 import { computedTimeBlock } from '@/utils/computedTime'
 import { useCachedStore } from '@/stores/cached'
+import { useUserStore } from '@/stores/user'
 import shakeTitle from '@/utils/shakeTitle'
+import notify from '@/utils/notification'
 
 export const pageSize = 20
 
 export const useChatStore = defineStore('chat', () => {
   const cachedStore = useCachedStore()
+  const userStore = useUserStore()
   const messageMap = reactive<Map<number, MessageType>>(new Map<number, MessageType>()) // 消息Map
   const replyMapping = reactive<Map<number, number[]>>(new Map<number, number[]>()) // 回复消息映射
 
@@ -88,6 +91,15 @@ export const useChatStore = defineStore('chat', () => {
     const uid = msg.fromUser.uid
     const cacheUser = cachedStore.userCachedList[uid]
     cachedStore.getBatchUserInfo([{ uid, lastModifyTime: cacheUser?.lastModifyTime }])
+
+    // 如果收到的消息里面是艾特自己的就发送系统通知
+    if (msg.message.body.atUidList?.includes(userStore.userInfo.uid) && cacheUser) {
+      notify({
+        name: cacheUser.name as string,
+        text: msg.message.body.content,
+        icon: cacheUser.avatar as string,
+      })
+    }
 
     // tab 在后台获得新消息，就开始闪烁！
     if (document.hidden && !shakeTitle.isShaking) {

@@ -73,12 +73,19 @@ export const useCachedStore = defineStore(
       data?.forEach((item) => (userCachedList[item.uid] = item))
     }
 
+    // 根据用户名关键字过滤用户，
+    // FIXME 是否需要过滤自己
+    const filterUsers = (searchKey: string) => {
+      return Object.values(userCachedList).filter((item) => item.name?.startsWith(searchKey))
+    }
+
     return {
       userCachedList,
       badgeCachedList,
       getBatchUserInfo,
       getBatchBadgeInfo,
       initAllUserBaseInfo,
+      filterUsers,
     }
   },
   { persist: true },

@@ -1,0 +1,87 @@
+.msg_input {
+  box-sizing: border-box;
+
+  // 处理enter键换行生成新的div、破坏子节点结构的问题
+  display: inline-block;
+  width: 100%;
+  min-height: 20px;
+  max-height: 104px;
+  overflow: hidden;
+  overflow-y: auto;
+  font-size: 14px;
+  color: var(--font-main);
+  white-space: pre-wrap;
+  resize: none;
+  border: none;
+  box-shadow: none;
+  transition: 0.2s;
+
+  &:focus {
+    outline: none;
+  }
+
+  &_wrapper {
+    padding: 10px;
+    padding-right: 0;
+    background-color: var(--background-3);
+    border-radius: 16px;
+
+    &:focus-within {
+      outline: 2px solid var(--hover-primary);
+    }
+  }
+
+  &:empty::before {
+    color: var(--font-placeholder);
+    pointer-events: none;
+    content: attr(placeholder);
+  }
+}
+
+// 选人弹窗样式
+.at-mentions__dialog {
+  position: fixed;
+  z-index: 10000;
+  width: 300px;
+  max-height: 250px;
+  overflow: auto;
+  font-size: 16px;
+  color: var(--font-main);
+  background: var(--background-2);
+  border-radius: 8px;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 10%);
+  transform: translateY(-100%);
+
+  .person-item {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    height: 46px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background 0.3s;
+
+    &:hover {
+      background-color: rgba(13, 132, 255, 10%);
+    }
+
+    &--active {
+      background-color: rgba(13, 132, 255, 30%);
+    }
+
+    &__avatar {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      margin-right: 15px;
+      vertical-align: middle;
+      border: 0.5px solid #ddd;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    &__name {
+      font-size: 14px;
+    }
+  }
+}
