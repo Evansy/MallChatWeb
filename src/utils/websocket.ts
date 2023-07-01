@@ -22,14 +22,16 @@ class WS {
   #connectReady = false
 
   constructor() {
-    worker.postMessage('{"type":"initWS"}')
+    worker.postMessage(`{"type":"initWS","value":${JSON.stringify(localStorage.getItem('TOKEN'))}}`)
     // 收到消息
     worker.addEventListener('message', this.onWorkerMsg)
 
     // 后台重试次数达到上限之后，tab 获取焦点再重试
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden && !this.#connectReady) {
-        worker.postMessage('{"type":"initWS"}')
+        worker.postMessage(
+          `{"type":"initWS","value":${JSON.stringify(localStorage.getItem('TOKEN'))}}`,
+        )
       }
 
       // 获得焦点停止消息闪烁
