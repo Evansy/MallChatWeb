@@ -418,14 +418,6 @@
     &-mention {
       color: #f1f1f1;
     }
-
-    &-card {
-      background-color: var(--color-primary);
-
-      &:hover {
-        box-shadow: var(--el-box-shadow-lighter);
-      }
-    }
   }
 
   a {
