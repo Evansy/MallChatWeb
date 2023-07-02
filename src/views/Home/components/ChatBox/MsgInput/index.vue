@@ -9,6 +9,7 @@ import {
   getEditorRange,
   transformMentionDataToNodeList,
   transformNodeListToMentionData,
+  insertInputText,
 } from './utils'
 import { useCachedStore } from '@/stores/cached'
 
@@ -385,7 +386,10 @@ const onInputKeyDown = (e: KeyboardEvent) => {
     // keyCode 13 Enter
     if (e.key === 'Enter') {
       e.preventDefault()
+      // 选人
       onSelectPerson(personList.value[activeIndex.value])
+      // 更新输入框同步值
+      onInputText()
     }
   } else {
     // 禁止处理换行
@@ -452,6 +456,17 @@ const onInputFocus = () => {
   checkIsShowSelectDialog()
 }
 
+// 插入换行符
+const onWrap = () => {
+  const rangeInfo = getEditorRange()
+  if (!rangeInfo || !rangeInfo.range || !rangeInfo.selection) return
+  insertInputText({
+    content: '\n',
+    selection: rangeInfo.selection,
+    range: rangeInfo.range,
+  })
+}
+
 // 拦截粘贴，只允许粘贴文本
 const onPaste = (e: ClipboardEvent) => {
   e.preventDefault()
@@ -479,7 +494,11 @@ const onPaste = (e: ClipboardEvent) => {
       :contenteditable="!disabled"
       @input="onInputText"
       @keyup="onInputKeyUp"
-      @keydown="onInputKeyDown"
+      @keydown.enter.prevent.exact
+      @keydown.shift.enter.exact="onWrap"
+      @keydown.ctrl.enter.exact="onWrap"
+      @keydown.meta.enter.exact="onWrap"
+      @keydown.exact="onInputKeyDown"
       @blur="onInputBlur"
       @focus="onInputFocus"
       @mouseup="checkIsShowSelectDialog"
@@ -489,6 +508,7 @@ const onPaste = (e: ClipboardEvent) => {
     <div
       v-show="showDialog"
       ref="dialogRef"
+      id="at-mentions-dialog"
       className="at-mentions__dialog"
       :style="{ top: `${dialogPosition.y - 14}px`, left: `${dialogPosition.x || 0}px` }"
     >

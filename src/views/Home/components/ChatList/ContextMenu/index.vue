@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, type PropType } from 'vue'
+import { computed, type PropType, inject } from 'vue'
 import apis from '@/services/apis'
 import {
   ContextMenu,
@@ -11,6 +11,9 @@ import { useUserStore } from '@/stores/user'
 import { copyToClip } from '@/utils/copy'
 import { useChatStore } from '@/stores/chat'
 import { PowerType, type MessageType } from '@/services/types'
+import { insertInputText, getEditorRange } from '@/views/Home/components/ChatBox/MsgInput/utils'
+
+const focusMsgInput = inject<() => void>('focusMsgInput')
 
 const props = defineProps({
   // 消息体
@@ -52,7 +55,22 @@ const copyContent = () => {
   copyToClip(content)
 }
 
+// 删除消息
 const onDelete = () => chatStore.deleteMsg(props.msg.message.id)
+
+// @ 用户
+const onAtUser = () => {
+  // 输入框获取焦点
+  focusMsgInput?.()
+  // 插入内容
+  setTimeout(() => {
+    const selection = getEditorRange()?.selection
+    const range = selection?.getRangeAt(0)
+    if (!selection || !range) return
+    console.log(selection, range, props.msg.fromUser.uid)
+    insertInputText({ content: props.msg.fromUser.uid + '', selection, range })
+  }, 10)
+}
 </script>
 
 <template>
@@ -64,6 +82,9 @@ const onDelete = () => chatStore.deleteMsg(props.msg.message.id)
       ...props.options,
     }"
   >
+    <!-- <ContextMenuItem label="at" @click="onAtUser">
+      <template #icon> <span class="icon">@</span> </template>
+    </ContextMenuItem> -->
     <ContextMenuItem label="复制" @click="copyContent">
       <template #icon>
         <IconCopy class="icon" />

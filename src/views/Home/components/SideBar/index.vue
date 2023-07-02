@@ -26,6 +26,7 @@ const mockData = computed(() => {
       name: lastUserInfo.value.name,
       avatar: mallChatLogo,
       tag: '官方',
+      // TODO 接收到艾特的时候，当前聊天没有被选中的时候，显示红色文本
       lastMsg:
         message?.type === 2 ? '撤回了一条消息' : message?.body?.content || '欢迎使用MallChat',
       lastMsgTime: formatTimestamp(message?.sendTime),
