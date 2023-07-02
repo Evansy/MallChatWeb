@@ -6,7 +6,7 @@ import { useUserStore } from '@/stores/user'
 import { useChatStore } from '@/stores/chat'
 import { useUserInfo } from '@/hooks/useCached'
 import MsgInput from './MsgInput/index.vue'
-import { getEditorRange } from './MsgInput/utils'
+import { insertInputText } from './MsgInput/utils'
 import apis from '@/services/apis'
 import { judgeClient } from '@/utils/detectDevice'
 import { emojis } from './constant'
@@ -34,6 +34,7 @@ const mentionList = ref<IMention[]>([])
 const isAudio = ref(false)
 const isHovered = ref(false)
 const tempMessageId = ref(0)
+const showEmoji = ref(false)
 
 const focusMsgInput = () => {
   setTimeout(() => {
@@ -47,7 +48,7 @@ const focusMsgInput = () => {
 
 provide('focusMsgInput', focusMsgInput)
 
-const send = (msgType: number, body: any, roomId = 1) => {
+const send = (msgType: MsgEnum, body: any, roomId = 1) => {
   apis
     .sendMsg({ roomId, msgType, body })
     .send()
@@ -117,56 +118,23 @@ const showReplyContent = () => {
 
 // 置空回复的消息
 const onClearReply = () => (chatStore.currentMsgReply = {})
-// 插入内容
-const insertText = (emoji: string, isEmoji = false) => {
-  let input = msg_input_ref.value?.input
-  let editRange = (isEmoji ? msg_input_ref.value?.range : getEditorRange()) as {
+// 插入表情
+const insertEmoji = (emoji: string) => {
+  const input = msg_input_ref.value?.input
+  const editRange = msg_input_ref.value?.range as {
     range: Range
     selection: Selection
   }
   if (!input || !editRange) return
-  const { selection, range: editorRange } = editRange
-  const range = isEmoji ? editorRange : selection.getRangeAt(0)
-  if (selection.getRangeAt(0) && selection.rangeCount) {
-    range.deleteContents()
-    // selection.removeAllRanges()
-    const el = document.createElement('div')
-    const text = document.createTextNode(emoji)
-    el.appendChild(text)
-    const frag = document.createDocumentFragment()
-    let node
-    let lastNode
-    while ((node = el.firstChild)) {
-      lastNode = frag.appendChild(node)
-    }
-    range.insertNode(frag)
-    if (lastNode) {
-      const newRange = range.cloneRange()
-      if (!newRange) return
-      newRange.setStartAfter(lastNode)
-      newRange.collapse(true)
-      selection.removeAllRanges()
-      selection.addRange(newRange)
-    }
-  }
-  // let startPos = input.selectionStart as number
-  // let endPos = input.selectionEnd as number
-  // let resultText =
-  //   input.innerHTML.substring(0, startPos) + emoji + input.innerHTML.substring(endPos)
-  // // 需要保留，否则光标位置不正确。
-  // input.innerHTML = resultText
-  // // 需要更新以触发 onChang
-  // inputMsg.value = resultText
-  // input.focus?.()
-  // // const range = window.getSelection()
-  // // range?.selectAllChildren(input)
-  // // range?.collapseToEnd()
-  // // input.selection.setRangeAtEndOf(last);
-  // input.selectionStart = startPos + emoji.length
-  // input.selectionEnd = startPos + emoji.length
-  //临时让获取焦点
-  // focusMsgInput()
+  insertInputText({ content: emoji, ...editRange })
+  // 需要更新以触发 onChang
+  inputMsg.value = input.innerText
+  // 关闭表情弹窗，一次只选一个表情
+  showEmoji.value = false
+  // 临时让获取焦点
+  focusMsgInput()
 }
+
 const onInputChange = (val: string, mentions: IMention[]) => {
   mentionList.value = mentions
 }
@@ -269,6 +237,7 @@ onEnd((audioFile: any) => {
               placement="top-end"
               effect="dark"
               title=""
+              v-model:visible="showEmoji"
               :width="client === 'PC' ? 418 : '95%'"
               trigger="click"
             >
@@ -283,7 +252,7 @@ onEnd((audioFile: any) => {
                   class="emoji-item"
                   v-for="(emoji, $index) of emojis"
                   :key="$index"
-                  v-login="() => insertText(emoji, true)"
+                  v-login="() => insertEmoji(emoji)"
                 >
                   {{ emoji }}
                 </li>
