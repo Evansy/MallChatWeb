@@ -51,7 +51,7 @@ const emit = defineEmits([
   'send',
 ])
 
-const { modelValue: value, mentions, maxLength } = toRefs(props)
+const { modelValue: value, mentions, maxLength, disabled } = toRefs(props)
 const editorRef = ref<HTMLElement | null>()
 const dialogRef = ref<HTMLElement | null>()
 const scrollRef = ref<HTMLDivElement>()
@@ -164,6 +164,15 @@ watch(showDialog, () => {
       dialogPosition.x = cursorX
       dialogPosition.y = cursorY
     }
+  }
+})
+
+// 禁用解除后自动获取焦点。
+watch(disabled, (newVal) => {
+  if (!newVal) {
+    setTimeout(() => {
+      editorRef.value?.focus()
+    })
   }
 })
 
@@ -398,6 +407,17 @@ const onInputKeyDown = (e: KeyboardEvent) => {
       onInputText()
     }
   } else {
+    // 禁止默认换行
+    if (
+      (e.ctrlKey && e.key === 'Enter') ||
+      (e.shiftKey && e.key === 'Enter') ||
+      (e.metaKey && e.key === 'Enter')
+    ) {
+      e.preventDefault()
+      onWrap()
+      return
+    }
+    // 禁止默认换行
     if (e.key === 'Enter') {
       e.preventDefault()
       emit('send', e)
@@ -501,11 +521,7 @@ const onPaste = (e: ClipboardEvent) => {
       :contenteditable="!disabled"
       @input="onInputText"
       @keyup="onInputKeyUp"
-      @keydown.enter.prevent.exact
-      @keydown.shift.enter.exact="onWrap"
-      @keydown.ctrl.enter.exact="onWrap"
-      @keydown.meta.enter.exact="onWrap"
-      @keydown.exact="onInputKeyDown"
+      @keydown="onInputKeyDown"
       @blur="onInputBlur"
       @focus="onInputFocus"
       @mouseup="checkIsShowSelectDialog"
@@ -528,7 +544,7 @@ const onPaste = (e: ClipboardEvent) => {
         >
           <Avatar class="avatar" :src="item.avatar" :size="26" />
           <div class="person-item__name">
-            {{ item.name }}<span>{{ `(${item.uid})` }}</span>
+            {{ item.name }}
           </div>
         </div>
       </div>

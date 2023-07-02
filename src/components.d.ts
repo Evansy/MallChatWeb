@@ -25,6 +25,7 @@ declare module '@vue/runtime-core' {
     IEpChatDotRound: typeof import('~icons/ep/chat-dot-round')['default']
     IEpClose: typeof import('~icons/ep/close')['default']
     IEpFemale: typeof import('~icons/ep/female')['default']
+    IEpFold: typeof import('~icons/ep/fold')['default']
     IEpInfoFilled: typeof import('~icons/ep/info-filled')['default']
     IEpLoading: typeof import('~icons/ep/loading')['default']
     IEpLock: typeof import('~icons/ep/lock')['default']

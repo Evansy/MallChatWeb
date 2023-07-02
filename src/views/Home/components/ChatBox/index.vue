@@ -40,10 +40,10 @@ const focusMsgInput = () => {
   setTimeout(() => {
     if (!msg_input_ref.value) return
     msg_input_ref.value?.focus?.()
-    const range = window.getSelection()
-    range?.selectAllChildren(msg_input_ref.value.input)
-    range?.collapseToEnd()
-  }, 10)
+    const selection = msg_input_ref.value?.range?.selection as Selection
+    selection?.selectAllChildren(msg_input_ref.value.input)
+    selection?.collapseToEnd()
+  })
 }
 
 provide('focusMsgInput', focusMsgInput)
@@ -283,7 +283,7 @@ onEnd((audioFile: any) => {
           </div>
           <span v-if="!isSign" class="tips" @click="loginStore.showLogin = true">
             <ElIcon class="icon-lock"><IEpLock /></ElIcon>
-            点我登录之后再发言~
+            点我<span class="tips-text">登录</span>之后再发言~
           </span>
         </div>
       </div>
