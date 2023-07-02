@@ -5,27 +5,18 @@ import { useCachedStore } from '@/stores/cached'
 import type { UserItem } from '@/services/types'
 import { pageSize } from './chat'
 import cloneDeep from 'lodash/cloneDeep'
-import { OnlineStatus } from '@/services/types'
+import { OnlineEnum } from '@/enums'
 import type { CacheUserReq } from '@/services/types'
 import { uniqueUserList } from '@/utils/unique'
 
 const sorAction = (pre: UserItem, next: UserItem) => {
-  if (pre.activeStatus === OnlineStatus.Online && next.activeStatus === OnlineStatus.Online) {
+  if (pre.activeStatus === OnlineEnum.ONLINE && next.activeStatus === OnlineEnum.ONLINE) {
     return next.lastOptTime < pre.lastOptTime ? -1 : 1
-  } else if (
-    pre.activeStatus !== OnlineStatus.Online &&
-    next.activeStatus !== OnlineStatus.Online
-  ) {
+  } else if (pre.activeStatus !== OnlineEnum.ONLINE && next.activeStatus !== OnlineEnum.ONLINE) {
     return next.lastOptTime < pre.lastOptTime ? -1 : 1
-  } else if (
-    pre.activeStatus === OnlineStatus.Online &&
-    next.activeStatus !== OnlineStatus.Online
-  ) {
+  } else if (pre.activeStatus === OnlineEnum.ONLINE && next.activeStatus !== OnlineEnum.ONLINE) {
     return -1
-  } else if (
-    pre.activeStatus !== OnlineStatus.Online &&
-    next.activeStatus === OnlineStatus.Online
-  ) {
+  } else if (pre.activeStatus !== OnlineEnum.ONLINE && next.activeStatus === OnlineEnum.ONLINE) {
     return 1
   } else {
     return next.lastOptTime < pre.lastOptTime ? -1 : 1

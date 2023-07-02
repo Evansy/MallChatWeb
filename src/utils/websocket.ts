@@ -11,7 +11,7 @@ import type {
   OnStatusChangeType,
 } from './wsType'
 import type { MessageType, MarkItemType, RevokedMsgType } from '@/services/types'
-import { OnlineStatus } from '@/services/types'
+import { OnlineEnum } from '@/enums'
 import { computedToken } from '@/services/request'
 import { worker } from './initWorker'
 import shakeTitle from '@/utils/shakeTitle'
@@ -149,7 +149,7 @@ class WS {
         // 自己更新自己上线
         groupStore.batchUpdateUserStatus([
           {
-            activeStatus: OnlineStatus.Online,
+            activeStatus: OnlineEnum.ONLINE,
             avatar: rest.avatar,
             lastOptTime: Date.now(),
             name: rest.name,

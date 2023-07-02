@@ -2,7 +2,6 @@
 import { computed, ref } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useGroupStore } from '@/stores/group'
-import defaultAvatar from '@/assets/avatars/default.png'
 import qrcode from '@/assets/qrcode.jpeg'
 import { judgeClient } from '@/utils/detectDevice'
 
@@ -12,111 +11,77 @@ const userStore = useUserStore()
 const groupStore = useGroupStore()
 
 const avatar = computed(() => userStore?.userInfo.avatar)
-
 const showSettingBox = () => (visible.value = true)
 const toggleGroupListShow = () => (groupStore.showGroupList = !groupStore.showGroupList)
-const operateBtns = [
-  {
-    title: '微信',
-    icon: 'icon-wechat',
-    text: '微信',
-    url: '',
-  },
-  {
-    title: 'bilibili',
-    icon: 'icon-bilibili',
-    text: '',
-    url: 'https://space.bilibili.com/146719540',
-  },
+// 是否PC端
+const isPc = computed(() => client === 'PC')
 
+const menuList = [
   {
-    title: '语雀',
-    icon: 'icon-yuque',
-    text: '项目文档',
-    url: 'https://www.yuque.com/snab/planet/cef1mcko4fve0ur3',
-  },
-
-  {
-    title: 'tencent cloud',
-    icon: 'icon-tencent-cloud',
-    text: '618超优惠',
-    url: 'https://curl.qcloud.com/qSaH0JLT',
+    name: '',
+    desc: '哔哩哔哩',
+    icon: 'bilibili',
+    handler: () => {
+      window.open('https://space.bilibili.com/146719540', '_blank')
+    },
   },
   {
-    title: 'MallChatWeb Server',
-    icon: 'icon-github',
-    text: '后端源码',
-    url: '',
-    func: () => window.open('https://github.com/zongzibinbin/MallChat', '_blank'),
+    name: '项目文档',
+    desc: '语雀',
+    icon: 'yuque',
+    handler: () => {
+      window.open('https://www.yuque.com/snab/planet/cef1mcko4fve0ur3', '_blank')
+    },
   },
   {
-    title: 'MallChatWeb Web',
-    icon: 'icon-github',
-    text: '前端源码',
-    url: '',
-    func: () => window.open('https://github.com/Evansy/MallChatWeb', '_blank'),
+    name: '618超优惠',
+    desc: '腾讯云',
+    icon: 'qcloud',
+    handler: () => {
+      window.open('https://curl.qcloud.com/qSaH0JLT', '_blank')
+    },
+  },
+  {
+    name: '后端源码',
+    desc: 'MallChatWeb Server',
+    icon: 'github',
+    handler: () => {
+      window.open('https://github.com/zongzibinbin/MallChat', '_blank')
+    },
+  },
+  {
+    name: '前端源码',
+    desc: 'MallChatWeb Web',
+    icon: 'github',
+    handler: () => {
+      window.open('https://github.com/Evansy/MallChatWeb', '_blank')
+    },
   },
 ]
 </script>
 
 <template>
   <aside class="side-toolbar">
-    <ElAvatar
-      size="large"
-      style="min-width: 56px"
-      class="side-toolbar-avatar"
-      :src="avatar || defaultAvatar"
-      v-login="showSettingBox"
-    />
-    <div class="operate-icons">
-      <div
-        class="operate-item"
-        v-for="(item, index) in operateBtns"
+    <Avatar :src="avatar" :size="isPc ? 50 : 40" v-login="showSettingBox" />
+    <div class="menu">
+      <el-tooltip effect="dark" :placement="isPc ? 'right' : 'bottom'">
+        <template #content>
+          <img class="icon-wechat-qrcode" :src="qrcode" alt="wx qrcode" />
+        </template>
+        <Icon icon="weixin" :size="28" colorful />
+      </el-tooltip>
+      <a
+        v-for="(item, index) in menuList"
+        class="menu-item"
         :key="index"
-        :style="client !== 'PC' ? (item.text ? 'min-width:16vw;' : 'min-width:8vw;') : ''"
+        :title="item.desc"
+        @click="item.handler"
       >
-        <div v-if="item.title != '微信'">
-          <a
-            v-if="item.url"
-            class="operate-icon-link"
-            :href="item.url"
-            target="_blank"
-            rel="noopener noreferrer"
-            :title="item.title"
-          >
-            <i :class="`operate-icon ${item.icon}`" /><span class="operate-icon-text">{{
-              item.text
-            }}</span>
-          </a>
-          <a
-            v-else
-            class="operate-icon-link"
-            v-login="item.func"
-            target="_blank"
-            rel="noopener noreferrer"
-            :title="item.title"
-          >
-            <i :class="`operate-icon ${item.icon}`" /><span class="operate-icon-text">{{
-              item.text
-            }}</span>
-          </a>
-        </div>
-
-        <el-tooltip v-else effect="dark" :placement="client === 'PC' ? 'right' : 'bottom'">
-          <template #content>
-            <img class="icon-wechat-qrcode" :src="qrcode" alt="wx qrcode" />
-          </template>
-          <div class="operate-box">
-            <i class="operate-icon icon-wechat" />
-          </div>
-        </el-tooltip>
-      </div>
+        <Icon :icon="item.icon" :size="28" colorful />
+        <span v-if="item.name" class="menu-item-name">{{ item.name }}</span>
+      </a>
     </div>
-
-    <el-icon class="menu-icon" color="var(--font-main)" :size="32" @click="toggleGroupListShow">
-      <IEpFold />
-    </el-icon>
-
+    <Icon icon="zhankai" :size="28" @click="toggleGroupListShow" />
     <UserSettingBox v-model="visible" />
   </aside>
 </template>

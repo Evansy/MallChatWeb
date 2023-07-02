@@ -51,4 +51,7 @@ export default {
   recallMsg: (data: { msgId: number; roomId: number }) => putRequest<void>(urls.recallMsg, data),
   /** 拉黑用户 */
   blockUser: (data: { uid: number }) => putRequest<void>(urls.blockUser, data),
+  /** 获取临时上传链接 */
+  getUploadUrl: (params: any) =>
+    getRequest<{ downloadUrl: string; uploadUrl: string }>(urls.fileUpload, { params }),
 }

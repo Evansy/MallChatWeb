@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { toRef } from 'vue'
 import type { PropType } from 'vue'
-import { OnlineStatus } from '@/services/types'
+import { OnlineEnum } from '@/enums'
 import type { UserItem } from '@/services/types'
 import { useUserInfo } from '@/hooks/useCached'
 const props = defineProps({
@@ -15,15 +15,13 @@ const userInfo = useUserInfo(user.value.uid)
 </script>
 
 <template>
-  <li
-    class="user-list-item"
-    :class="user.activeStatus === OnlineStatus.Online ? 'item-online' : ''"
-    :key="user.uid"
-  >
-    <div class="item-avatar-wrapper">
-      <img class="item-avatar" :src="userInfo.avatar" />
-      <i class="item-online-status" />
-    </div>
+  <li class="user-list-item" :key="user.uid">
+    <Avatar
+      :src="userInfo.avatar"
+      :size="24"
+      showStatus
+      :online="user.activeStatus === OnlineEnum.ONLINE"
+    />
     {{ userInfo.name }}
   </li>
 </template>

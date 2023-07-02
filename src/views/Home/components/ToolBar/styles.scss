@@ -1,121 +1,109 @@
 .side-toolbar {
   display: flex;
-  align-items: center;
-  padding: 16px;
-  padding-bottom: 0;
-  color: var(--font-main);
-
-  &_avatar {
-    cursor: pointer;
-
-    --el-avatar-size: 32px;
-  }
-}
-
-.operate-icons {
-  display: flex;
-  column-gap: 8px;
-  align-items: center;
-  margin-left: 15px;
-  overflow-x: scroll;
-  font-size: 0;
-  scrollbar-width: none; /* firefox */
-  -ms-overflow-style: none; /* IE 10+ */
-  &::-webkit-scrollbar {
-    display: none; /* Chrome Safari */
-  }
-}
-
-.operate-icon {
-  display: inline-block;
-  width: 28px;
-  height: 28px;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-}
-
-.menu-icon {
-  margin-left: auto;
-}
-
-.icon-github {
-  background-image: url('@/assets/icons/icon_github.svg');
-}
-
-.icon-bilibili {
-  background-image: url('@/assets/icons/icon_bilibili.svg');
-}
-
-.icon-tencent-cloud {
-  background-image: url('@/assets/icons/icon_tencent_cloud.svg');
-}
-
-.icon-tiktok {
-  background-image: url('@/assets/icons/icon_tiktok.svg');
-}
-
-.icon-wechat {
-  background-image: url('@/assets/icons/icon_wechat.svg');
-}
-
-.icon-yuque {
-  background-image: url('@/assets/icons/icon_yuque.png');
-}
-
-.operate-icon-text {
-  margin-top: 4px;
-  font-size: 12px;
-}
-
-.operate-icon-link,
-.operate-box {
-  display: flex;
   flex-direction: column;
   align-items: center;
-}
+  width: 80px;
+  padding: 20px 0;
+  color: var(--font-main);
+  user-select: none;
 
-.operate-box .icon-wechat-qrcode {
-  width: 200px;
-}
-
-@media only screen and (min-width: 640px) {
-  .side-toolbar {
+  .menu {
+    display: flex;
+    flex: 1;
     flex-direction: column;
-    width: 80px;
-    height: 100%;
-    padding: 20px 0;
-  }
-
-  .operate-icons {
-    flex-direction: column;
-    row-gap: 16px;
     align-items: center;
-    margin-top: auto;
-    margin-left: 0;
+    justify-content: flex-end;
+
+    &-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 6px 0;
+      line-height: 1.2;
+      text-align: center;
+
+      &-name {
+        margin-top: 4px;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+    }
   }
 
-  .operate-icon-text {
-    margin-top: 2px;
-    font-size: 8px;
+  // 语雀图标不标准，需要特殊处理
+  .icon-yuque {
+    width: 30px;
+    height: 30px;
+    font-size: 23px !important;
+    line-height: 28px;
+    background: #fff;
+    border-radius: 50%;
   }
 
-  .menu-icon {
+  .icon-qcloud {
+    font-size: 23px !important;
+  }
+
+  .icon-zhankai {
     display: none;
   }
 }
 
-@media only screen and (min-width: 640px) {
-  .side-toolbar {
-    &-avatar {
-      --el-avatar-size: 56px;
-    }
-  }
+.icon-wechat-qrcode {
+  width: 200px;
 }
 
 @media only screen and (max-width: 640px) {
-  .operate-icon {
-    width: 8vw;
-    height: 8vw;
+  .side-toolbar {
+    flex-direction: row;
+    width: 100%;
+    height: 44px;
+    padding: 0 16px;
+    margin-top: 16px;
+
+    .menu {
+      flex-direction: row;
+      justify-content: flex-start;
+      margin: 0 8px;
+      overflow-y: auto;
+
+      &-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 8px;
+        line-height: 1.2;
+        text-align: center;
+      }
+    }
+
+    .mallchatcolor {
+      display: block;
+      font-size: 23px !important;
+      line-height: 28px;
+    }
+
+    .icon-zhankai {
+      display: block;
+    }
+
+    .icon-yuque {
+      width: 23px;
+      height: 23px;
+      font-size: 18px !important;
+    }
+
+    ::-webkit-scrollbar {
+      width: 1px;
+      height: 1px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: var(--background-2);
+    }
+
+    ::-webkit-scrollbar-track {
+      background-color: var(--background);
+    }
   }
 }

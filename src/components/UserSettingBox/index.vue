@@ -4,7 +4,7 @@ import { useRequest } from 'alova'
 import { ElMessage } from 'element-plus'
 import { Select, CloseBold, EditPen } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user'
-import { SexType, IsYet } from '@/services/types'
+import { SexEnum, IsYetEnum } from '@/enums'
 import type { BadgeType } from '@/services/types'
 import apis from '@/services/apis'
 import { judgeClient } from '@/utils/detectDevice'
@@ -44,7 +44,7 @@ watchEffect(() => {
 })
 
 const currentBadge = computed(() =>
-  badgeList.value.find((item) => item.obtain === IsYet.Yes && item.wearing === IsYet.Yes),
+  badgeList.value.find((item) => item.obtain === IsYetEnum.YES && item.wearing === IsYetEnum.YES),
 )
 
 // 佩戴卸下徽章
@@ -111,15 +111,15 @@ const onCancelEditName = async () => {
           size="20"
           color="var(--font-main)"
           class="setting-avatar-sex"
-          v-if="userInfo.sex && [SexType.Man, SexType.Female].includes(userInfo.sex)"
+          v-if="userInfo.sex && [SexEnum.MAN, SexEnum.REMALE].includes(userInfo.sex)"
           :style="{
             backgroundColor: `var(${
-              userInfo.sex === SexType.Man ? '--avatar-sex-bg-man' : '--avatar-sex-bg-female'
+              userInfo.sex === SexEnum.MAN ? '--avatar-sex-bg-man' : '--avatar-sex-bg-female'
             })`,
           }"
         >
-          <IEpFemale v-if="userInfo.sex === SexType.Man" />
-          <IEpMale v-if="userInfo.sex === SexType.Female" />
+          <IEpFemale v-if="userInfo.sex === SexEnum.MAN" />
+          <IEpMale v-if="userInfo.sex === SexEnum.REMALE" />
         </el-icon>
       </div>
 
@@ -183,20 +183,20 @@ const onCancelEditName = async () => {
         <li class="badge-item" v-for="badge of badgeList" :key="badge.id">
           <img
             class="badge-item-icon"
-            :class="{ 'badge-item-icon-has': badge.obtain === IsYet.Yes }"
+            :class="{ 'badge-item-icon-has': badge.obtain === IsYetEnum.YES }"
             :src="badge.img"
             alt="badge"
           />
           <div class="badge-item-mask">
-            <template v-if="badge.obtain === IsYet.Yes">
+            <template v-if="badge.obtain === IsYetEnum.YES">
               <el-button
                 size="small"
-                v-if="badge.wearing === IsYet.No"
+                v-if="badge.wearing === IsYetEnum.NO"
                 @click="toggleWarningBadge(badge)"
               >
                 佩戴
               </el-button>
-              <!-- <el-button size="small" v-if="badge.wearing === IsYet.Yes">卸下</el-button> -->
+              <!-- <el-button size="small" v-if="badge.wearing === IsYetEnum.YES">卸下</el-button> -->
             </template>
             <el-tooltip effect="dark" :content="badge.describe" placement="top">
               <el-icon class="badge-item-info" color="var(--font-main)"><IEpInfoFilled /></el-icon>

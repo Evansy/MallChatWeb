@@ -23,18 +23,11 @@
     padding-right: 4px;
   }
 
-  .icon {
-    width: 14px;
-    height: 14px;
-    font-size: 14px;
-    line-height: 1;
-  }
-
   .mx-context-menu-item-sperator {
     background-color: var(--background-3);
   }
 
   .mx-context-menu-item-sperator::after {
-    background-color: var(--background-3);
+    background-color: var(--background-2);
   }
 }

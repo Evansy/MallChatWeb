@@ -5,9 +5,7 @@
   &-item {
     display: inline-flex;
     align-items: center;
-    padding: 0 2px;
-    font-size: 12px;
-    line-height: 12px;
+    padding: 0 4px;
     cursor: pointer;
     border-radius: 4px;
   }
@@ -16,29 +14,22 @@
     background-color: var(--background-dark);
   }
 
-  .icon {
+  .mallchat {
     display: inline-block;
-    width: 18px;
-    height: 18px;
+    line-height: 1;
     color: var(--font-main);
     border-radius: 50%;
   }
 
-  .icon:hover {
+  .mallchat:hover {
     color: var(--color-primary);
   }
 
-  .more,
-  .reply {
-    width: 14px;
-    height: 14px;
-  }
-
   .like-active {
-    color: var(--font-pink);
+    color: var(--font-pink) !important;
   }
 
   .dislike-active {
-    color: var(--color-light-1);
+    color: var(--color-light-1) !important;
   }
 }

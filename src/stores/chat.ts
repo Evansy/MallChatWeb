@@ -2,7 +2,7 @@ import { ref, reactive, computed } from 'vue'
 import { defineStore } from 'pinia'
 import apis from '@/services/apis'
 import type { MessageType, MarkItemType, RevokedMsgType, CacheUserReq } from '@/services/types'
-import { MarkType } from '@/services/types'
+import { MarkEnum } from '@/enums'
 import { computedTimeBlock } from '@/utils/computedTime'
 import { useCachedStore } from '@/stores/cached'
 import { useUserStore } from '@/stores/user'
@@ -150,9 +150,9 @@ export const useChatStore = defineStore('chat', () => {
 
       const msgItem = messageMap.get(msgId)
       if (msgItem) {
-        if (markType === MarkType.Like) {
+        if (markType === MarkEnum.LIKE) {
           msgItem.message.messageMark.likeCount = markCount
-        } else if (markType === MarkType.DisLike) {
+        } else if (markType === MarkEnum.DISLIKE) {
           msgItem.message.messageMark.dislikeCount = markCount
         }
       }
@@ -164,7 +164,9 @@ export const useChatStore = defineStore('chat', () => {
     const message = messageMap.get(msgId)
     if (message) {
       message.message.type = 2
-      message.message.body = `撤回了一条消息` // 后期根据本地用户数据修改
+      const userName = message.fromUser.username || ''
+
+      message.message.body = `"${userName}"撤回了一条消息` // 后期根据本地用户数据修改
     }
     // 更新与这条撤回消息有关的消息
     const messageList = replyMapping.get(msgId)
@@ -179,6 +181,11 @@ export const useChatStore = defineStore('chat', () => {
   const deleteMsg = (msgId: number) => {
     messageMap.delete(msgId)
   }
+  // 更新消息
+  const updateMsg = (msgId: number, newMessage: MessageType) => {
+    deleteMsg(msgId)
+    pushMsg(newMessage)
+  }
 
   return {
     getMsgIndex,
@@ -188,6 +195,7 @@ export const useChatStore = defineStore('chat', () => {
     clearNewMsgCount,
     updateMarkCount,
     updateRecallStatus,
+    updateMsg,
     chatListToBottomAction,
     newMsgCount,
     isLoading,
