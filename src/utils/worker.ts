@@ -9,8 +9,7 @@ let connection: WebSocket
 let heartTimer: number | null = null
 
 // 重连次数上限
-// const reconnectCountMax = 100
-const reconnectCountMax = 5
+const reconnectCountMax = 100
 let reconnectCount = 0
 // 重连 timer
 let timer: null | number = null
@@ -97,7 +96,7 @@ const initConnection = (token: string) => {
   connection?.removeEventListener('error', onConnectError)
   // 建立链接
   // 本地配置到 .env 里面修改。生产配置在 .env.production 里面
-  connection = new WebSocket(import.meta.env.VITE_WS_URL + '?' + token)
+  connection = new WebSocket(import.meta.env.VITE_WS_URL,[token])
   // 收到消息
   connection.addEventListener('message', onConnectMsg)
   // 建立链接
