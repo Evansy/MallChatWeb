@@ -27,20 +27,21 @@ const onReplyMsg = async (msgFromUser: MessageType) => {
 </script>
 
 <template>
-  <div class="msg-option">
+  <div class="msg-option" v-if="!msg.loading">
     <span class="msg-option-item" title="回复">
-      <IconReply class="icon reply" v-login="() => onReplyMsg(msg)" />
+      <Icon icon="reply" :size="14" v-login="() => onReplyMsg(msg)" />
     </span>
     <span class="msg-option-item" title="点赞">
-      <IconLike :class="['icon', { 'like-active': isLike }]" v-login="() => onLike()" />
+      <Icon icon="like" :size="14" :class="[{ 'like-active': isLike }]" v-login="() => onLike()" />
     </span>
     <span class="msg-option-item" title="不喜欢">
-      <IconDislike :class="['icon', { 'dislike-active': isDisLike }]" v-login="() => onDisLike()" />
+      <Icon
+        icon="dislike"
+        :size="15"
+        :class="[{ 'dislike-active': isDisLike }]"
+        v-login="() => onDisLike()"
+      />
     </span>
-    <!-- TODO -->
-    <!-- <span class="msg-option-item" title="更多">
-      <IconMore class="icon more" />
-    </span> -->
   </div>
 </template>
 

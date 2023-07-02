@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // 艾特功能参考自 https://github.com/MrHGJ/at-mentions
-import { ref, reactive, toRefs, watch, watchEffect } from 'vue'
+import { ref, reactive, toRefs, watch, watchEffect, type StyleValue } from 'vue'
 import type { IMention, INode } from './types'
 import type { CacheUserItem } from '@/services/types'
 import { NodeType } from './types'
@@ -36,6 +36,9 @@ const props = defineProps({
     type: Number,
     default: -1,
   },
+  // 劫持
+  className: String,
+  style: Object,
 })
 
 // v-model
@@ -51,6 +54,7 @@ const emit = defineEmits([
 const { modelValue: value, mentions, maxLength } = toRefs(props)
 const editorRef = ref<HTMLElement | null>()
 const dialogRef = ref<HTMLElement | null>()
+const scrollRef = ref<HTMLDivElement>()
 const cachedStore = useCachedStore()
 
 // 是否展示选人弹窗
@@ -336,6 +340,31 @@ const onInputKeyUp = (e: KeyboardEvent) => {
   }
 }
 
+const handleArrow = (direction: 'up' | 'down') => {
+  if (!scrollRef.value) return
+  const { scrollHeight = 0, offsetHeight = 0, scrollTop } = scrollRef.value
+  const itemHeight = scrollHeight / personList.value.length
+
+  let newIndex = 0
+  if (direction === 'up') {
+    newIndex = activeIndex.value - 1
+    if (newIndex < 0) return
+    const newScrollTop = newIndex * itemHeight
+    if (newScrollTop < scrollTop) {
+      scrollRef.value.scrollTop = newScrollTop
+    }
+  }
+  if (direction === 'down') {
+    newIndex = activeIndex.value + 1
+    if (newIndex > personList.value.length - 1) return
+    const newScrollTop = (newIndex + 1) * itemHeight
+    if (newScrollTop > scrollTop + offsetHeight) {
+      scrollRef.value.scrollTop = newScrollTop - offsetHeight
+    }
+  }
+  activeIndex.value = newIndex
+}
+
 // 键盘按下
 const onInputKeyDown = (e: KeyboardEvent) => {
   // 设置maxLength后，限制字符数输入
@@ -348,55 +377,29 @@ const onInputKeyDown = (e: KeyboardEvent) => {
       }
     }
   }
+
   if (showDialog.value && personList.value.length > 0) {
-    const dialogHeight = 250
-    const itemHeight = 46
-    // 向下移动光标，调整dialog选中的人
-    // keyCode 40
+    // 向下移动光标，调整dialog选中的人--keyCode 40
     if (e.key === 'ArrowDown') {
       e.preventDefault()
-      let newIndex = activeIndex.value + 1
-      if (newIndex === personList.value.length) {
-        newIndex = personList.value.length - 1
-      }
-      activeIndex.value = newIndex
-      const dialogEl = document.getElementById('at-mentions-dialog') as HTMLDivElement
-      const nowScrollTop = dialogEl?.scrollTop || 0
-      // 调整滚动条的位置
-      if ((newIndex + 1) * itemHeight > dialogHeight + nowScrollTop) {
-        dialogEl.scrollTop = (newIndex + 1) * itemHeight - dialogHeight
-      }
+      handleArrow('down')
     }
-    // 向上移动光标，调整dialog选中的人
-    // keyCode 38 ArrowUp
+    // 向上移动光标，调整dialog选中的人--keyCode 38 ArrowUp
     if (e.key === 'ArrowUp') {
       e.preventDefault()
-      let newIndex = activeIndex.value - 1
-      if (newIndex < 0) {
-        newIndex = 0
-      }
-      activeIndex.value = newIndex
-      const dialogEl = document.getElementById('at-mentions-dialog') as HTMLDivElement
-      const nowScrollTop = dialogEl?.scrollTop || 0
-      if (newIndex * itemHeight < nowScrollTop) {
-        dialogEl.scrollTop = newIndex === 0 ? 0 : newIndex * itemHeight
-      }
+      handleArrow('up')
     }
-    // 按Enter键，确认选择当前人
-    // keyCode 13 Enter
+    // 按Enter键，确认选择当前人--keyCode 13 Enter
     if (e.key === 'Enter') {
       e.preventDefault()
-      // 选人
+      // 选择当前人
       onSelectPerson(personList.value[activeIndex.value])
       // 更新输入框同步值
       onInputText()
     }
   } else {
-    // 禁止处理换行
-    if ((e.ctrlKey && e.key === 'Enter') || (e.shiftKey && e.key === 'Enter')) return
-
-    // 仅回车就发送
     if (e.key === 'Enter') {
+      e.preventDefault()
       emit('send', e)
     }
   }
@@ -450,12 +453,6 @@ const onInputBlur = () => {
   }, 300)
 }
 
-const onInputFocus = () => {
-  emit('focus')
-  // 聚焦时是否展示选人弹窗
-  checkIsShowSelectDialog()
-}
-
 // 插入换行符
 const onWrap = () => {
   const rangeInfo = getEditorRange()
@@ -465,6 +462,12 @@ const onWrap = () => {
     selection: rangeInfo.selection,
     range: rangeInfo.range,
   })
+}
+
+const onInputFocus = () => {
+  emit('focus')
+  // 聚焦时是否展示选人弹窗
+  checkIsShowSelectDialog()
 }
 
 // 拦截粘贴，只允许粘贴文本
@@ -485,11 +488,15 @@ const onPaste = (e: ClipboardEvent) => {
 </script>
 
 <template>
-  <div class="msg_input_wrapper">
+  <div
+    class="input-wrapper"
+    :class="[className, $attrs.class]"
+    :style="[style as StyleValue, $attrs.style as StyleValue]"
+  >
     <div
       ref="editorRef"
       v-bind="$attrs"
-      class="msg_input"
+      class="input"
       :text="modelValue"
       :contenteditable="!disabled"
       @input="onInputText"
@@ -503,24 +510,27 @@ const onPaste = (e: ClipboardEvent) => {
       @focus="onInputFocus"
       @mouseup="checkIsShowSelectDialog"
       @paste="onPaste"
-    ></div>
+    />
 
     <div
       v-show="showDialog"
       ref="dialogRef"
-      id="at-mentions-dialog"
       className="at-mentions__dialog"
       :style="{ top: `${dialogPosition.y - 14}px`, left: `${dialogPosition.x || 0}px` }"
     >
-      <div
-        v-for="(item, index) of personList"
-        class="person-item"
-        :class="{ 'person-item--active': index === activeIndex }"
-        :key="item.uid"
-        @click="() => onSelectPerson(item)"
-      >
-        <img :src="item.avatar" class="person-item__avatar" />
-        <div class="person-item__name">{{ `${item.name}(${item.uid})` }}</div>
+      <div ref="scrollRef" class="person-warpper">
+        <div
+          v-for="(item, index) of personList"
+          class="person-item"
+          :class="{ 'person-item--active': index === activeIndex }"
+          :key="item.uid"
+          @click="() => onSelectPerson(item)"
+        >
+          <Avatar class="avatar" :src="item.avatar" :size="26" />
+          <div class="person-item__name">
+            {{ item.name }}<span>{{ `(${item.uid})` }}</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -529,10 +539,8 @@ const onPaste = (e: ClipboardEvent) => {
 <style>
 .at_member {
   padding: 0;
-  font-size: 16px;
+  font-size: inherit;
   line-height: 1;
-
-  /* // color: #4387f4; */
   color: var(--color-primary);
   background: transparent;
   border: none;

@@ -1,0 +1,85 @@
+/* stylelint-disable */
+/* eslint-disable */
+/* prettier-ignore */
+@font-face {
+  font-family: "mallchat"; /* Project id 4142069 */
+  src: url('//at.alicdn.com/t/c/font_4142069_q7wdf7ccbx.woff2?t=1688219879090') format('woff2'),
+       url('//at.alicdn.com/t/c/font_4142069_q7wdf7ccbx.woff?t=1688219879090') format('woff'),
+       url('//at.alicdn.com/t/c/font_4142069_q7wdf7ccbx.ttf?t=1688219879090') format('truetype');
+}
+
+.mallchat {
+  font-family: 'mallchat' !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-tupian1:before {
+  content: '\e640';
+}
+
+.icon-jianpan:before {
+  content: '\e6d8';
+}
+
+.icon-saying:before {
+  content: '\e62f';
+}
+
+.icon-xiazai:before {
+  content: '\e616';
+}
+
+.icon-dislike:before {
+  content: '\e67c';
+}
+
+.icon-huojian:before {
+  content: '\e68b';
+}
+
+.icon-like:before {
+  content: '\e85c';
+}
+
+.icon-reply:before {
+  content: '\e716';
+}
+
+.icon-totop:before {
+  content: '\e63a';
+}
+
+.icon-zhankai:before {
+  content: '\e657';
+}
+
+.icon-chehui:before {
+  content: '\e665';
+}
+
+.icon-shanchu:before {
+  content: '\e6bb';
+}
+
+.icon-voice:before {
+  content: '\e85e';
+}
+
+.icon-avatar:before {
+  content: '\e648';
+}
+
+.icon-loading:before {
+  content: '\e6de';
+}
+
+.icon-copy:before {
+  content: '\e62d';
+}
+
+.icon-lahei:before {
+  content: '\e651';
+}

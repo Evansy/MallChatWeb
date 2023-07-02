@@ -87,14 +87,34 @@ a:active {
   cursor: pointer;
 }
 
-.msg-content-link {
-  display: inline-block;
-  margin-right: 4px;
-  margin-left: 4px;
-  font-size: 14px;
+.ellipsis-1 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
 }
 
-.msg-content-link:hover {
-  color: currentcolor;
-  text-decoration: underline;
+.ellipsis-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.icon-spin {
+  animation: icon-loading 1s infinite cubic-bezier(0, 0, 1, 1);
+}
+
+@keyframes icon-loading {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }

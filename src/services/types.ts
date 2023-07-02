@@ -3,6 +3,7 @@
  * 注意：请使用TSDoc规范进行注释，以便在使用时能够获得良好提示。
  * @see TSDoc规范https://tsdoc.org/
  **/
+import type { OnlineEnum, MsgEnum, ActEnum, SexEnum, IsYetEnum, MarkEnum } from '@/enums'
 
 /***/
 export type ListResponse<T extends unknown> = {
@@ -11,11 +12,6 @@ export type ListResponse<T extends unknown> = {
   /** 是否最后一页 */
   isLast: boolean
   list: T[]
-}
-
-export enum OnlineStatus {
-  Online = 1,
-  Offline,
 }
 
 export type CacheBadgeReq = {
@@ -68,7 +64,7 @@ export type CacheUserItem = {
 
 export type UserItem = {
   /** 在线状态 */
-  activeStatus: OnlineStatus
+  activeStatus: OnlineEnum
   /** 头像 */
   avatar: string
   /** 最后一次上下线时间 */
@@ -99,34 +95,13 @@ export type MessageReplyType = {
   username: string
 }
 
-export enum ActType {
-  /** 确认 */
-  Confirm = 1,
-  /** 取消 */
-  Cancel,
-}
-export enum MarkType {
-  Like = 1,
-  DisLike,
-}
-
 export type MarkMsgReq = {
   // actType	动作类型 1确认 2取消
-  actType: ActType
+  actType: ActEnum
   // 标记类型 1点赞 2举报
-  markType: MarkType
+  markType: MarkEnum
   // 消息 ID
   msgId: number
-}
-
-export enum SexType {
-  Man = 1,
-  Female,
-}
-
-export enum PowerType {
-  User,
-  Admin,
 }
 
 export type UserInfoType = {
@@ -139,17 +114,11 @@ export type UserInfoType = {
   /** 剩余改名次数 */
   modifyNameChance: number
   /** 性别 1为男性，2为女性 */
-  sex: SexType
+  sex: SexEnum
   /** 徽章，本地字段，有值用本地，无值用远端 */
   badge?: string
   /** 权限 */
   power?: number
-}
-
-// 是否拥有 0否 1是
-export enum IsYet {
-  No,
-  Yes,
 }
 
 export type BadgeType = {
@@ -160,9 +129,9 @@ export type BadgeType = {
   // 徽章图标
   img: string
   // 是否拥有 0否 1是
-  obtain: IsYet
+  obtain: IsYetEnum
   // 是否佩戴 0否 1是
-  wearing: IsYet
+  wearing: IsYetEnum
 }
 
 export type MarkItemType = {
@@ -171,11 +140,11 @@ export type MarkItemType = {
   /** 消息id */
   msgId: number
   /** 操作类型 1点赞 2举报 */
-  markType: MarkType
+  markType: MarkEnum
   /** 数量 */
   markCount: number
   /** 动作类型 1确认 2取消 */
-  actType: ActType
+  actType: ActEnum
 }
 
 export type RevokedMsgType = {
@@ -185,13 +154,6 @@ export type RevokedMsgType = {
   roomId?: number
   /** 撤回人ID */
   recallUid?: number
-}
-
-export enum MsgTypeType {
-  /** 文本 */
-  Text = 1,
-  /** 撤回 */
-  Recall,
 }
 
 // -------------------- ⬇消息体类型定义⬇ ----------------
@@ -208,6 +170,8 @@ export type MessageType = {
   sendTime: string
   /** 时间段（可选） */
   timeBlock?: string
+  /** 是否加载中 */
+  loading?: boolean
 }
 
 /**
@@ -245,44 +209,75 @@ export type MessageMarkType = {
   dislikeCount: number
 }
 
-/**
- * 消息内容
- */
-export type MsgType = {
-  id: number
-  type: number
-  /** TODO：不同消息类型不同Body 未来后端增加其它类型后变更为`联合类型`, `条件类型` */
-  body: BodyType | any
-  sendTime: number
-  messageMark: MessageMarkType
+/** 图片消息体 */
+export type ImageBody = {
+  size: number
+  url: string
+  width: number
+  height: number
 }
-
-/**
- * 消息
- */
-export type BodyType = {
+/** 语音消息体 */
+export type VoiceBody = {
+  size: number
+  second: number
+  url: string
+}
+/** 视频 */
+export type VideoBody = {
+  size: number
+  url: string
+  thumbWidth?: number
+  thumbHeight?: number
+  thumbUrl?: string
+}
+/** 文件消息体 */
+export type FileBody = {
+  size: number
+  fileName: string
+  url: string
+}
+/** 文本消息体 */
+export type TextBody = {
   /** 消息内容 */
   content: string
   /** 回复 */
-  reply: {
-    id: number
-    username: string
-    type: number
-    /** 根据不同类型回复的消息展示也不同-`过渡版` */
-    body: any
-    /**
-     * 是否可消息跳转
-     * @enum {number}  `0`否 `1`是
-     */
-    canCallback: number
-    /** 跳转间隔的消息条数  */
-    gapCount: number
-  }
+  reply: ReplyType
   /**
    * 消息链接映射
    * @deprecated 即将废弃？
    */
   urlTitleMap: Record<string, string>
+}
+
+/**
+ * 消息内容
+ */
+export type MsgType = {
+  /** 消息ID */
+  id: number
+  /** 消息类型 */
+  type: MsgEnum
+  /** 动态消息体-`根据消息类型变化` */
+  body: TextBody | ImageBody | VoiceBody | VideoBody | FileBody | any
+  /** 发送时间戳 */
+  sendTime: number
+  /** 消息互动信息 */
+  messageMark: MessageMarkType
+}
+
+export type ReplyType = {
+  id: number
+  username: string
+  type: MsgEnum
+  /** 根据不同类型回复的消息展示也不同-`过渡版` */
+  body: any
+  /**
+   * 是否可消息跳转
+   * @enum {number}  `0`否 `1`是
+   */
+  canCallback: number
+  /** 跳转间隔的消息条数  */
+  gapCount: number
 }
 
 /**
@@ -292,12 +287,14 @@ export type MessageReq = {
   /** 会话id */
   roomId: number
   /** 消息类型 */
-  msgType: number
+  msgType: MsgEnum
   /** 消息体 */
   body: {
     /** 文本消息内容 */
-    content: string
+    content?: string
     /** 回复的消息id */
     replyMsgId?: number
+    /** 任意 */
+    [key: string]: any
   }
 }

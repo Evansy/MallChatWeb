@@ -23,4 +23,6 @@ export default {
   blockUser: `${prefix}/capi/user/black`,
   // 撤回消息
   recallMsg: `${prefix}/capi/chat/msg/recall`,
+  // 文件上传
+  fileUpload: `${prefix}/capi/oss/upload/url`,
 }

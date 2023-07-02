@@ -5,13 +5,11 @@ import { useChatStore, pageSize } from '@/stores/chat'
 import { formatTimestamp } from '@/utils/computedTime'
 import { useUserInfo, useBadgeInfo } from '@/hooks/useCached'
 import type { MessageType, MsgType } from '@/services/types'
-import defaultAvatar from '@/assets/avatars/default.png'
-import RenderMsg from '@/components/RenderMsg.vue'
 import MsgOption from '../MsgOption/index.vue'
 import ContextMenu from '../ContextMenu/index.vue'
 import type { TooltipTriggerType } from 'element-plus/es/components/tooltip/src/trigger'
 import { useLikeToggle } from '@/hooks/useLikeToggle'
-import { MsgTypeType } from '@/services/types'
+import { MsgEnum } from '@/enums'
 
 const props = defineProps({
   // 消息体
@@ -68,7 +66,7 @@ const menuOptions = ref({
 const { isLike, isDisLike, likeCount, dislikeCount, onLike, onDisLike } = useLikeToggle(
   props.msg.message,
 )
-const isRecall = computed(() => message.value.type === MsgTypeType.Recall)
+const isRecall = computed(() => message.value.type === MsgEnum.RECALL)
 
 // 滚动到消息
 const scrollToMsg = async (msg: MsgType) => {
@@ -126,9 +124,7 @@ onMounted(() => {
   <span v-if="isRecall" class="send-time-block">{{ message.body }}</span>
   <transition name="remove">
     <div :class="chatCls" v-if="!isRecall">
-      <div class="chat-item-avatar">
-        <img :src="userInfo.avatar || defaultAvatar" />
-      </div>
+      <Avatar :src="userInfo.avatar" />
       <div class="chat-item-box" ref="boxRef">
         <div class="chat-item-user-info">
           <el-tooltip
@@ -150,7 +146,6 @@ onMounted(() => {
           :trigger="tooltipTrigger"
           :placement="tooltipPlacement || 'bottom-end'"
           :offset="2"
-          :hide-after="30"
           :show-arrow="false"
           :teleported="false"
         >
@@ -158,24 +153,21 @@ onMounted(() => {
             <MsgOption :msg="msg" />
           </template>
           <div
-            class="chat-item-content"
             ref="renderMsgRef"
+            :class="['chat-item-content', { uploading: msg?.loading }]"
             @contextmenu.prevent.stop="handleRightClick($event)"
           >
-            <RenderMsg
-              :text="message.body.content"
-              :url-map="message.body.urlTitleMap"
-              :is-me="isCurrentUser"
-            />
+            <Icon v-if="msg?.loading" icon="loading" :size="20" spin />
+            <RenderMessage :message="message" />
           </div>
         </el-tooltip>
         <div
-          v-if="message.body.reply"
+          v-if="message.body?.reply"
           class="chat-item-reply"
           :class="{ pointer: message.body.reply.canCallback }"
           @click="scrollToMsg(message)"
         >
-          <i class="can-scroll-icon" v-if="message.body.reply.canCallback" />
+          <Icon icon="totop" v-if="message.body.reply.canCallback" :size="12" />
           <span class="ellipsis">
             {{ message.body.reply.username }}: {{ message.body.reply.body }}
           </span>
@@ -187,7 +179,7 @@ onMounted(() => {
               :class="['extra-item like', { active: isLike }]"
               @click="onLike"
             >
-              <IconLike />
+              <Icon icon="like" />
               <transition name="count-up" mode="out-in">
                 <span class="count" :key="likeCount">{{ likeCount }}</span>
               </transition>
@@ -199,7 +191,7 @@ onMounted(() => {
               :class="['extra-item dlike', { active: isDisLike }]"
               @click="onDisLike"
             >
-              <IconDislike />
+              <Icon icon="dislike" :size="17" />
               <transition name="count-up" mode="out-in">
                 <span class="count" :key="dislikeCount">{{ dislikeCount }}</span>
               </transition>
@@ -212,7 +204,7 @@ onMounted(() => {
   <ContextMenu v-model:show="isShowMenu" :options="menuOptions" :msg="msg" />
 </template>
 
-<style lang="scss" src="./styles.scss" scoped />
+<style lang="scss" src="./styles.scss" />
 
 <style lang="scss">
 .option-tooltip {
