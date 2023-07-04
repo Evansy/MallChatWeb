@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import type { PropType } from 'vue'
+import { type PropType, computed } from 'vue'
+import { Close } from '@element-plus/icons-vue'
 import { getFileSuffix, formatBytes } from '@/utils'
 import type { FileBody } from '@/services/types'
-import useDownload from '@/hooks/useDownload'
+import useDownloadQuenuStore from '@/stores/downloadQuenu'
 
-const { downloadFile: download, process, isDownloading } = useDownload()
+const { downloadObjMap, download, quenu, cancelDownload } = useDownloadQuenuStore()
 
 const props = defineProps({
   body: {
@@ -15,8 +16,26 @@ const props = defineProps({
 
 // 下载文件
 const downloadFile = () => {
-  download(props.body.url, props.body.fileName)
+  // 队列下载
+  download(props.body.url)
 }
+
+const cancelDownloadFile = () => {
+  cancelDownload(props.body.url)
+}
+
+const isDownloading = computed(() => {
+  return downloadObjMap.get(props.body.url)?.isDownloading || false
+})
+
+const process = computed(() => {
+  return downloadObjMap.get(props.body.url)?.process || 0
+})
+
+// 是否排队中
+const isQuenu = computed(() => {
+  return quenu.includes(props.body.url)
+})
 </script>
 
 <template>
@@ -26,7 +45,11 @@ const downloadFile = () => {
       <span class="file-name">{{ body?.fileName || '未知文件' }}</span>
       <span class="file-size">{{ formatBytes(body?.size) }}</span>
     </div>
-    <Icon v-if="!isDownloading" icon="xiazai" :size="22" @click="downloadFile" />
+    <el-text v-if="isQuenu" class="mx-1" size="small" type="warning" @click="cancelDownloadFile"
+      >等待下载
+      <el-icon><Close /></el-icon>
+    </el-text>
+    <Icon v-else-if="!isDownloading" icon="xiazai" :size="22" @click="downloadFile" />
     <el-progress
       v-else
       type="circle"
