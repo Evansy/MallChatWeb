@@ -18,6 +18,8 @@ declare module '@vue/runtime-core' {
     ElImage: typeof import('element-plus/es')['ElImage']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElPopover: typeof import('element-plus/es')['ElPopover']
+    ElProgress: typeof import('element-plus/es')['ElProgress']
+    ElText: typeof import('element-plus/es')['ElText']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     File: typeof import('./components/RenderMessage/file.vue')['default']
     Icon: typeof import('./components/Icon/index.vue')['default']
