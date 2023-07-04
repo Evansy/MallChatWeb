@@ -13,7 +13,7 @@ const componentMap = {
   [MsgEnum.TEXT]: Text,
   [MsgEnum.RECALL]: '',
   [MsgEnum.IMAGE]: Image,
-  [MsgEnum.VOICE]: File,
+  [MsgEnum.VOICE]: Voice,
   [MsgEnum.FILE]: File,
   [MsgEnum.VIDEO]: Video,
 }
