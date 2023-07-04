@@ -24,6 +24,7 @@ const cancelDownloadFile = () => {
   cancelDownload(props.body.url)
 }
 
+// 目前使用url作为map的key 但是url可能会重复 后面可以考虑使用id 或者 url + id 的形式
 const isDownloading = computed(() => {
   return downloadObjMap.get(props.body.url)?.isDownloading || false
 })
