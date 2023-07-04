@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { ref, type PropType } from 'vue'
+import type { PropType } from 'vue'
 import { getFileSuffix, formatBytes } from '@/utils'
 import type { FileBody } from '@/services/types'
+import useDownload from '@/hooks/useDownload'
+
+const { downloadFile: download, process, isDownloading } = useDownload()
 
 const props = defineProps({
   body: {
@@ -10,19 +13,9 @@ const props = defineProps({
   },
 })
 
-const isDownloading = ref(false)
 // 下载文件
 const downloadFile = () => {
-  isDownloading.value = true
-  const a = document.createElement('a')
-  a.href = props.body.url
-  a.download = props.body.fileName
-  a.target = '_blank'
-  a.click()
-  a.remove()
-  setTimeout(() => {
-    isDownloading.value = false
-  }, 500)
+  download(props.body.url, props.body.fileName)
 }
 </script>
 
@@ -34,6 +27,13 @@ const downloadFile = () => {
       <span class="file-size">{{ formatBytes(body?.size) }}</span>
     </div>
     <Icon v-if="!isDownloading" icon="xiazai" :size="22" @click="downloadFile" />
-    <Icon v-else icon="loading" :size="22" spin />
+    <el-progress
+      v-else
+      type="circle"
+      :percentage="process"
+      :width="22"
+      :stroke-width="1"
+      :show-text="false"
+    />
   </div>
 </template>
