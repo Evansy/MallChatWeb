@@ -8,13 +8,16 @@ import {
   type MenuOptions,
 } from '@imengyu/vue3-context-menu'
 import { useUserStore } from '@/stores/user'
+import { useCachedStore } from '@/stores/cached'
 import { copyToClip } from '@/utils/copy'
 import { useChatStore } from '@/stores/chat'
 import type { MessageType } from '@/services/types'
 import { MsgEnum, PowerEnum } from '@/enums'
-import { insertInputText, getEditorRange } from '@/views/Home/components/ChatBox/MsgInput/utils'
+import type { CacheUserItem } from '@/services/types'
 
 const focusMsgInput = inject<() => void>('focusMsgInput')
+const onSelectPerson =
+  inject<(personItem: CacheUserItem, ignoreContentCheck?: boolean) => void>('onSelectPerson')
 
 const props = defineProps({
   // 消息体
@@ -30,6 +33,8 @@ const props = defineProps({
 
 const userInfo = useUserStore()?.userInfo
 const chatStore = useChatStore()
+const cachedStore = useCachedStore()
+// FIXME 未登录到登录这些监听没有变化。需处理
 const isCurrentUser = computed(() => props.msg?.fromUser.uid === userInfo.uid)
 const isAdmin = computed(() => userInfo?.power === PowerEnum.ADMIN)
 
@@ -76,11 +81,8 @@ const onAtUser = () => {
   focusMsgInput?.()
   // 插入内容
   setTimeout(() => {
-    const selection = getEditorRange()?.selection
-    const range = selection?.getRangeAt(0)
-    if (!selection || !range) return
-    console.log(selection, range, props.msg.fromUser.uid)
-    insertInputText({ content: props.msg.fromUser.uid + '', selection, range })
+    const userItem = cachedStore.userCachedList[props.msg.fromUser.uid]
+    userItem && onSelectPerson?.(userItem as CacheUserItem, true)
   }, 10)
 }
 </script>
@@ -94,9 +96,9 @@ const onAtUser = () => {
       ...props.options,
     }"
   >
-    <!-- <ContextMenuItem label="at" @click="onAtUser">
+    <ContextMenuItem label="at" @click="onAtUser" v-login-show>
       <template #icon> <span class="icon">@</span> </template>
-    </ContextMenuItem> -->
+    </ContextMenuItem>
     <ContextMenuItem v-if="msg.message.type === MsgEnum.TEXT" label="复制" @click="copyContent">
       <template #icon>
         <Icon icon="copy" :size="13" />
@@ -123,7 +125,7 @@ const onAtUser = () => {
       </template>
     </ContextMenuItem>
     <ContextMenuSeparator />
-    <ContextMenuItem label="删除" @click="onDelete">
+    <ContextMenuItem label="删除" @click="onDelete" v-login-show>
       <template #icon>
         <Icon icon="shanchu" :size="13" />
       </template>

@@ -12,6 +12,7 @@ import { judgeClient } from '@/utils/detectDevice'
 import { emojis } from './constant'
 
 import type { IMention } from './MsgInput/types'
+import type { CacheUserItem } from '@/services/types'
 import { useFileDialog } from '@vueuse/core'
 import { useUpload } from '@/hooks/useUpload'
 import { useRecording } from '@/hooks/useRecording'
@@ -47,7 +48,12 @@ const focusMsgInput = () => {
   })
 }
 
+const onSelectPerson = (personItem: CacheUserItem, ignoreContentCheck?: boolean) => {
+  msg_input_ref.value?.onSelectPerson?.(personItem, ignoreContentCheck)
+}
+
 provide('focusMsgInput', focusMsgInput)
+provide('onSelectPerson', onSelectPerson)
 
 const send = (msgType: MsgEnum, body: any, roomId = 1) => {
   apis

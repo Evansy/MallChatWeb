@@ -12,6 +12,8 @@ import {
   insertInputText,
 } from './utils'
 import { useCachedStore } from '@/stores/cached'
+import VirtualList from '@/components/VirtualList'
+import MentionItem from './item.vue'
 
 // 关闭透传 attrs 到组件根节点，传递到子节点  v-bind="$attrs"
 defineOptions({ inheritAttrs: false })
@@ -53,8 +55,7 @@ const emit = defineEmits([
 
 const { modelValue: value, mentions, maxLength, disabled } = toRefs(props)
 const editorRef = ref<HTMLElement | null>()
-const dialogRef = ref<HTMLElement | null>()
-const scrollRef = ref<HTMLDivElement>()
+const scrollRef = ref()
 const cachedStore = useCachedStore()
 
 // 是否展示选人弹窗
@@ -71,8 +72,6 @@ const isInit = ref(false)
 const editorRange = ref<{ range: Range; selection: Selection } | null>(null)
 // 记录input文本内容
 const inputStr = ref('')
-
-defineExpose({ input: editorRef, range: editorRange })
 
 inputStr.value = value.value
 
@@ -293,14 +292,14 @@ const insertHtmlAtCaret = (
 }
 
 // 选择@的人。替换原来的检索文案，并插入新的@标签<button/>
-const onSelectPerson = (personItem: CacheUserItem) => {
+const onSelectPerson = (personItem: CacheUserItem, ignore = false) => {
   // 选择人员后关闭并重置选人框，重置搜索词
   showDialog.value = false
   // 滚动到候选框顶部
-  dialogRef.value?.scrollTo(0, 0)
+  scrollRef.value?.scrollToIndex(0)
   const editor = editorRef.value
   if (editor) {
-    // editor.focus()
+    editor.focus()
     const myEditorRange = editorRange?.value?.range
     if (!myEditorRange) return
     const textNode = myEditorRange.endContainer // 拿到末尾文本节点
@@ -308,10 +307,12 @@ const onSelectPerson = (personItem: CacheUserItem) => {
     // 找出光标前的@符号位置
     const textNodeValue = textNode.nodeValue as string
     const expRes = /@([^@]*)$/.exec(textNodeValue)
-    if (expRes && expRes.length > 1) {
-      myEditorRange.setStart(textNode, expRes.index)
-      myEditorRange.setEnd(textNode, endOffset)
-      myEditorRange.deleteContents() // 删除草稿end
+    if ((expRes && expRes.length > 1) || ignore) {
+      if (!ignore && expRes?.length) {
+        myEditorRange.setStart(textNode, expRes.index)
+        myEditorRange.setEnd(textNode, endOffset)
+        myEditorRange.deleteContents() // 删除草稿end
+      }
       const btn = document.createElement('button')
       btn.dataset.person = JSON.stringify(personItem)
       btn.textContent = `@${personItem.name}`
@@ -351,25 +352,18 @@ const onInputKeyUp = (e: KeyboardEvent) => {
 
 const handleArrow = (direction: 'up' | 'down') => {
   if (!scrollRef.value) return
-  const { scrollHeight = 0, offsetHeight = 0, scrollTop } = scrollRef.value
-  const itemHeight = scrollHeight / personList.value.length
+  console.log(scrollRef.value.getOffset(), scrollRef.value.getClientSize())
 
   let newIndex = 0
   if (direction === 'up') {
     newIndex = activeIndex.value - 1
     if (newIndex < 0) return
-    const newScrollTop = newIndex * itemHeight
-    if (newScrollTop < scrollTop) {
-      scrollRef.value.scrollTop = newScrollTop
-    }
+    newIndex < scrollRef.value.getOffset() / 34 && scrollRef.value.scrollToIndex(newIndex)
   }
   if (direction === 'down') {
     newIndex = activeIndex.value + 1
-    if (newIndex > personList.value.length - 1) return
-    const newScrollTop = (newIndex + 1) * itemHeight
-    if (newScrollTop > scrollTop + offsetHeight) {
-      scrollRef.value.scrollTop = newScrollTop - offsetHeight
-    }
+    if (newIndex > personList.value.length + 1) return
+    newIndex > 6 && scrollRef.value.scrollToIndex(newIndex - 6)
   }
   activeIndex.value = newIndex
 }
@@ -466,6 +460,7 @@ const onInputBlur = () => {
   // 加一段延时。防止选人时，未来得及执行选人点击事件就直接隐藏对话框
   setTimeout(() => {
     showDialog.value = false
+    scrollRef.value?.scrollToIndex(0)
     // personList.value = []
     setTimeout(() => {
       searchKey.value = ''
@@ -505,6 +500,9 @@ const onPaste = (e: ClipboardEvent) => {
   document.execCommand('insertHTML', false, pastedText)
   return false
 }
+
+// 暴露 ref 属性
+defineExpose({ input: editorRef, range: editorRange, onSelectPerson })
 </script>
 
 <template>
@@ -530,24 +528,20 @@ const onPaste = (e: ClipboardEvent) => {
 
     <div
       v-show="showDialog"
-      ref="dialogRef"
       className="at-mentions__dialog"
       :style="{ top: `${dialogPosition.y - 14}px`, left: `${dialogPosition.x || 0}px` }"
     >
-      <div ref="scrollRef" class="person-warpper">
-        <div
-          v-for="(item, index) of personList"
-          class="person-item"
-          :class="{ 'person-item--active': index === activeIndex }"
-          :key="item.uid"
-          @click="() => onSelectPerson(item)"
-        >
-          <Avatar class="avatar" :src="item.avatar" :size="26" />
-          <div class="person-item__name">
-            {{ item.name }}
-          </div>
-        </div>
-      </div>
+      <VirtualList
+        v-if="personList?.length"
+        ref="scrollRef"
+        class="person-warpper"
+        dataPropName="item"
+        :itemProps="{ activeIndex }"
+        :data="personList"
+        data-key="uid"
+        :item="MentionItem"
+        :size="20"
+      />
     </div>
   </div>
 </template>

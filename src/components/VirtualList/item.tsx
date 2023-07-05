@@ -77,6 +77,7 @@ export default defineComponent({
       const { component: Comp, index, source, uniqueKey, itemProps, dataPropName } = props
       const merged = {
         ...itemProps,
+        index,
         [dataPropName]: source, // 数据源给到指定属性上
       }
       // 渲染出传入自定义组件项-这里的Comp就是传入的自定义组件 (ts-ignore避免类型警告)
