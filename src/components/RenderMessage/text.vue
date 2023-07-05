@@ -30,6 +30,14 @@ const openUrl = (url: string) => {
 <template>
   <div class="text">
     <template v-for="(item, index) in fragments">
+      <span
+        v-if="item.startsWith('@') && item.trim() !== '' && item.trim() !== '@'"
+        :key="item"
+        class="text-mention"
+      >
+        {{ item }}
+      </span>
+      <template v-else>{{ item }}</template>
       <div
         v-if="keys.includes(item)"
         :key="item + index"
@@ -42,14 +50,6 @@ const openUrl = (url: string) => {
         <span class="text-card-title ellipsis-2"> {{ urlMap[item] }}</span>
         <span class="text-card-desc ellipsis-1">暂无描述</span>
       </div>
-      <span
-        v-else-if="item.startsWith('@') && item.trim() !== '' && item.trim() !== '@'"
-        :key="item"
-        class="text-mention"
-      >
-        {{ item }}
-      </span>
-      <template v-else>{{ item }}</template>
     </template>
   </div>
 </template>

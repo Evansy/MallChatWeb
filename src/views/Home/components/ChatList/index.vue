@@ -6,8 +6,6 @@ import type { MessageType } from '@/services/types'
 import VirtualList from '@/components/VirtualList/index'
 import MsgItem from './MsgItem/index.vue'
 
-import VideoPlayer from '@/components/VideoPlayer/index.vue'
-
 const chatStore = useChatStore()
 const virtualListRef = ref()
 
@@ -76,12 +74,11 @@ const getKey = (item: MessageType) => item.message.id
       :data="chatStore.chatMessageList"
       :data-key="getKey"
       :item="MsgItem"
-      :size="20"
+      :keeps="40"
       @totop="onTotop"
       @scroll="onScroll"
       @ok="goToBottom"
     />
-    <!-- <VideoPlayer></VideoPlayer> -->
     <template v-if="!chatStore.isLoading && chatStore.chatMessageList?.length === 0">
       <div class="empty">暂无消息，快来发送第一条消息吧~</div>
     </template>
