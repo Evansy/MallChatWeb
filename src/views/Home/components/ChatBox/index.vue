@@ -35,6 +35,7 @@ const isAudio = ref(false)
 const isHovered = ref(false)
 const tempMessageId = ref(0)
 const showEmoji = ref(false)
+const nowMsgType = ref<MsgEnum>(MsgEnum.FILE)
 
 const focusMsgInput = () => {
   setTimeout(() => {
@@ -138,8 +139,8 @@ const insertEmoji = (emoji: string) => {
 const onInputChange = (val: string, mentions: IMention[]) => {
   mentionList.value = mentions
 }
-
 const options = reactive({ multiple: false, accept: '.jpg,.png' })
+
 const { open, reset, onChange } = useFileDialog(options)
 const { isUploading, fileInfo, uploadFile, onStart, onChange: useUploadChange } = useUpload()
 const { isRecording, start, stop, onEnd, second } = useRecording()
@@ -147,10 +148,12 @@ const { mockMessage } = useMockMessage()
 
 const openFileSelect = (fileType: string) => {
   if (fileType === 'img') {
+    nowMsgType.value = MsgEnum.IMAGE
     options.accept = '.jpg,.png,.gif,.jpeg,.webp'
   }
   if (fileType === 'file') {
-    options.accept = '*'
+    nowMsgType.value = MsgEnum.FILE
+    options.accept = '*' // 任意文件
   }
   open()
 }
@@ -158,7 +161,7 @@ const openFileSelect = (fileType: string) => {
 onChange((files) => {
   if (!files?.length) return
   const file = files[0]
-  if (options.accept === '.jpg,.png,.gif,.jpeg,.webp') {
+  if (nowMsgType.value === MsgEnum.IMAGE) {
     if (!file.type.includes('image')) {
       return ElMessage.error('请选择图片文件')
     }
@@ -168,7 +171,13 @@ onChange((files) => {
 
 onStart(() => {
   if (!fileInfo.value) return
-  const { type, body } = generateBody(fileInfo.value, true)
+
+  // 如果文件是视频就把消息类型改为视频
+  if (fileInfo.value.type.includes('video')) {
+    nowMsgType.value = MsgEnum.VIDEO
+  }
+
+  const { type, body } = generateBody(fileInfo.value, nowMsgType.value, true)
   const res = mockMessage(type, body)
   tempMessageId.value = res.message.id // 记录下上传状态下的消息id
   chatStore.pushMsg(res) // 消息列表新增一条消息
@@ -178,16 +187,18 @@ onStart(() => {
 useUploadChange((status) => {
   if (status === 'success') {
     if (!fileInfo.value) return
-    const { body, type } = generateBody(fileInfo.value)
+    const { body, type } = generateBody(fileInfo.value, nowMsgType.value)
     send(type, body)
   }
   reset()
 })
 
-onEnd((audioFile: any) => {
-  if (!audioFile) return
-  uploadFile(audioFile)
-})
+onEnd((audioFile: any) => uploadFile(audioFile))
+
+const onStartRecord = () => {
+  nowMsgType.value = MsgEnum.VOICE
+  start()
+}
 </script>
 
 <template>
@@ -213,9 +224,9 @@ onEnd((audioFile: any) => {
             <div
               v-show="isAudio"
               class="recorded"
-              @mousedown="start()"
+              @mousedown="onStartRecord()"
               @mouseup="stop()"
-              @touchstart.passive="start()"
+              @touchstart.passive="onStartRecord()"
               @touchend.passive="stop()"
             >
               <div class="recorded-tips">{{ isRecording ? `录制中 ${second}s` : '按住说话' }}</div>

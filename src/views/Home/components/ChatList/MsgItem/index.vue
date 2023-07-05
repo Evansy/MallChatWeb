@@ -131,6 +131,7 @@ onMounted(() => {
             effect="dark"
             :content="badgeInfo?.describe"
             :placement="isCurrentUser ? 'top-end' : 'top-start'"
+            :teleported="false"
           >
             <img v-show="badgeInfo?.img" class="user-badge" :src="badgeInfo?.img" />
           </el-tooltip>

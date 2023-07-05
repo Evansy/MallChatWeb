@@ -1,57 +1,55 @@
 <script setup lang="ts">
-import type { PropType } from 'vue'
+import { ref, type PropType, computed } from 'vue'
 import type { ImageBody } from '@/services/types'
+import { useImgPreviewStore } from '@/stores/preview'
+import { formatImage } from '@/utils'
 
-defineProps({
+const props = defineProps({
   body: {
     type: Object as PropType<ImageBody>,
     required: true,
   },
 })
 
-const MAX_WIDTH = 200 // 预设宽度
-const MAX_HEIGHT = 150 // 预设高度
+const imageStore = useImgPreviewStore()
+const hasLoadError = ref(false)
+const isLoading = ref(true)
 
 /**
  * 核心就是的到高度，产生明确占位防止图片加载时页面抖动
  * @param width 宽度
  * @param height 高度
  */
-const getImageHeight = (width: number, height: number) => {
-  // 小： 如果图片宽高都小于最大宽高，直接返回原高度
-  if (width < MAX_WIDTH && height < MAX_HEIGHT) {
-    return height
-    // 宽： 根据宽度等比缩放
-  } else if (width > height) {
-    return (MAX_WIDTH / width) * height
-    // 窄：返回最大高度
-  } else if (width === height || width < height) {
-    return MAX_HEIGHT
-  }
+const getImageHeight = computed(() => {
+  const { width, height } = props.body
+  return formatImage(width, height)
+})
+
+// 没有图片的情况下计算出按比例的宽度
+const getWidthStyle = () => {
+  const { width, height } = props.body
+  return `width: ${(getImageHeight.value / height) * width}px`
+}
+
+const handleError = () => {
+  isLoading.value = false
+  hasLoadError.value = true
 }
 </script>
 
 <template>
-  <el-image
-    class="image"
-    hide-on-click-modal
-    preview-teleported
-    :src="body?.url"
-    :style="{ height: getImageHeight(body.width, body.height) + 'px' }"
-    :preview-src-list="[body?.url]"
-    fit="scale-down"
-  >
-    <template #placeholder>
-      <div class="image-slot">
-        <Icon icon="loading2" :size="18" spin colorful />
-        Loading...
-      </div>
+  <div class="image" :style="{ height: getImageHeight + 'px' }" @click="imageStore.show(body?.url)">
+    <div v-if="hasLoadError" class="image-slot" :style="getWidthStyle()">
+      <Icon icon="dazed" :size="36" colorful />
+      加载失败
+    </div>
+    <template v-else>
+      <img
+        v-if="body?.url"
+        :src="body?.url"
+        @click="imageStore.show(body?.url)"
+        @error="handleError"
+      />
     </template>
-    <template #error>
-      <div class="image-slot">
-        <Icon icon="dazed" :size="36" colorful />
-        加载失败
-      </div>
-    </template>
-  </el-image>
+  </div>
 </template>

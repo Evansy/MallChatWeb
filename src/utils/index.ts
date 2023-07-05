@@ -15,6 +15,34 @@ export const formatBytes = (bytes: number): string => {
   return size + ' ' + units[unitIndex]
 }
 
+/**
+ * 图片尺寸格式化
+ * @param width 图片宽度
+ * @param height 图片高度
+ * @param option 选项: { maxWidth: number, maxHeight: number }
+ */
+export const formatImage = (
+  width: number,
+  height: number,
+  option = {
+    maxWidth: 200,
+    maxHeight: 150,
+  },
+): number => {
+  const { maxWidth, maxHeight } = option
+  // 小： 如果图片宽高都小于最大宽高，直接返回原高度
+  if (width < maxWidth && height < maxHeight) {
+    return height
+    // 宽： 根据宽度等比缩放
+  } else if (width > height) {
+    return (maxWidth / width) * height
+    // 窄：返回最大高度
+  } else if (width === height || width < height) {
+    return maxHeight
+  }
+  return maxHeight
+}
+
 /** 注意！这是文件图标映射关系表，如有修改需求-请联系前端管理同学 */
 const fileSuffixMap: Record<string, string> = {
   'jpg': 'jpg',
@@ -40,6 +68,11 @@ const fileSuffixMap: Record<string, string> = {
   'rar': 'zip',
   '7z': 'zip',
   'txt': 'txt',
+  'log': 'log',
+  'svg': 'svg',
+  'sketch': 'sketch',
+  'exe': 'exe',
+  'md': 'md',
 }
 /**
  * 获取文件对应的Icon
@@ -55,39 +88,33 @@ export const getFileSuffix = (fileName: string): string => {
   return fileSuffixMap[suffix] || 'other'
 }
 
-/**
- * 转换文件类型
- * @param suffix 文件后缀
- */
-export const convertFileType = (suffix: string) => {
-  if (['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(suffix)) {
-    return MsgEnum.IMAGE
-  } else if ([''].includes(suffix)) {
-    // TODO: 视频消息 暂不支持-所有视频消息都会被当做文件处理
-    return MsgEnum.VIDEO
-  } else if (['mp3', 'wav'].includes(suffix)) {
-    return MsgEnum.VOICE
-  } else {
-    return MsgEnum.FILE
-  }
-}
-
 // 生成消息体
-export const generateBody = (fileInfo: any, isMock?: boolean) => {
-  const { size, suffix, width, height, downloadUrl, name, second, tempUrl } = fileInfo
-  const type = convertFileType(suffix)
+export const generateBody = (fileInfo: any, msgType: MsgEnum, isMock?: boolean) => {
+  const {
+    size,
+    width,
+    height,
+    downloadUrl,
+    name,
+    second,
+    tempUrl,
+    thumbWidth,
+    thumbHeight,
+    thumbUrl,
+    thumbSize,
+  } = fileInfo
   const url = isMock ? tempUrl : downloadUrl
   const baseBody = { size, url }
   let body = {}
 
-  if (type === MsgEnum.IMAGE) {
+  if (msgType === MsgEnum.IMAGE) {
     body = { ...baseBody, width, height }
-  } else if (type === MsgEnum.VOICE) {
+  } else if (msgType === MsgEnum.VOICE) {
     body = { ...baseBody, second }
-  } else if (type === MsgEnum.VIDEO) {
-    body = { ...baseBody, thumbWidth: null, thumbHeight: null, thumbUrl: null }
-  } else if (type === MsgEnum.FILE) {
+  } else if (msgType === MsgEnum.VIDEO) {
+    body = { ...baseBody, thumbWidth, thumbHeight, thumbUrl, thumbSize }
+  } else if (msgType === MsgEnum.FILE) {
     body = { ...baseBody, fileName: name, url: downloadUrl }
   }
-  return { body, type }
+  return { body, type: msgType }
 }

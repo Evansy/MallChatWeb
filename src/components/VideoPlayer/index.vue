@@ -1,29 +1,55 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import Player from 'xgplayer'
-import 'xgplayer/dist/index.min.css'
 
-onMounted(() => {
-  new Player({
+const props = defineProps({
+  url: {
+    type: String,
+    default: '',
+  },
+})
+
+const player = ref<Player>()
+
+const init = () => {
+  if (!props.url) return
+  if (player.value) {
+    player.value.destroy()
+  }
+  player.value = new Player({
     id: 'xgplayer',
-    width: 300,
-    url: 'http://s2.pstatp.com/cdn/expire-1-M/byted-player-videos/1.0.0/xgplayer-demo.mp4',
-    pip: true, // 画中画
-    download: true, // 开启下载
-    keyShortcut: true, // 键盘快捷键
+    url: props.url,
+    width: '50%',
     fitVideoSize: 'fixWidth',
     videoInit: true, // 显示首帧
+    miniplayer: true,
+    miniplayerConfig: {
+      bottom: 10,
+      right: 10,
+      width: 320,
+      height: 180,
+    },
+    pip: true, // 画中画
+    cssFullscreen: true, // 全屏样式
     screenShot: {
       saveImg: true,
-      quality: 0.92,
-      type: 'image/png',
-      format: '.png',
     },
+    ignores: ['replay', 'fullscreen'],
     lang: 'zh-cn',
   })
+}
+
+onMounted(() => {
+  init()
+})
+
+onUnmounted(() => {
+  if (player.value) {
+    player.value.destroy()
+  }
 })
 </script>
 
 <template>
-  <div id="xgplayer" style="flex: auto"></div>
+  <div id="xgplayer"></div>
 </template>
