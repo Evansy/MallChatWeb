@@ -3,6 +3,7 @@ import { createPinia } from 'pinia'
 import dayjs from 'dayjs'
 import weekday from 'dayjs/plugin/weekday'
 import vLogin from './directives/v-login'
+import vLoginShow from './directives/v-login-show'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import router from './router'
 import App from './App.vue'
@@ -22,4 +23,5 @@ const app = createApp(App)
 app.use(pinia)
 app.use(router)
 app.directive('login', vLogin) // 登录权限指令-未登录先登录
+app.directive('login-show', vLoginShow) // 登录权限指令-未登录先登录
 app.mount('#app')
