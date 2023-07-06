@@ -31,3 +31,21 @@
 [hidden] {
   display: none !important;
 }
+
+.auto-show-scroll {
+  scrollbar-width: block;
+  -ms-overflow-style: block;
+}
+
+.auto-show-scroll::-webkit-scrollbar {
+  display: block;
+}
+
+.auto-hide-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.auto-hide-scroll::-webkit-scrollbar {
+  display: none;
+}

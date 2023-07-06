@@ -56,6 +56,7 @@ const hiddenGroupListShow = () => (groupStore.showGroupList = false)
     <div class="user-list-wrapper" :class="groupStore.showGroupList ? 'show' : ''">
       <div class="user-list-header">在线人数：{{ statistic.onlineNum || 0 }}</div>
       <TransitionGroup
+        v-scroll
         v-show="groupUserList?.length"
         tag="ul"
         name="fade"

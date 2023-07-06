@@ -12,6 +12,7 @@ import 'dayjs/locale/zh-cn'
 import './styles/main.css'
 import '@/utils/websocket'
 import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css'
+import vScroll from './directives/v-scroll'
 
 dayjs.locale('zh-cn') // 设置 dayjs 语言
 dayjs.extend(weekday) // 设置一周起始位周一
@@ -24,4 +25,5 @@ app.use(pinia)
 app.use(router)
 app.directive('login', vLogin) // 登录权限指令-未登录先登录
 app.directive('login-show', vLoginShow) // 登录权限指令-未登录先登录
+app.directive('scroll', vScroll)
 app.mount('#app')

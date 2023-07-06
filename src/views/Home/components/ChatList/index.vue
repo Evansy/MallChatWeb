@@ -67,6 +67,7 @@ const getKey = (item: MessageType) => item.message.id
       <IEpLoading />消息加载中
     </el-icon>
     <VirtualList
+      v-scroll
       v-if="chatStore.chatMessageList?.length"
       ref="virtualListRef"
       class="virtual-list scroll-hover"
