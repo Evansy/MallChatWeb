@@ -203,32 +203,6 @@ onMounted(() => {
           </transition>
         </div>
       </div>
-      <div v-if="likeCount + dislikeCount > 0" class="extra">
-        <transition name="fade">
-          <span
-            v-if="likeCount > 0"
-            :class="['extra-item like', { active: isLike }]"
-            @click="onLike"
-          >
-            <IconLike />
-            <transition name="count-up" mode="out-in">
-              <span class="count" :key="likeCount">{{ likeCount }}</span>
-            </transition>
-          </span>
-        </transition>
-        <transition name="fade">
-          <span
-            v-if="dislikeCount > 0"
-            :class="['extra-item dlike', { active: isDisLike }]"
-            @click="onDisLike"
-          >
-            <IconDislike />
-            <transition name="count-up" mode="out-in">
-              <span class="count" :key="dislikeCount">{{ dislikeCount }}</span>
-            </transition>
-          </span>
-        </transition>
-      </div>
     </div>
   </transition>
   <ContextMenu v-model:show="isShowMenu" :options="menuOptions" :msg="msg" />
