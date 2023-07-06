@@ -23,6 +23,14 @@ const fragments = computed(() => {
 // 打开链接
 const openUrl = (url: string) => {
   if (!url) return
+  // 当没有协议时，自动添加协议
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    if (window.location.protocol === 'https:') {
+      url = 'https://' + url
+    } else {
+      url = 'http://' + url
+    }
+  }
   window.open(url, '_blank')
 }
 </script>

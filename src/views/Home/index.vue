@@ -50,7 +50,8 @@ onUnmounted(() => {
       @close="imageStore.close()"
     />
     <div v-if="videoStore.isPlaying" class="video-play" style="pointer-events: none">
-      <VideoPlayer :url="videoStore.previewUrl" style="pointer-events: auto"></VideoPlayer>
+      <Icon icon="guanbi1" class="close" :size="30" @click="videoStore.close()" />
+      <VideoPlayer :url="videoStore.previewUrl" style="pointer-events: auto" />
     </div>
     <LoginBox />
   </main>
