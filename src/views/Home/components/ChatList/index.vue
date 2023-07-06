@@ -3,7 +3,7 @@ import { ref, onMounted, nextTick, provide } from 'vue'
 import throttle from 'lodash/throttle'
 import { useChatStore } from '@/stores/chat'
 import type { MessageType } from '@/services/types'
-import VirtualList from '@/components/VirtualList/index'
+import VirtualList from '@/components/VirtualList'
 import MsgItem from './MsgItem/index.vue'
 
 const chatStore = useChatStore()
@@ -74,11 +74,12 @@ const getKey = (item: MessageType) => item.message.id
       :data="chatStore.chatMessageList"
       :data-key="getKey"
       :item="MsgItem"
-      :keeps="40"
+      :size="20"
       @totop="onTotop"
       @scroll="onScroll"
       @ok="goToBottom"
     />
+    <!-- <VideoPlayer></VideoPlayer> -->
     <template v-if="!chatStore.isLoading && chatStore.chatMessageList?.length === 0">
       <div class="empty">暂无消息，快来发送第一条消息吧~</div>
     </template>

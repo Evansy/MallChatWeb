@@ -18,6 +18,24 @@
     color: #fff;
     text-align: right;
 
+    .close {
+      position: absolute;
+      top: 40px;
+      right: 40px;
+      padding: 8px;
+      line-height: 30px;
+      color: #fff;
+      pointer-events: auto;
+      background-color: var(--el-text-color-regular);
+      border-color: #fff;
+      border-radius: 50%;
+
+      &:hover {
+        box-shadow: 0 0 5px 3px var(--background-2);
+        transform: scale(0.95);
+      }
+    }
+
     .xgplayer {
       .xgplayer-controls {
         height: auto !important;

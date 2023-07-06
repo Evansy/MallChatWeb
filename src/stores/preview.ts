@@ -12,7 +12,6 @@ export const useImgPreviewStore = defineStore('image', () => {
   const show = (url: string) => {
     previewUrl.value = url
     isShowing.value = true
-    console.log('showImgPreview', url)
   }
   /**
    * 关闭图片预览
@@ -94,8 +93,6 @@ export const useVideoPreviewStore = defineStore('video', () => {
    * 关闭视频预览
    */
   const close = () => {
-    console.log('closeVideoPreview')
-
     previewUrl.value = ''
     isPlaying.value = false
   }
