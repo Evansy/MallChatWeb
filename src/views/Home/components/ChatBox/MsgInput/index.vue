@@ -536,7 +536,7 @@ defineExpose({ input: editorRef, range: editorRange, onSelectPerson })
         ref="scrollRef"
         class="person-warpper"
         dataPropName="item"
-        :itemProps="{ activeIndex }"
+        :itemProps="{ activeIndex, onSelect: onSelectPerson }"
         :data="personList"
         data-key="uid"
         :item="MentionItem"

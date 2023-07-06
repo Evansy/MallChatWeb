@@ -14,12 +14,13 @@ const props = defineProps({
   index: {
     type: Number,
   },
+  onSelect: Function,
 })
 
 const emit = defineEmits(['select'])
 
 const onClick = () => {
-  emit('select', props.item)
+  props.onSelect?.(props.item)
 }
 </script>
 
