@@ -3,13 +3,9 @@ import { computed, type PropType, inject } from 'vue'
 import apis from '@/services/apis'
 import { ContextMenu, ContextMenuItem, type MenuOptions } from '@imengyu/vue3-context-menu'
 import { useUserStore } from '@/stores/user'
-import { useCachedStore } from '@/stores/cached'
 import { PowerEnum } from '@/enums'
-import type { CacheUserItem } from '@/services/types'
 
-const focusMsgInput = inject<() => void>('focusMsgInput')
-const onSelectPerson =
-  inject<(personItem: CacheUserItem, ignoreContentCheck?: boolean) => void>('onSelectPerson')
+const onAtUser = inject<(uid: number, ignore: boolean) => void>('onSelectPerson')
 
 const props = defineProps({
   // 消息体
@@ -24,7 +20,6 @@ const props = defineProps({
 })
 
 const userInfo = useUserStore()?.userInfo
-const cachedStore = useCachedStore()
 const isAdmin = computed(() => userInfo?.power === PowerEnum.ADMIN)
 
 // 拉黑用户
@@ -33,17 +28,6 @@ const onBlockUser = async () => {
   if (uid) {
     await apis.blockUser({ uid }).send()
   }
-}
-
-// @ 用户
-const onAtUser = () => {
-  // 输入框获取焦点
-  focusMsgInput?.()
-  // 插入内容
-  setTimeout(() => {
-    const userItem = cachedStore.userCachedList[props.uid]
-    userItem && onSelectPerson?.(userItem as CacheUserItem, true)
-  }, 10)
 }
 </script>
 
@@ -56,7 +40,7 @@ const onAtUser = () => {
       ...props.options,
     }"
   >
-    <ContextMenuItem label="at" @click="onAtUser" v-login-show>
+    <ContextMenuItem label="艾特Ta" @click="onAtUser?.(props.uid, true)" v-login-show>
       <template #icon> <span class="icon">@</span> </template>
     </ContextMenuItem>
     <ContextMenuItem v-if="isAdmin" label="拉黑(管理)" @click="onBlockUser">

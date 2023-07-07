@@ -8,16 +8,12 @@ import {
   type MenuOptions,
 } from '@imengyu/vue3-context-menu'
 import { useUserStore } from '@/stores/user'
-import { useCachedStore } from '@/stores/cached'
 import { copyToClip } from '@/utils/copy'
 import { useChatStore } from '@/stores/chat'
 import type { MessageType } from '@/services/types'
 import { MsgEnum, PowerEnum } from '@/enums'
-import type { CacheUserItem } from '@/services/types'
 
-const focusMsgInput = inject<() => void>('focusMsgInput')
-const onSelectPerson =
-  inject<(personItem: CacheUserItem, ignoreContentCheck?: boolean) => void>('onSelectPerson')
+const onAtUser = inject<(uid: number, ignore: boolean) => void>('onSelectPerson')
 
 const props = defineProps({
   // 消息体
@@ -33,7 +29,6 @@ const props = defineProps({
 
 const userInfo = useUserStore()?.userInfo
 const chatStore = useChatStore()
-const cachedStore = useCachedStore()
 // FIXME 未登录到登录这些监听没有变化。需处理
 const isCurrentUser = computed(() => props.msg?.fromUser.uid === userInfo.uid)
 const isAdmin = computed(() => userInfo?.power === PowerEnum.ADMIN)
@@ -74,17 +69,6 @@ const download = () => {
 }
 
 const onDelete = () => chatStore.deleteMsg(props.msg.message.id)
-
-// @ 用户
-const onAtUser = () => {
-  // 输入框获取焦点
-  focusMsgInput?.()
-  // 插入内容
-  setTimeout(() => {
-    const userItem = cachedStore.userCachedList[props.msg.fromUser.uid]
-    userItem && onSelectPerson?.(userItem as CacheUserItem, true)
-  }, 10)
-}
 </script>
 
 <template>
@@ -96,7 +80,7 @@ const onAtUser = () => {
       ...props.options,
     }"
   >
-    <ContextMenuItem label="at" @click="onAtUser" v-login-show>
+    <ContextMenuItem label="艾特Ta" @click="onAtUser?.(msg.fromUser.uid, true)" v-login-show>
       <template #icon> <span class="icon">@</span> </template>
     </ContextMenuItem>
     <ContextMenuItem v-if="msg.message.type === MsgEnum.TEXT" label="复制" @click="copyContent">

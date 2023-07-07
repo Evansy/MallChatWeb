@@ -12,7 +12,6 @@ import { judgeClient } from '@/utils/detectDevice'
 import { emojis } from './constant'
 
 import type { IMention } from './MsgInput/types'
-import type { CacheUserItem } from '@/services/types'
 import { useFileDialog } from '@vueuse/core'
 import { useUpload } from '@/hooks/useUpload'
 import { useRecording } from '@/hooks/useRecording'
@@ -30,7 +29,7 @@ const chatStore = useChatStore()
 const isSelect = ref(false)
 const isSending = ref(false)
 const inputMsg = ref('')
-const msg_input_ref = ref<typeof ElInput>()
+const mentionRef = ref<typeof ElInput>()
 const mentionList = ref<IMention[]>([])
 const isAudio = ref(false)
 const isHovered = ref(false)
@@ -40,16 +39,17 @@ const nowMsgType = ref<MsgEnum>(MsgEnum.FILE)
 
 const focusMsgInput = () => {
   setTimeout(() => {
-    if (!msg_input_ref.value) return
-    msg_input_ref.value?.focus?.()
-    const selection = msg_input_ref.value?.range?.selection as Selection
-    selection?.selectAllChildren(msg_input_ref.value.input)
+    if (!mentionRef.value) return
+    mentionRef.value?.focus?.()
+    const selection = mentionRef.value?.range?.selection as Selection
+    selection?.selectAllChildren(mentionRef.value.input)
     selection?.collapseToEnd()
   })
 }
-
-const onSelectPerson = (personItem: CacheUserItem, ignoreContentCheck?: boolean) => {
-  msg_input_ref.value?.onSelectPerson?.(personItem, ignoreContentCheck)
+// 艾特
+const onSelectPerson = (uid: number, ignoreCheck?: boolean) => {
+  mentionRef.value?.onSelectPerson?.(uid, ignoreCheck)
+  isAudio.value = false
 }
 
 provide('focusMsgInput', focusMsgInput)
@@ -76,11 +76,7 @@ const send = (msgType: MsgEnum, body: any, roomId = 1) => {
     })
 }
 
-const sendMsgHandler = (e: Event) => {
-  // 处理输入法状态下的回车事件
-  if ((e as KeyboardEvent).isComposing) {
-    return e.preventDefault()
-  }
+const sendMsgHandler = () => {
   // 空消息或正在发送时禁止发送
   if (!inputMsg.value?.trim().length || isSending.value) {
     return
@@ -127,8 +123,8 @@ const showReplyContent = () => {
 const onClearReply = () => (chatStore.currentMsgReply = {})
 // 插入表情
 const insertEmoji = (emoji: string) => {
-  const input = msg_input_ref.value?.input
-  const editRange = msg_input_ref.value?.range as {
+  const input = mentionRef.value?.input
+  const editRange = mentionRef.value?.range as {
     range: Range
     selection: Selection
   }
@@ -241,7 +237,7 @@ const onStartRecord = () => {
               class="m-input"
               v-show="!isAudio"
               v-model="inputMsg"
-              ref="msg_input_ref"
+              ref="mentionRef"
               autofocus
               :tabindex="!isSign || isSending"
               :disabled="!isSign || isSending"
@@ -275,7 +271,13 @@ const onStartRecord = () => {
                 </li>
               </ul>
             </el-popover>
-            <Icon class="action" icon="at" :size="20" colorful />
+            <Icon
+              class="action"
+              icon="at"
+              :size="20"
+              colorful
+              @click="insertInputText({ content: '@', ...mentionRef?.range })"
+            />
             <Icon
               :class="['action', { disabled: isUploading }]"
               icon="tupian"

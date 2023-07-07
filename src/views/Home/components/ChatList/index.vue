@@ -21,6 +21,7 @@ const goToBottom = () => {
 const goToNewMessage = () => {
   // 未读消息数 = 总数 - 新消息数
   virtualListRef.value.scrollToIndex(chatStore.chatMessageList.length - chatStore.newMsgCount)
+  chatStore.clearNewMsgCount()
 }
 
 // 提供虚拟列表 ref 给子组件使用
