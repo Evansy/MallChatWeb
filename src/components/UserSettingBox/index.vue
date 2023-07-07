@@ -4,6 +4,7 @@ import { useRequest } from 'alova'
 import { ElMessage } from 'element-plus'
 import { Select, CloseBold, EditPen } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user'
+import { useCachedStore } from '@/stores/cached'
 import { SexEnum, IsYetEnum } from '@/enums'
 import type { BadgeType } from '@/services/types'
 import apis from '@/services/apis'
@@ -30,6 +31,7 @@ const editName = reactive({
 })
 
 const userStore = useUserStore()
+const cachedStore = useCachedStore()
 
 const userInfo = computed(() => userStore.userInfo)
 const { send: handlerGetBadgeList, data: badgeList } = useRequest(apis.getBadgeList, {
@@ -47,12 +49,21 @@ const currentBadge = computed(() =>
   badgeList.value.find((item) => item.obtain === IsYetEnum.YES && item.wearing === IsYetEnum.YES),
 )
 
+// 更新缓存里面的用户信息
+const updateCurrentUserCache = (key: 'name' | 'wearingItemId', value: any) => {
+  const currentUser = userStore.userInfo.uid && cachedStore.userCachedList[userStore.userInfo.uid]
+  if (currentUser) {
+    currentUser[key] = value // 更新缓存里面的用户信息
+  }
+}
+
 // 佩戴卸下徽章
 const toggleWarningBadge = async (badge: BadgeType) => {
   if (!badge?.id) return
   await apis.setUserBadge(badge.id).send()
   handlerGetBadgeList()
   badge.img && (userInfo.value.badge = badge.img)
+  updateCurrentUserCache('wearingItemId', badge.id) // 更新缓存里面的用户徽章
 }
 
 // 编辑用户名
@@ -73,13 +84,15 @@ const onSaveUserName = async () => {
     return
   }
   editName.saving = true
-  await apis.modifyUserName(editName.tempName).send()
-  userStore.userInfo.name = editName.tempName
-  editName.saving = false
-  editName.isEdit = false
-  editName.tempName = ''
+
+  await apis.modifyUserName(editName.tempName).send() // 更改用户名
+  userStore.userInfo.name = editName.tempName // 更新用户信息里面的用户名
+  updateCurrentUserCache('name', editName.tempName) // 更新缓存里面的用户信息
+  // 重置状态
+  onCancelEditName()
+  // 没有更名机会就不走下去
   if (!userInfo.value?.modifyNameChance || userInfo.value.modifyNameChance === 0) return
-  userInfo.value.modifyNameChance = userInfo.value?.modifyNameChance - 1
+  userInfo.value.modifyNameChance = userInfo.value?.modifyNameChance - 1 // 减少更名次数
 }
 // 确认保存用户名
 const onCancelEditName = async () => {

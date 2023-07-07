@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, type PropType, inject } from 'vue'
+import { ElMessage } from 'element-plus'
 import apis from '@/services/apis'
 import {
   ContextMenu,
@@ -8,7 +9,7 @@ import {
   type MenuOptions,
 } from '@imengyu/vue3-context-menu'
 import { useUserStore } from '@/stores/user'
-import { copyToClip } from '@/utils/copy'
+import { copyToClip, handleCopyImg } from '@/utils/copy'
 import { useChatStore } from '@/stores/chat'
 import type { MessageType } from '@/services/types'
 import { MsgEnum, PowerEnum } from '@/enums'
@@ -52,8 +53,16 @@ const onBlockUser = async () => {
 
 // 拷贝内容-(此版本未针对不同Body体进行处理)
 const copyContent = () => {
-  const content = props.msg.message.body?.content
-  copyToClip(content)
+  const msg = props.msg.message
+  if (msg.type === MsgEnum.TEXT) {
+    const content = msg.body?.content
+    copyToClip(content)
+    ElMessage.success('复制成功~')
+  }
+  if (msg.type === MsgEnum.IMAGE) {
+    handleCopyImg(msg.body.url)
+    ElMessage.success('复制成功~')
+  }
 }
 
 // 下载
@@ -83,7 +92,11 @@ const onDelete = () => chatStore.deleteMsg(props.msg.message.id)
     <ContextMenuItem label="艾特Ta" @click="onAtUser?.(msg.fromUser.uid, true)" v-login-show>
       <template #icon> <span class="icon">@</span> </template>
     </ContextMenuItem>
-    <ContextMenuItem v-if="msg.message.type === MsgEnum.TEXT" label="复制" @click="copyContent">
+    <ContextMenuItem
+      v-if="msg.message.type === MsgEnum.TEXT || msg.message.type === MsgEnum.IMAGE"
+      label="复制"
+      @click="copyContent"
+    >
       <template #icon>
         <Icon icon="copy" :size="13" />
       </template>

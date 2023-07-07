@@ -55,6 +55,7 @@ const onSelectPerson = (uid: number, ignoreCheck?: boolean) => {
 provide('focusMsgInput', focusMsgInput)
 provide('onSelectPerson', onSelectPerson)
 
+// 发送消息
 const send = (msgType: MsgEnum, body: any, roomId = 1) => {
   apis
     .sendMsg({ roomId, msgType, body })
@@ -160,7 +161,7 @@ const openFileSelect = (fileType: string) => {
   open()
 }
 
-onChange((files) => {
+const selectAndUploadFile = async (files?: FileList | null) => {
   if (!files?.length) return
   const file = files[0]
   if (nowMsgType.value === MsgEnum.IMAGE) {
@@ -168,8 +169,17 @@ onChange((files) => {
       return ElMessage.error('请选择图片文件')
     }
   }
-  uploadFile(file)
+  await uploadFile(file)
+}
+
+// 选中文件上传并发送消息
+provide('onChangeFile', selectAndUploadFile)
+// 设置消息类型
+provide('onChangeMsgType', (msgType: MsgEnum) => {
+  nowMsgType.value = msgType
 })
+
+onChange(selectAndUploadFile)
 
 onStart(() => {
   if (!fileInfo.value) return

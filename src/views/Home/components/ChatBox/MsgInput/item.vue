@@ -17,8 +17,6 @@ const props = defineProps({
   onSelect: Function,
 })
 
-const emit = defineEmits(['select'])
-
 const onClick = () => {
   props.onSelect?.(props.item)
 }

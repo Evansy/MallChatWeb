@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // 艾特功能参考自 https://github.com/MrHGJ/at-mentions
-import { ref, reactive, toRefs, watch, watchEffect, type StyleValue, inject, provide } from 'vue'
+import { ref, reactive, toRefs, watch, watchEffect, type StyleValue, inject } from 'vue'
 import type { IMention, INode } from './types'
 import type { CacheUserItem } from '@/services/types'
 import { NodeType } from './types'
@@ -14,6 +14,7 @@ import {
 import { useCachedStore } from '@/stores/cached'
 import VirtualList from '@/components/VirtualList'
 import MentionItem from './item.vue'
+import PasteImageDialog from '../PasteImageDialog/index.vue'
 
 // 关闭透传 attrs 到组件根节点，传递到子节点  v-bind="$attrs"
 defineOptions({ inheritAttrs: false })
@@ -353,7 +354,6 @@ const onInputKeyUp = (e: KeyboardEvent) => {
 
 const handleArrow = (direction: 'up' | 'down') => {
   if (!scrollRef.value) return
-  console.log(scrollRef.value.getOffset(), scrollRef.value.getClientSize())
 
   let newIndex = 0
   if (direction === 'up') {
@@ -518,6 +518,8 @@ const onSelectPerson = (uid: number, ignore = false) => {
 
 // 暴露 ref 属性
 defineExpose({ input: editorRef, range: editorRange, onSelectPerson })
+
+const getKey = (item: CacheUserItem) => item.uid
 </script>
 
 <template>
@@ -553,11 +555,13 @@ defineExpose({ input: editorRef, range: editorRange, onSelectPerson })
         dataPropName="item"
         :itemProps="{ activeIndex, onSelect: onSelectPerson }"
         :data="personList"
-        data-key="uid"
+        :data-key="getKey"
         :item="MentionItem"
         :size="20"
       />
     </div>
+
+    <PasteImageDialog />
   </div>
 </template>
 

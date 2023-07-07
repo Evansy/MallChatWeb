@@ -28,5 +28,6 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 0, // 允许any类型
     'no-param-reassign': 0, // 允许修改函数参数
     'prefer-regex-literals': 0, // 允许使用new RegExp
+    'no-unused-vars': 2, // 禁止未使用的变量
   },
 }
