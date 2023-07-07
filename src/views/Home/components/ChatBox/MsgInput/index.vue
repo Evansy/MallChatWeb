@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // 艾特功能参考自 https://github.com/MrHGJ/at-mentions
-import { ref, reactive, toRefs, watch, watchEffect, type StyleValue } from 'vue'
+import { ref, reactive, toRefs, watch, watchEffect, type StyleValue, inject, provide } from 'vue'
 import type { IMention, INode } from './types'
 import type { CacheUserItem } from '@/services/types'
 import { NodeType } from './types'
@@ -53,6 +53,7 @@ const emit = defineEmits([
   'send',
 ])
 
+const focusMsgInput = inject<() => void>('focusMsgInput')
 const { modelValue: value, mentions, maxLength, disabled } = toRefs(props)
 const editorRef = ref<HTMLElement | null>()
 const scrollRef = ref()
@@ -292,7 +293,7 @@ const insertHtmlAtCaret = (
 }
 
 // 选择@的人。替换原来的检索文案，并插入新的@标签<button/>
-const onSelectPerson = (personItem: CacheUserItem, ignore = false) => {
+const selectPerson = (personItem: CacheUserItem, ignore = false) => {
   // 选择人员后关闭并重置选人框，重置搜索词
   showDialog.value = false
   // 滚动到候选框顶部
@@ -396,7 +397,7 @@ const onInputKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
       e.preventDefault()
       // 选择当前人
-      onSelectPerson(personList.value[activeIndex.value])
+      selectPerson(personList.value[activeIndex.value])
       // 更新输入框同步值
       onInputText()
     }
@@ -410,6 +411,10 @@ const onInputKeyDown = (e: KeyboardEvent) => {
       e.preventDefault()
       onWrap()
       return
+    }
+    // 处理输入法状态下的回车事件
+    if ((e as KeyboardEvent).isComposing) {
+      return e.preventDefault()
     }
     // 禁止默认换行
     if (e.key === 'Enter') {
@@ -499,6 +504,16 @@ const onPaste = (e: ClipboardEvent) => {
   }
   document.execCommand('insertHTML', false, pastedText)
   return false
+}
+
+//
+const onSelectPerson = (uid: number, ignore = false) => {
+  if (!uid) return
+  focusMsgInput?.()
+  setTimeout(() => {
+    const userItem = cachedStore.userCachedList[uid]
+    userItem && selectPerson?.(userItem as CacheUserItem, ignore)
+  }, 10)
 }
 
 // 暴露 ref 属性
