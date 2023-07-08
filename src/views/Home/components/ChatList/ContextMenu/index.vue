@@ -70,11 +70,25 @@ const download = () => {
   const { body } = props.msg.message
   const url = body?.url
   if (!url) return
-  const a = document.createElement('a')
-  a.href = url
-  a.download = body.fileName || '未知文件'
-  a.click()
-  a.remove()
+
+  const xhr = new XMLHttpRequest()
+  xhr.open('GET', url, true)
+  xhr.responseType = 'blob'
+
+  xhr.onreadystatechange = () => {
+    // 下载失败提示
+    if (xhr.status != 200) return ElMessage.error('下载失败~')
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      const blob = xhr.response
+      let link = document.createElement('a')
+      link.href = URL.createObjectURL(blob)
+      link.download = body.fileName || '未知文件'
+      link.dispatchEvent(new MouseEvent('click'))
+      link.remove()
+    }
+  }
+
+  xhr.send()
 }
 
 const onDelete = () => chatStore.deleteMsg(props.msg.message.id)
