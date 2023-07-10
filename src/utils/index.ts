@@ -118,3 +118,23 @@ export const generateBody = (fileInfo: any, msgType: MsgEnum, isMock?: boolean) 
   }
   return { body, type: msgType }
 }
+
+/**
+ * 地址转Blob
+ */
+export const urlToBlob = async (url: string): Promise<Blob> => {
+  const response = await fetch(url)
+  const blob = await response.blob()
+  return blob
+}
+
+/**
+ * 地址转文件
+ */
+export const urlToFile = async (url: string, fileName?: string): Promise<File> => {
+  const blob = await urlToBlob(url)
+  const fileType = blob.type
+  const name = fileName || Date.now() + '_emoji.png' // 时间戳生成唯一文件名
+  const file = new File([blob], name, { type: fileType })
+  return file
+}

@@ -139,9 +139,12 @@ onMounted(() => {
           >
             <img v-show="badgeInfo?.img" class="user-badge" :src="badgeInfo?.img" />
           </el-tooltip>
-          <span class="user-name" @click="onAtUser?.(userInfo.uid!, true)">{{
-            userInfo.name
-          }}</span>
+          <span
+            :class="['user-name', { noat: isCurrentUser }]"
+            @click="onAtUser?.(userInfo.uid!, true)"
+          >
+            {{ userInfo.name }}
+          </span>
           <span class="user-ip">({{ userInfo.locPlace || '未知' }})</span>
           <span class="send-time" v-if="isShowTime">
             {{ formatTimestamp(msg.message.sendTime) }}

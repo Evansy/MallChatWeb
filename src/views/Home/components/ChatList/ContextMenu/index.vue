@@ -13,6 +13,9 @@ import { copyToClip, handleCopyImg } from '@/utils/copy'
 import { useChatStore } from '@/stores/chat'
 import type { MessageType } from '@/services/types'
 import { MsgEnum, PowerEnum } from '@/enums'
+import { useEmojiStore } from '@/stores/emoji'
+import { useEmojiUpload } from '@/hooks/useEmojiUpload'
+import { urlToFile } from '@/utils'
 
 const onAtUser = inject<(uid: number, ignore: boolean) => void>('onSelectPerson')
 
@@ -28,6 +31,8 @@ const props = defineProps({
   },
 })
 
+const emojiStore = useEmojiStore()
+const { uploadEmoji } = useEmojiUpload()
 const userInfo = useUserStore()?.userInfo
 const chatStore = useChatStore()
 // FIXME 未登录到登录这些监听没有变化。需处理
@@ -77,6 +82,17 @@ const download = () => {
   a.remove()
 }
 
+const onAddEmoji = () => {
+  const { type, body } = props.msg.message
+  if (type === MsgEnum.EMOJI) {
+    emojiStore.addEmoji(body.url)
+  } else {
+    urlToFile(body.url).then((file) => {
+      uploadEmoji(file)
+    })
+  }
+}
+
 const onDelete = () => chatStore.deleteMsg(props.msg.message.id)
 </script>
 
@@ -99,6 +115,19 @@ const onDelete = () => chatStore.deleteMsg(props.msg.message.id)
     >
       <template #icon>
         <Icon icon="copy" :size="13" />
+      </template>
+    </ContextMenuItem>
+    <ContextMenuItem
+      v-if="
+        (msg.message.type === MsgEnum.EMOJI || msg.message.type === MsgEnum.IMAGE) &&
+        !isCurrentUser &&
+        emojiStore.emojiList.length < 50
+      "
+      label="添加到表情"
+      @click="onAddEmoji"
+    >
+      <template #icon>
+        <Icon icon="aixin" :size="13" />
       </template>
     </ContextMenuItem>
     <ContextMenuItem

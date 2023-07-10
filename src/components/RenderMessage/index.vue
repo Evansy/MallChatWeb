@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import type { PropType } from 'vue'
 import { MsgEnum } from '@/enums'
-import type { MsgType as M } from '@/services/types'
+import type { MsgType } from '@/services/types'
 import Image from './image.vue'
 import Voice from './voice.vue'
 import File from './file.vue'
 import Video from './video.vue'
 import Text from './text.vue'
+import Emoji from './emoji.vue'
 
 const componentMap = {
   [MsgEnum.UNKNOWN]: '',
@@ -16,11 +17,12 @@ const componentMap = {
   [MsgEnum.VOICE]: Voice,
   [MsgEnum.FILE]: File,
   [MsgEnum.VIDEO]: Video,
+  [MsgEnum.EMOJI]: Emoji,
 }
 
 defineProps({
   message: {
-    type: Object as PropType<M>,
+    type: Object as PropType<MsgType>,
     required: true,
   },
 })

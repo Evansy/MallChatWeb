@@ -21,6 +21,7 @@ declare module '@vue/runtime-core' {
     ElProgress: typeof import('element-plus/es')['ElProgress']
     ElText: typeof import('element-plus/es')['ElText']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
+    Emoji: typeof import('./components/RenderMessage/emoji.vue')['default']
     File: typeof import('./components/RenderMessage/file.vue')['default']
     Icon: typeof import('./components/Icon/index.vue')['default']
     IEpArrowDownBold: typeof import('~icons/ep/arrow-down-bold')['default']

@@ -156,6 +156,11 @@ export type RevokedMsgType = {
   recallUid?: number
 }
 
+export type EmojiItem = {
+  expressionUrl: string
+  id: number
+}
+
 // -------------------- ⬇消息体类型定义⬇ ----------------
 
 /**
@@ -249,6 +254,10 @@ export type TextBody = {
    */
   urlTitleMap: Record<string, string>
 }
+/** 表情消息 */
+export type EmojiBody = {
+  url: string
+}
 
 /**
  * 消息内容
@@ -259,7 +268,7 @@ export type MsgType = {
   /** 消息类型 */
   type: MsgEnum
   /** 动态消息体-`根据消息类型变化` */
-  body: TextBody | ImageBody | VoiceBody | VideoBody | FileBody | any
+  body: TextBody | ImageBody | VoiceBody | VideoBody | FileBody | EmojiBody | any
   /** 发送时间戳 */
   sendTime: number
   /** 消息互动信息 */

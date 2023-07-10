@@ -25,4 +25,10 @@ export default {
   recallMsg: `${prefix}/capi/chat/msg/recall`,
   // 文件上传
   fileUpload: `${prefix}/capi/oss/upload/url`,
+  // 增加表情
+  addEmoji: `${prefix}/capi/user/emoji`,
+  // 删除表情
+  deleteEmoji: `${prefix}/capi/user/emoji`,
+  // 查询表情包
+  getEmoji: `${prefix}/capi/user/emoji/list`,
 }
