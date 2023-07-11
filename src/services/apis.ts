@@ -60,7 +60,8 @@ export default {
   addEmoji: (data: { uid: number; expressionUrl: string }) =>
     postRequest<MessageType>(urls.addEmoji, data),
   /** 获取表情 **/
-  getEmoji: (params: { uid: number }) => getRequest<EmojiItem[]>(urls.getEmoji, params),
+  getEmoji: (params: { uid: number }) =>
+    getRequest<EmojiItem[]>(urls.getEmoji, { localCache: 0, params }),
   /** 删除id */
   deleteEmoji: (params: { id: number }) => deleteRequest<EmojiItem[]>(urls.deleteEmoji, params),
 }

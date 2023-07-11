@@ -154,7 +154,7 @@ const options = reactive({ multiple: false, accept: '.jpg,.png' })
 
 const { open, reset, onChange } = useFileDialog(options)
 const { isUploading, fileInfo, uploadFile, onStart, onChange: useUploadChange } = useUpload()
-const { uploadEmoji } = useEmojiUpload()
+const { uploadEmoji, isEmojiUp } = useEmojiUpload()
 const { isRecording, start, stop, onEnd, second } = useRecording()
 const { mockMessage } = useMockMessage()
 
@@ -286,7 +286,7 @@ const sendEmoji = throttle((url: string) => {
               v-model:visible="showEmoji"
               popper-class="emoji-warpper"
               :show-arrow="false"
-              :width="client === 'PC' ? 380 : '95%'"
+              :width="client === 'PC' ? 385 : '95%'"
               trigger="click"
             >
               <template #reference>
@@ -325,12 +325,15 @@ const sendEmoji = throttle((url: string) => {
                     />
                   </div>
                   <Icon
-                    v-if="emojiList.length < 50"
+                    v-if="emojiList.length < 50 && !isEmojiUp"
                     class="item-add"
                     icon="tianjia"
                     :size="30"
                     @click="openFileSelect('img', true)"
                   />
+                  <div v-else class="item-add">
+                    <Icon icon="loading" spin :size="30" />
+                  </div>
                 </div>
                 <div class="footer">
                   <Icon

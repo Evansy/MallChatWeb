@@ -7,7 +7,7 @@ import { useEmojiStore } from '@/stores/emoji'
  * 表情图上传Hook
  */
 export const useEmojiUpload = () => {
-  const isUploading = ref(false) // 是否正在上传
+  const isEmojiUp = ref(false) // 是否正在上传
   const progress = ref(0) // 进度
   const emojiStore = useEmojiStore()
 
@@ -21,7 +21,7 @@ export const useEmojiUpload = () => {
    * @param file 文件
    */
   const upload = async (url: string, file: File) => {
-    isUploading.value = true
+    isEmojiUp.value = true
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest()
@@ -31,7 +31,7 @@ export const useEmojiUpload = () => {
         progress.value = Math.round((e.loaded / e.total) * 100)
       }
       xhr.onload = () => {
-        isUploading.value = false
+        isEmojiUp.value = false
         if (xhr.status === 200) {
           onSuccess.trigger(file)
           resolve(true)
@@ -137,6 +137,7 @@ export const useEmojiUpload = () => {
   }
 
   return {
+    isEmojiUp,
     onStart: onStart.on,
     onFail: onFail.on,
     onSuccess: onSuccess.on,

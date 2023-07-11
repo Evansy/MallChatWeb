@@ -23,17 +23,6 @@
       cursor: pointer;
     }
 
-    .user-name:hover::after {
-      position: absolute;
-      top: 0;
-      right: 100%;
-      content: '@';
-    }
-
-    .noat:hover::after {
-      content: '' !important;
-    }
-
     .user-badge {
       width: 18px;
       height: 18px;
