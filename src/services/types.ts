@@ -250,9 +250,15 @@ export type TextBody = {
   reply: ReplyType
   /**
    * 消息链接映射
-   * @deprecated 即将废弃？
    */
-  urlTitleMap: Record<string, string>
+  urlContentMap: Record<
+    string,
+    {
+      title: string
+      description: string
+      image: string
+    }
+  >
 }
 /** 表情消息 */
 export type EmojiBody = {

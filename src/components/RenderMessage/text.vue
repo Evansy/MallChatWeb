@@ -10,7 +10,7 @@ const props = defineProps({
 })
 
 // 获取所有匹配的字符串
-const urlMap = props.body.urlTitleMap || {}
+const urlMap = props.body.urlContentMap || {}
 const keys = Object.keys(urlMap)
 // 使用匹配字符串创建动态正则表达式，并将文本拆分为片段数组
 const fragments = computed(() => {
@@ -47,9 +47,16 @@ const openUrl = (url: string) => {
         class="text-card"
         @click="openUrl(item.trim())"
       >
-        <span class="text-card-link ellipsis-1"> {{ item.trim() }}</span>
-        <span class="text-card-title ellipsis-2"> {{ urlMap[item] }}</span>
-        <span class="text-card-desc ellipsis-1">暂无描述</span>
+        <div
+          v-if="urlMap[item].image"
+          class="text-card-image"
+          :style="{ backgroundImage: `url(${urlMap[item].image})` }"
+        />
+        <div class="text-card-link-content">
+          <span class="text-card-link ellipsis-1"> {{ item.trim() }}</span>
+          <span class="text-card-title ellipsis-2"> {{ urlMap[item].title }}</span>
+          <span class="text-card-desc ellipsis-1">{{ urlMap[item].description }}</span>
+        </div>
       </div>
     </template>
   </div>

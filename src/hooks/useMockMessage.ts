@@ -34,7 +34,7 @@ export const useMockMessage = () => {
         id: uniqueId,
         sendTime: Number(currentTimeStamp),
         content,
-        urlTitleMap: {},
+        urlContentMap: {},
         type: type,
         body,
         messageMark: {

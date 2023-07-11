@@ -8,6 +8,7 @@ import { useCachedStore } from '@/stores/cached'
 import { useUserStore } from '@/stores/user'
 import shakeTitle from '@/utils/shakeTitle'
 import notify from '@/utils/notification'
+import { MsgEnum, PowerEnum } from '@/enums'
 
 export const pageSize = 20
 
@@ -16,6 +17,8 @@ export const useChatStore = defineStore('chat', () => {
   const userStore = useUserStore()
   const messageMap = reactive<Map<number, MessageType>>(new Map<number, MessageType>()) // 消息Map
   const replyMapping = reactive<Map<number, number[]>>(new Map<number, number[]>()) // 回复消息映射
+  const userInfo = userStore.userInfo
+  const isAdmin = computed(() => userInfo?.power === PowerEnum.ADMIN)
 
   const chatListToBottomAction = ref<() => void>() // 外部提供消息列表滚动到底部事件
   const isLast = ref(false) // 是否到底了
@@ -163,10 +166,17 @@ export const useChatStore = defineStore('chat', () => {
     const { msgId } = data
     const message = messageMap.get(msgId)
     if (message) {
-      message.message.type = 2
-      const userName = message.fromUser.username || ''
+      message.message.type = MsgEnum.RECALL
 
-      message.message.body = `"${userName}"撤回了一条消息` // 后期根据本地用户数据修改
+      // 如果消息是被管理员撤回，需要显示 管理员 xx 撤回了一条成员消息
+      if (isAdmin.value) {
+        message.message.body = `管理员"${userInfo.name}"撤回了一条成员消息` // 后期根据本地用户数据修改
+      } else {
+        // 如果被撤回的消息是消息发送者撤回，正常显示
+        const uid = message.fromUser.uid
+        const cacheUser = cachedStore.userCachedList[uid]
+        message.message.body = `"${cacheUser.name}"撤回了一条消息` // 后期根据本地用户数据修改
+      }
     }
     // 更新与这条撤回消息有关的消息
     const messageList = replyMapping.get(msgId)
