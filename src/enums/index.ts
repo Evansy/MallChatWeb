@@ -25,6 +25,8 @@ export enum MsgEnum {
   VOICE,
   /** 视频 */
   VIDEO,
+  /** 表情包 */
+  EMOJI,
 }
 
 /**

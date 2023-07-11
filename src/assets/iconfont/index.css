@@ -3,9 +3,9 @@
 /* prettier-ignore */
 @font-face {
   font-family: "mallchat"; /* Project id 4142069 */
-  src: url('//at.alicdn.com/t/c/font_4142069_nzdc1c9l0lr.woff2?t=1688480111830') format('woff2'),
-       url('//at.alicdn.com/t/c/font_4142069_nzdc1c9l0lr.woff?t=1688480111830') format('woff'),
-       url('//at.alicdn.com/t/c/font_4142069_nzdc1c9l0lr.ttf?t=1688480111830') format('truetype');
+  src: url('//at.alicdn.com/t/c/font_4142069_jnq5uyu0igi.woff2?t=1688973717399') format('woff2'),
+       url('//at.alicdn.com/t/c/font_4142069_jnq5uyu0igi.woff?t=1688973717399') format('woff'),
+       url('//at.alicdn.com/t/c/font_4142069_jnq5uyu0igi.ttf?t=1688973717399') format('truetype');
 }
 
 .mallchat {
@@ -14,6 +14,18 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-tianjia:before {
+  content: '\e622';
+}
+
+.icon-aixin:before {
+  content: '\e711';
+}
+
+.icon-biaoqing:before {
+  content: '\e61c';
 }
 
 .icon-bofang:before {

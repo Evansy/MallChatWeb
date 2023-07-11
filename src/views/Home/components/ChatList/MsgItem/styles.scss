@@ -30,6 +30,10 @@
       content: '@';
     }
 
+    .noat:hover::after {
+      content: '' !important;
+    }
+
     .user-badge {
       width: 18px;
       height: 18px;
@@ -136,6 +140,12 @@
         vertical-align: middle;
         background: var(--background-2);
       }
+    }
+
+    .emoji {
+      width: 128px;
+      height: 128px;
+      user-select: none;
     }
 
     .file {

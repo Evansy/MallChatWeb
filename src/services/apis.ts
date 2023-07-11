@@ -11,6 +11,7 @@ import type {
   CacheBadgeItem,
   CacheUserReq,
   CacheBadgeReq,
+  EmojiItem,
 } from '@/services/types'
 import { alovaIns } from './request'
 import urls from './urls'
@@ -18,6 +19,7 @@ import urls from './urls'
 const getRequest = <T>(url: string, config?: any) => alovaIns.Get<T>(url, config)
 const postRequest = <T>(url: string, params?: any) => alovaIns.Post<T, unknown>(url, params)
 const putRequest = <T>(url: string, params?: any) => alovaIns.Put<T, unknown>(url, params)
+const deleteRequest = <T>(url: string, params?: any) => alovaIns.Delete<T, unknown>(url, params)
 
 export default {
   /** 获取群成员列表 */
@@ -54,4 +56,11 @@ export default {
   /** 获取临时上传链接 */
   getUploadUrl: (params: any) =>
     getRequest<{ downloadUrl: string; uploadUrl: string }>(urls.fileUpload, { params }),
+  /** 新增表情包 */
+  addEmoji: (data: { uid: number; expressionUrl: string }) =>
+    postRequest<MessageType>(urls.addEmoji, data),
+  /** 获取表情 **/
+  getEmoji: (params: { uid: number }) => getRequest<EmojiItem[]>(urls.getEmoji, params),
+  /** 删除id */
+  deleteEmoji: (params: { id: number }) => deleteRequest<EmojiItem[]>(urls.deleteEmoji, params),
 }
