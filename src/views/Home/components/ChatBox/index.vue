@@ -233,6 +233,7 @@ const handleRightClick = (event: Event, id: number) => {
 
 const sendEmoji = throttle((url: string) => {
   send(MsgEnum.EMOJI, { url })
+  showEmoji.value = false
 }, 1000)
 </script>
 
