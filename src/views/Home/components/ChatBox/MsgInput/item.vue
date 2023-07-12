@@ -18,7 +18,7 @@ const props = defineProps({
 })
 
 const onClick = () => {
-  props.onSelect?.(props.item)
+  props.onSelect?.(props.item.uid)
 }
 </script>
 
