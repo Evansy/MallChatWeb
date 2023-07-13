@@ -33,11 +33,13 @@ const props = defineProps({
 
 const emojiStore = useEmojiStore()
 const { uploadEmoji } = useEmojiUpload()
-const userInfo = useUserStore()?.userInfo
+const userStore = useUserStore()
+const userInfo = userStore?.userInfo
 const chatStore = useChatStore()
 // FIXME 未登录到登录这些监听没有变化。需处理
 const isCurrentUser = computed(() => props.msg?.fromUser.uid === userInfo.uid)
 const isAdmin = computed(() => userInfo?.power === PowerEnum.ADMIN)
+const isShowMenuSeparator = computed(() => userStore.isSign)
 
 // 撤回
 const onRecall = async () => {
@@ -150,7 +152,7 @@ const onDelete = () => chatStore.deleteMsg(props.msg.message.id)
         <Icon icon="xiazai" :size="15" />
       </template>
     </ContextMenuItem>
-    <ContextMenuSeparator />
+    <ContextMenuSeparator v-if="isShowMenuSeparator" />
     <ContextMenuItem label="删除" @click="onDelete" v-login-show>
       <template #icon>
         <Icon icon="shanchu" :size="13" />
