@@ -24,7 +24,7 @@ const fragments = computed(() => {
 const openUrl = (url: string) => {
   if (!url) return
   // 当没有协议时，自动添加协议
-  window.open('//' + url, '_blank')
+  window.open(url.startsWith("http") ? url : '//' + url, '_blank')
 }
 </script>
 
