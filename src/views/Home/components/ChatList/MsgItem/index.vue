@@ -184,7 +184,7 @@ onMounted(() => {
             <span
               v-if="likeCount > 0"
               :class="['extra-item like', { active: isLike }]"
-              @click="onLike"
+              v-login="onLike"
             >
               <Icon icon="like" />
               <transition name="count-up" mode="out-in">
@@ -196,7 +196,7 @@ onMounted(() => {
             <span
               v-if="dislikeCount > 0"
               :class="['extra-item dlike', { active: isDisLike }]"
-              @click="onDisLike"
+              v-login="onDisLike"
             >
               <Icon icon="dislike" :size="17" />
               <transition name="count-up" mode="out-in">
