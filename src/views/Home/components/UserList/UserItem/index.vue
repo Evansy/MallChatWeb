@@ -12,7 +12,7 @@ const props = defineProps({
   },
 })
 const user = toRef(props.user)
-const userInfo = useUserInfo(user.value.uid)
+const userInfo = useUserInfo(user.value?.uid)
 const isShowMenu = ref(false) // 是否显示菜单
 // 弹出定位
 const menuOptions = ref({ x: 0, y: 0 })
@@ -37,7 +37,7 @@ const handleRightClick = (e: MouseEvent) => {
       :online="user.activeStatus === OnlineEnum.ONLINE"
     />
     {{ userInfo.name }}
-    <ContextMenu v-model:show="isShowMenu" :options="menuOptions" :uid="(userInfo.uid as number)" />
+    <ContextMenu v-model:show="isShowMenu" :options="menuOptions" :uid="(user?.uid as number)" />
   </li>
 </template>
 

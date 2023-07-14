@@ -168,14 +168,18 @@ export const useChatStore = defineStore('chat', () => {
     if (message) {
       message.message.type = MsgEnum.RECALL
 
-      // 如果消息是被管理员撤回，需要显示 管理员 xx 撤回了一条成员消息
-      if (isAdmin.value) {
-        message.message.body = `管理员"${userInfo.name}"撤回了一条成员消息` // 后期根据本地用户数据修改
-      } else {
-        // 如果被撤回的消息是消息发送者撤回，正常显示
-        const uid = message.fromUser.uid
-        const cacheUser = cachedStore.userCachedList[uid]
-        message.message.body = `"${cacheUser.name}"撤回了一条消息` // 后期根据本地用户数据修改
+      if (typeof data.recallUid === 'number') {
+        const cacheUser = cachedStore.userCachedList[data.recallUid]
+        // 如果撤回者的 id 不等于消息发送人的 id, 或者你本人就是管理员，那么显示管理员撤回的。
+        if (
+          data.recallUid !== message.fromUser.uid ||
+          (data.recallUid === userInfo.uid && isAdmin.value)
+        ) {
+          message.message.body = `管理员"${cacheUser.name}"撤回了一条成员消息` // 后期根据本地用户数据修改
+        } else {
+          // 如果被撤回的消息是消息发送者撤回，正常显示
+          message.message.body = `"${cacheUser.name}"撤回了一条消息` // 后期根据本地用户数据修改
+        }
       }
     }
     // 更新与这条撤回消息有关的消息
