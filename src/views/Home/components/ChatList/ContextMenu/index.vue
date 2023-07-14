@@ -38,7 +38,6 @@ const chatStore = useChatStore()
 // FIXME 未登录到登录这些监听没有变化。需处理
 const isCurrentUser = computed(() => props.msg?.fromUser.uid === userInfo.uid)
 const isAdmin = computed(() => userInfo?.power === PowerEnum.ADMIN)
-const isShowMenuSeparator = computed(() => userStore.isSign)
 
 // 撤回
 const onRecall = async () => {
