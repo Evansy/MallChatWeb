@@ -98,6 +98,11 @@ const scrollToMsg = async (msg: MsgType) => {
 
 /** 右键菜单 */
 const handleRightClick = (e: MouseEvent) => {
+  // perf: 未登录时，禁用右键菜单功能
+  if (!userStore.isSign) {
+    return
+  }
+
   // TODO：看它源码里提供了一个transformMenuPosition函数可以控制在容器范围内弹窗 我试验了一下报错
   // https://github.com/imengyu/vue3-context-menu/blob/f91a4140b4a425fa2770449a8be3570836cdfc23/examples/views/ChangeContainer.vue#LL242C5-L242C5
   const { x, y } = e
