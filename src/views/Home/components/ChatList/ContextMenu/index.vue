@@ -33,8 +33,7 @@ const props = defineProps({
 
 const emojiStore = useEmojiStore()
 const { uploadEmoji } = useEmojiUpload()
-const userStore = useUserStore()
-const userInfo = userStore?.userInfo
+const userInfo = useUserStore()?.userInfo
 const chatStore = useChatStore()
 // FIXME 未登录到登录这些监听没有变化。需处理
 const isCurrentUser = computed(() => props.msg?.fromUser.uid === userInfo.uid)
@@ -152,7 +151,7 @@ const onDelete = () => chatStore.deleteMsg(props.msg.message.id)
         <Icon icon="xiazai" :size="15" />
       </template>
     </ContextMenuItem>
-    <ContextMenuSeparator v-if="isShowMenuSeparator" />
+    <ContextMenuSeparator v-login-show />
     <ContextMenuItem label="删除" @click="onDelete" v-login-show>
       <template #icon>
         <Icon icon="shanchu" :size="13" />
