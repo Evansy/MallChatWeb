@@ -150,7 +150,7 @@ const onDelete = () => chatStore.deleteMsg(props.msg.message.id)
         <Icon icon="xiazai" :size="15" />
       </template>
     </ContextMenuItem>
-    <ContextMenuSeparator />
+    <ContextMenuSeparator v-login-show />
     <ContextMenuItem label="删除" @click="onDelete" v-login-show>
       <template #icon>
         <Icon icon="shanchu" :size="13" />
