@@ -3,7 +3,7 @@ import { useUserStore } from '@/stores/user'
 import { useChatStore } from '@/stores/chat'
 import { useGroupStore } from '@/stores/group'
 import { useCachedStore } from '@/stores/cached'
-import { WsResponseMessageType, WsRequestMsgType } from './wsType'
+import { WsResponseMessageType } from './wsType'
 import type {
   LoginSuccessResType,
   LoginInitResType,
@@ -22,14 +22,14 @@ class WS {
   #connectReady = false
 
   constructor() {
-    worker.postMessage('{"type":"initWS"}')
+    this.initConnect()
     // 收到消息
     worker.addEventListener('message', this.onWorkerMsg)
 
     // 后台重试次数达到上限之后，tab 获取焦点再重试
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden && !this.#connectReady) {
-        worker.postMessage('{"type":"initWS"}')
+        this.initConnect()
       }
 
       // 获得焦点停止消息闪烁
@@ -37,6 +37,11 @@ class WS {
         shakeTitle.clear()
       }
     })
+  }
+
+  initConnect = () => {
+    const token = localStorage.getItem('TOKEN')
+    worker.postMessage(`{"type":"initWS","value":${token ? `"${token}"` : null}}`)
   }
 
   onWorkerMsg = (e: MessageEvent<any>) => {
@@ -63,21 +68,10 @@ class WS {
     this.#connectReady = false
   }
 
-  // 检测登录状态
-  #detectionLoginStatus = () => {
-    const token = localStorage.getItem('TOKEN')
-    if (token) {
-      this.send({ type: WsRequestMsgType.Authorization, data: { token } })
-      // 获取用户详情
-      const userStore = useUserStore()
-      userStore.getUserDetailAction()
-    }
-  }
-
   #dealTasks = () => {
     this.#connectReady = true
     // 先探测登录态
-    this.#detectionLoginStatus()
+    // this.#detectionLoginStatus()
 
     setTimeout(() => {
       const userStore = useUserStore()
@@ -140,6 +134,8 @@ class WS {
         userStore.userInfo = { ...userStore.userInfo, ...rest }
         localStorage.setItem('USER_INFO', JSON.stringify(rest))
         localStorage.setItem('TOKEN', token)
+        // 获取用户详情
+        userStore.getUserDetailAction()
         // 更新一下请求里面的 token.
         computedToken.clear()
         computedToken.get()
