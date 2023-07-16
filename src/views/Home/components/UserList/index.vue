@@ -19,9 +19,9 @@ onMounted(() => {
           if (entries?.[0]?.isIntersecting) {
             // 加载更多
             await groupStore.loadMore()
-            // 如果 roomLastElRef.value 存在，则停止观察该元素
+            // 停止观察该元素
             groupListLastElRef.value && observer.unobserve(groupListLastElRef.value);
-            // 延迟10毫秒后，重新观察 roomLastElRef.value 元素
+            // 延迟500毫秒后，重新观察  groupListLastElRef 元素
             setTimeout(() => {
               groupListLastElRef.value && observer.observe(groupListLastElRef.value);
             }, 500);
@@ -56,7 +56,7 @@ const hiddenGroupListShow = () => (groupStore.showGroupList = false)
         v-loading.lock="groupStore.loading"
       >
         <UserItem v-for="user in groupUserList" :key="user.uid" :user="user" />
-        <li  key="visible_el" ref="groupListLastElRef">&nbsp;</li>
+        <li key="visible_el" ref="groupListLastElRef">&nbsp;</li>
       </TransitionGroup>
       <template v-if="groupUserList?.length === 0">
         <div class="list-no-data">暂无成员~</div>
