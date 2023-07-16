@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watchEffect, onMounted, nextTick } from 'vue'
+import { computed, ref,onUnmounted , onMounted, nextTick } from 'vue'
 
 import { pageSize } from '@/stores/chat'
 import { useGroupStore } from '@/stores/group'
@@ -10,36 +10,29 @@ const groupStore = useGroupStore()
 const groupUserList = computed(() => groupStore.userList)
 const statistic = computed(() => groupStore.countInfo)
 
-watchEffect(
-  () => {
-    // 滚动到最新消息
-    if (groupUserList.value?.length <= pageSize && groupListLastElRef.value) {
-      // 加载完列表再把加载更多放出来(一开始就放出来的话，会触发 2 次加载列表)
-      setTimeout(() => {
-        groupListLastElRef.value && (groupListLastElRef.value.style.display = 'block')
-      }, 10)
-    }
-  },
-  { flush: 'post' },
-)
+
 
 onMounted(() => {
   nextTick(() => {
     const observer = new IntersectionObserver(
-      async (entries) => {
-        if (entries?.[0]?.isIntersecting) {
-          // 加载更多
-          await groupStore.loadMore()
-        }
-      },
-      {
-        // root: chatListElRef.value,
-        // rootMargin: '0px',
-        threshold: 1,
-      },
+        async (entries) => {
+          if (entries?.[0]?.isIntersecting) {
+            // 加载更多
+            await groupStore.loadMore()
+            // 停止观察该元素
+            groupListLastElRef.value && observer.unobserve(groupListLastElRef.value);
+            // 延迟500毫秒后，重新观察  groupListLastElRef 元素
+            setTimeout(() => {
+              groupListLastElRef.value && observer.observe(groupListLastElRef.value);
+            }, 500);
+          }
+        },
     )
     // 元素可见性监听
     groupListLastElRef.value && observer.observe(groupListLastElRef.value)
+    onUnmounted(() => {
+      groupListLastElRef.value && observer.unobserve(groupListLastElRef.value);
+    });
   })
 })
 
@@ -63,7 +56,7 @@ const hiddenGroupListShow = () => (groupStore.showGroupList = false)
         v-loading.lock="groupStore.loading"
       >
         <UserItem v-for="user in groupUserList" :key="user.uid" :user="user" />
-        <li class="list-last-visible-el" key="visible_el" ref="groupListLastElRef">&nbsp;</li>
+        <li key="visible_el" ref="groupListLastElRef">&nbsp;</li>
       </TransitionGroup>
       <template v-if="groupUserList?.length === 0">
         <div class="list-no-data">暂无成员~</div>
