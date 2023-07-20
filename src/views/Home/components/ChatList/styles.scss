@@ -76,7 +76,7 @@
 .virtual-list {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 99%; // 100%时谷歌浏览器会出现无法滚动问题
   padding-right: 20px;
   padding-left: 20px;
   overflow-y: auto;
