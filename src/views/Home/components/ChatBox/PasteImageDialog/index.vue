@@ -35,18 +35,22 @@ watchEffect(() => {
     visible.value = false
   }
 })
+const onClear = () =>{
+  imageBody.value.url && URL.revokeObjectURL(imageBody.value.url)
+  pasteFile.value = undefined
+  imageBody.value = {
+    url: '',
+  }
+}
 const onSend = async () => {
   if (!pasteFile?.value) return
   // FIXME 如下逻辑可以尝试抽为 hook
   onChangeMsgType?.(MsgEnum.IMAGE) // 设置上传类型为图片
   await onChangeFile?.([pasteFile?.value]) // 上传文件并发送消息
   visible.value = false // 关闭弹窗
-  URL.revokeObjectURL(imageBody.value.url)
-  pasteFile.value = undefined
-  imageBody.value = {
-    url: '',
-  }
+  onClear()
 }
+
 </script>
 
 <template>
@@ -56,6 +60,7 @@ const onSend = async () => {
     v-model="visible"
     :close-on-click-modal="false"
     center
+    @close="onClear"
   >
     <img v-if="imageBody.url" :src="imageBody.url" />
 
