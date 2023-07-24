@@ -171,10 +171,7 @@ export const useChatStore = defineStore('chat', () => {
       if (typeof data.recallUid === 'number') {
         const cacheUser = cachedStore.userCachedList[data.recallUid]
         // 如果撤回者的 id 不等于消息发送人的 id, 或者你本人就是管理员，那么显示管理员撤回的。
-        if (
-          data.recallUid !== message.fromUser.uid ||
-          (data.recallUid === userInfo.uid && isAdmin.value)
-        ) {
+        if (data.recallUid !== message.fromUser.uid) {
           message.message.body = `管理员"${cacheUser.name}"撤回了一条成员消息` // 后期根据本地用户数据修改
         } else {
           // 如果被撤回的消息是消息发送者撤回，正常显示
