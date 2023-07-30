@@ -55,7 +55,10 @@ export default {
   blockUser: (data: { uid: number }) => putRequest<void>(urls.blockUser, data),
   /** 获取临时上传链接 */
   getUploadUrl: (params: any) =>
-    getRequest<{ downloadUrl: string; uploadUrl: string }>(urls.fileUpload, { localCache: 0, params }),
+    getRequest<{ downloadUrl: string; uploadUrl: string }>(urls.fileUpload, {
+      localCache: 0,
+      params,
+    }),
   /** 新增表情包 */
   addEmoji: (data: { uid: number; expressionUrl: string }) =>
     postRequest<MessageType>(urls.addEmoji, data),

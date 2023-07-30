@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { computed, ref,onUnmounted , onMounted, nextTick } from 'vue'
+import { computed, ref, onUnmounted, onMounted, nextTick } from 'vue'
 
-import { pageSize } from '@/stores/chat'
 import { useGroupStore } from '@/stores/group'
 import UserItem from './UserItem/index.vue'
 
@@ -10,29 +9,26 @@ const groupStore = useGroupStore()
 const groupUserList = computed(() => groupStore.userList)
 const statistic = computed(() => groupStore.countInfo)
 
-
-
 onMounted(() => {
+  let observer: IntersectionObserver
   nextTick(() => {
-    const observer = new IntersectionObserver(
-        async (entries) => {
-          if (entries?.[0]?.isIntersecting) {
-            // 加载更多
-            await groupStore.loadMore()
-            // 停止观察该元素
-            groupListLastElRef.value && observer.unobserve(groupListLastElRef.value);
-            // 延迟500毫秒后，重新观察  groupListLastElRef 元素
-            setTimeout(() => {
-              groupListLastElRef.value && observer.observe(groupListLastElRef.value);
-            }, 500);
-          }
-        },
-    )
+    observer = new IntersectionObserver(async (entries) => {
+      if (entries?.[0]?.isIntersecting) {
+        // 加载更多
+        await groupStore.loadMore()
+        // 停止观察该元素
+        groupListLastElRef.value && observer.unobserve(groupListLastElRef.value)
+        // 延迟500毫秒后，重新观察  groupListLastElRef 元素
+        setTimeout(() => {
+          groupListLastElRef.value && observer.observe(groupListLastElRef.value)
+        }, 500)
+      }
+    })
     // 元素可见性监听
     groupListLastElRef.value && observer.observe(groupListLastElRef.value)
-    onUnmounted(() => {
-      groupListLastElRef.value && observer.unobserve(groupListLastElRef.value);
-    });
+  })
+  onUnmounted(() => {
+    groupListLastElRef.value && observer.unobserve(groupListLastElRef.value)
   })
 })
 
@@ -67,6 +63,7 @@ const hiddenGroupListShow = () => (groupStore.showGroupList = false)
 </template>
 
 <style lang="scss" src="./styles.scss" scoped />
+
 <style>
 /* 1. 声明过渡效果 */
 .fade-move,

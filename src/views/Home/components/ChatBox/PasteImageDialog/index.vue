@@ -35,7 +35,7 @@ watchEffect(() => {
     visible.value = false
   }
 })
-const onClear = () =>{
+const onClear = () => {
   imageBody.value.url && URL.revokeObjectURL(imageBody.value.url)
   pasteFile.value = undefined
   imageBody.value = {
@@ -50,7 +50,6 @@ const onSend = async () => {
   visible.value = false // 关闭弹窗
   onClear()
 }
-
 </script>
 
 <template>

@@ -1,22 +1,20 @@
 <script lang="ts" setup>
 import { computed, type CSSProperties } from 'vue'
-const props = defineProps({
+
+interface Props {
   /** 图标名称 */
-  icon: {
-    type: String,
-    default: '',
-  },
+  icon: string
   /** 图标尺寸 */
-  size: {
-    type: [Number, String],
-    default: 16,
-  },
+  size?: number | string
   /** 旋转角度 */
-  rotate: Number,
+  rotate?: number
   /** 加载态 */
-  spin: Boolean,
+  spin?: boolean
   /** 是否多色 */
-  colorful: Boolean,
+  colorful?: boolean
+}
+const props = withDefaults(defineProps<Props>(), {
+  size: 16,
 })
 
 const iconCls = computed(() => {

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { PropType } from 'vue'
 import { MsgEnum } from '@/enums'
 import type { MsgType } from '@/services/types'
 import Image from './image.vue'
@@ -20,12 +19,7 @@ const componentMap = {
   [MsgEnum.EMOJI]: Emoji,
 }
 
-defineProps({
-  message: {
-    type: Object as PropType<MsgType>,
-    required: true,
-  },
-})
+defineProps<{ message: MsgType }>()
 </script>
 
 <template>

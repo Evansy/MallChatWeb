@@ -1,21 +1,13 @@
 <script setup lang="ts">
-import type { PropType } from 'vue'
 import type { CacheUserItem } from '@/services/types'
 
-const props = defineProps({
-  // 消息体
-  item: {
-    type: Object as PropType<CacheUserItem>,
-    required: true,
-  },
-  activeIndex: {
-    type: Number,
-  },
-  index: {
-    type: Number,
-  },
-  onSelect: Function,
-})
+interface Props {
+  item: CacheUserItem
+  activeIndex: number
+  index: number
+  onSelect?: (uid: number) => void
+}
+const props = defineProps<Props>()
 
 const onClick = () => {
   props.onSelect?.(props.item.uid)

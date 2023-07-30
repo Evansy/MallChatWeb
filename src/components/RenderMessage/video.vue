@@ -1,15 +1,9 @@
 <script setup lang="ts">
-import type { PropType } from 'vue'
 import type { VideoBody } from '@/services/types'
 import { useVideoPreviewStore } from '@/stores/preview'
 import { formatImage } from '@/utils'
 
-const props = defineProps({
-  body: {
-    type: Object as PropType<VideoBody>,
-    required: true,
-  },
-})
+const props = defineProps<{ body: VideoBody }>()
 
 const videoStore = useVideoPreviewStore()
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, type PropType, inject } from 'vue'
+import { computed, inject } from 'vue'
 import apis from '@/services/apis'
 import { ContextMenu, ContextMenuItem, type MenuOptions } from '@imengyu/vue3-context-menu'
 import { useUserStore } from '@/stores/user'
@@ -7,17 +7,12 @@ import { PowerEnum } from '@/enums'
 
 const onAtUser = inject<(uid: number, ignore: boolean) => void>('onSelectPerson')
 
-const props = defineProps({
+const props = defineProps<{
   // 消息体
-  uid: {
-    type: Number,
-    required: true,
-  },
+  uid: number
   // 菜单设置-其它的参数透传
-  options: {
-    type: Object as PropType<MenuOptions>,
-  },
-})
+  options?: MenuOptions
+}>()
 
 const userInfo = useUserStore()?.userInfo
 const isAdmin = computed(() => userInfo?.power === PowerEnum.ADMIN)

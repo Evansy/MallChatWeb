@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type PropType, computed } from 'vue'
+import { computed } from 'vue'
 import { Close } from '@element-plus/icons-vue'
 import { getFileSuffix, formatBytes } from '@/utils'
 import type { FileBody } from '@/services/types'
@@ -7,12 +7,7 @@ import useDownloadQuenuStore from '@/stores/downloadQuenu'
 
 const { downloadObjMap, download, quenu, cancelDownload } = useDownloadQuenuStore()
 
-const props = defineProps({
-  body: {
-    type: Object as PropType<FileBody>,
-    required: true,
-  },
-})
+const props = defineProps<{ body: FileBody }>()
 
 // 下载文件
 const downloadFile = () => {

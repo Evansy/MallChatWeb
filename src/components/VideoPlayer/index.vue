@@ -2,12 +2,7 @@
 import { onMounted, onUnmounted, ref } from 'vue'
 import Player from 'xgplayer'
 
-const props = defineProps({
-  url: {
-    type: String,
-    default: '',
-  },
-})
+const props = defineProps<{ url: string }>()
 
 const player = ref<Player>()
 

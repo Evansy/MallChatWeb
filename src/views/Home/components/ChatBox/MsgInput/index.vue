@@ -18,30 +18,25 @@ import PasteImageDialog from '../PasteImageDialog/index.vue'
 
 // 关闭透传 attrs 到组件根节点，传递到子节点  v-bind="$attrs"
 defineOptions({ inheritAttrs: false })
-const props = defineProps({
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-  modelValue: {
-    type: String,
-    default: '',
-  },
-  mentions: {
-    type: Array<IMention>,
-    default: () => [],
-  },
-  maxLength: {
-    type: Number,
-    default: -1,
-  },
-  minHeight: {
-    type: Number,
-    default: -1,
-  },
+
+interface Props {
+  // 是否启用 contentEditable
+  disabled?: boolean
+  // v-model 的 value
+  modelValue: string
+  // 艾特 成员列表数据
+  mentions?: IMention[]
+  // 最大长度
+  maxLength?: number
   // 劫持
-  className: String,
-  style: Object,
+  className?: string
+  style?: object
+}
+const props = withDefaults(defineProps<Props>(), {
+  disabled: false,
+  modelValue: '',
+  mentions: () => [],
+  maxLength: -1,
 })
 
 // v-model
@@ -132,7 +127,7 @@ watch(
   () => {
     personList.value = cachedStore.filterUsers(searchKey.value) as CacheUserItem[]
   },
-  { immediate: true },
+  // { immediate: true },
 )
 
 // 关闭选人弹窗时，重置选择的人的位置
@@ -528,6 +523,7 @@ const getKey = (item: CacheUserItem) => item.uid
     :class="[className, $attrs.class]"
     :style="[style as StyleValue, $attrs.style as StyleValue]"
   >
+    <!-- 输入框 -->
     <div
       ref="editorRef"
       v-bind="$attrs"
@@ -543,6 +539,7 @@ const getKey = (item: CacheUserItem) => item.uid
       @paste="onPaste"
     />
 
+    <!-- 人员选择浮层 -->
     <div
       v-show="showDialog"
       className="at-mentions__dialog"
@@ -561,6 +558,7 @@ const getKey = (item: CacheUserItem) => item.uid
       />
     </div>
 
+    <!-- 粘贴图片弹窗 -->
     <PasteImageDialog />
   </div>
 </template>

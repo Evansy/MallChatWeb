@@ -1,13 +1,8 @@
 <script setup lang="ts">
-import { ref, type PropType } from 'vue'
+import { ref } from 'vue'
 import type { EmojiBody } from '@/services/types'
 
-defineProps({
-  body: {
-    type: Object as PropType<EmojiBody>,
-    required: true,
-  },
-})
+defineProps<{ body: EmojiBody }>()
 
 const hasLoadError = ref(false)
 const isLoading = ref(true)

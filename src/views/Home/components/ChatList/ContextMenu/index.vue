@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, type PropType, inject } from 'vue'
+import { computed, inject } from 'vue'
 import { ElMessage } from 'element-plus'
 import apis from '@/services/apis'
 import {
@@ -19,17 +19,12 @@ import { urlToFile } from '@/utils'
 
 const onAtUser = inject<(uid: number, ignore: boolean) => void>('onSelectPerson')
 
-const props = defineProps({
+const props = defineProps<{
   // 消息体
-  msg: {
-    type: Object as PropType<MessageType>,
-    required: true,
-  },
+  msg: MessageType
   // 菜单设置-其它的参数透传
-  options: {
-    type: Object as PropType<MenuOptions>,
-  },
-})
+  options?: MenuOptions
+}>()
 
 const emojiStore = useEmojiStore()
 const { uploadEmoji } = useEmojiUpload()

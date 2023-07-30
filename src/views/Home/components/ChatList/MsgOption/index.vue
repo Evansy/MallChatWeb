@@ -1,15 +1,10 @@
 <script setup lang="ts">
-import { inject, type PropType } from 'vue'
+import { inject } from 'vue'
 import { useLikeToggle } from '@/hooks/useLikeToggle'
 import { useChatStore } from '@/stores/chat'
 import type { MessageType } from '@/services/types'
 
-const props = defineProps({
-  msg: {
-    type: Object as PropType<MessageType>,
-    required: true,
-  },
-})
+const props = defineProps<{ msg: MessageType }>()
 
 const focusMsgInput = inject<() => void>('focusMsgInput')
 const chatStore = useChatStore()

@@ -1,15 +1,10 @@
 <script setup lang="ts">
-import { ref, type PropType, computed } from 'vue'
+import { ref, computed } from 'vue'
 import type { ImageBody } from '@/services/types'
 import { useImgPreviewStore } from '@/stores/preview'
 import { formatImage } from '@/utils'
 
-const props = defineProps({
-  body: {
-    type: Object as PropType<ImageBody>,
-    required: true,
-  },
-})
+const props = defineProps<{ body: ImageBody }>()
 
 const imageStore = useImgPreviewStore()
 const hasLoadError = ref(false)

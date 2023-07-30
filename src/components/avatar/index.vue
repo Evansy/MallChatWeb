@@ -1,32 +1,25 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-defineProps({
+interface Props {
   /** 头像地址 */
-  src: {
-    type: String,
-    default: '',
-  },
+  src?: string
   /** 图标尺寸 */
-  size: {
-    type: Number,
-    default: 40,
-  },
+  size?: number
   /** 圆形(circle)和正方形(square)两种 */
-  shape: {
-    type: String,
-    default: 'circle',
-  },
+  shape?: 'circle' | 'square'
   /** 是否显示状态 */
-  showStatus: {
-    type: Boolean,
-    default: false,
-  },
+  showStatus?: boolean
   /** 在线状态 */
-  online: {
-    type: Boolean,
-    default: true,
-  },
+  online?: boolean
+}
+
+withDefaults(defineProps<Props>(), {
+  src: '',
+  size: 40,
+  shape: 'circle',
+  showStatus: false,
+  online: true,
 })
 
 const hasError = ref(false)
