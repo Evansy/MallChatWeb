@@ -1,14 +1,14 @@
 import { ref, reactive, computed } from 'vue'
 import { defineStore } from 'pinia'
 import apis from '@/services/apis'
-import type { MessageType, MarkItemType, RevokedMsgType, CacheUserReq } from '@/services/types'
+import type { MessageType, MarkItemType, RevokedMsgType, SessionItem } from '@/services/types'
 import { MarkEnum } from '@/enums'
 import { computedTimeBlock } from '@/utils/computedTime'
 import { useCachedStore } from '@/stores/cached'
 import { useUserStore } from '@/stores/user'
 import shakeTitle from '@/utils/shakeTitle'
 import notify from '@/utils/notification'
-import { MsgEnum, PowerEnum } from '@/enums'
+import { MsgEnum } from '@/enums'
 
 export const pageSize = 20
 
@@ -17,8 +17,10 @@ export const useChatStore = defineStore('chat', () => {
   const userStore = useUserStore()
   const messageMap = reactive<Map<number, MessageType>>(new Map<number, MessageType>()) // 消息Map
   const replyMapping = reactive<Map<number, number[]>>(new Map<number, number[]>()) // 回复消息映射
-  const userInfo = userStore.userInfo
-  const isAdmin = computed(() => userInfo?.power === PowerEnum.ADMIN)
+  const sessionList = reactive<SessionItem[]>([]) // 会话列表
+  const sessionOptions = reactive({ isLast: false, isLoading: false, cursor: '' })
+  // const userInfo = userStore.userInfo
+  // const isAdmin = computed(() => userInfo?.power === PowerEnum.ADMIN)
 
   const chatListToBottomAction = ref<() => void>() // 外部提供消息列表滚动到底部事件
   const isLast = ref(false) // 是否到底了
@@ -46,16 +48,6 @@ export const useChatStore = defineStore('chat', () => {
 
     /** 收集需要请求用户详情的 uid */
     const uidCollectYet: Set<number> = new Set() // 去重用
-    const uidCollects: CacheUserReq[] = []
-    const collectUidItem = (uid: number) => {
-      // 去重 uid
-      if (uidCollectYet.has(uid)) return
-      // 尝试取缓存user, 如果有 lastModifyTime 说明缓存过了，没有就一定是要缓存的用户了
-      const cacheUser = cachedStore.userCachedList[uid]
-      uidCollects.push({ uid, lastModifyTime: cacheUser?.lastModifyTime })
-      // 添加收集过的 uid
-      uidCollectYet.add(uid)
-    }
     computedList.forEach((msg) => {
       const replyItem = msg.message.body?.reply
       if (replyItem?.id) {
@@ -67,10 +59,10 @@ export const useChatStore = defineStore('chat', () => {
         // collectUidItem(replyItem.uid)
       }
       // 查询消息发送者的信息
-      collectUidItem(msg.fromUser.uid)
+      uidCollectYet.add(msg.fromUser.uid)
     })
     // 获取用户信息缓存
-    cachedStore.getBatchUserInfo(uidCollects)
+    cachedStore.getBatchUserInfo([...uidCollectYet])
     // 为保证获取的历史消息在前面
     const newList = [...computedList, ...chatMessageList.value]
     messageMap.clear() // 清空Map
@@ -83,7 +75,30 @@ export const useChatStore = defineStore('chat', () => {
     isLoading.value = false
   }
 
+  const getSessionList = async (isFresh = false) => {
+    sessionOptions.isLoading = true
+    const data = await apis
+      .getSessionList({
+        params: {
+          pageSize,
+          cursor: isFresh || !sessionOptions.cursor ? undefined : sessionOptions.cursor,
+        },
+      })
+      .send()
+      .catch(() => {
+        sessionOptions.isLoading = false
+      })
+    if (!data) return
+    isFresh
+      ? sessionList.splice(0, sessionList.length, ...data.list)
+      : sessionList.push(...data.list)
+    sessionOptions.cursor = data.cursor
+    sessionOptions.isLast = data.isLast
+    sessionOptions.isLoading = false
+  }
+
   // 默认执行一次
+  getSessionList()
   getMsgList()
 
   const pushMsg = (msg: MessageType) => {
@@ -93,7 +108,7 @@ export const useChatStore = defineStore('chat', () => {
     // 尝试取缓存user, 如果有 lastModifyTime 说明缓存过了，没有就一定是要缓存的用户了
     const uid = msg.fromUser.uid
     const cacheUser = cachedStore.userCachedList[uid]
-    cachedStore.getBatchUserInfo([{ uid, lastModifyTime: cacheUser?.lastModifyTime }])
+    cachedStore.getBatchUserInfo([uid])
 
     // 如果收到的消息里面是艾特自己的就发送系统通知
     if (msg.message.body.atUidList?.includes(userStore.userInfo.uid) && cacheUser) {
@@ -215,5 +230,8 @@ export const useChatStore = defineStore('chat', () => {
     loadMore,
     currentMsgReply,
     filterUser,
+    sessionList,
+    sessionOptions,
+    getSessionList,
   }
 })

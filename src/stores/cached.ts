@@ -1,7 +1,7 @@
 import { reactive } from 'vue'
 import { defineStore } from 'pinia'
 import apis from '@/services/apis'
-import type { CacheUserItem, CacheUserReq, CacheBadgeItem, CacheBadgeReq } from '@/services/types'
+import type { CacheUserItem, CacheBadgeItem } from '@/services/types'
 import { isDiffNow10Min } from '@/utils/computedTime'
 
 export const useCachedStore = defineStore(
@@ -11,14 +11,16 @@ export const useCachedStore = defineStore(
     const badgeCachedList = reactive<Record<number, Partial<CacheBadgeItem>>>({})
 
     /** 批量获取用户详细信息 */
-    const getBatchUserInfo = async (users: CacheUserReq[]) => {
+    const getBatchUserInfo = async (uids: number[]) => {
       // 没有 lastModifyTime 的要更新，lastModifyTime 距离现在 10 分钟已上的也要更新
-      const result = users.filter(
-        (item) => !item.lastModifyTime || isDiffNow10Min(item.lastModifyTime),
-      )
+      const result = uids
+        .map((uid) => {
+          const cacheUser = userCachedList[uid]
+          return { uid, lastModifyTime: cacheUser?.lastModifyTime }
+        })
+        .filter((item) => !item.lastModifyTime || isDiffNow10Min(item.lastModifyTime))
       if (!result.length) return
       const itemIdSet: Set<number> = new Set()
-      const itemIds: CacheBadgeReq[] = []
       const data = await apis.getUserInfoBatch(result).send()
       data?.forEach((item) => {
         // 更新最后更新时间。
@@ -32,21 +34,21 @@ export const useCachedStore = defineStore(
         // 收集徽章 id并缓存
         // 可以改成 itemIds，可以更快收集完成。
         const wearingItemId = item.wearingItemId
-        if (wearingItemId && !itemIdSet.has(wearingItemId)) {
-          const cacheUser = badgeCachedList[wearingItemId]
-          itemIds.push({ itemId: wearingItemId, lastModifyTime: cacheUser?.lastModifyTime })
-        }
+        wearingItemId && itemIdSet.add(wearingItemId)
       })
       // 批量请求徽章详情
-      getBatchBadgeInfo(itemIds)
+      getBatchBadgeInfo([...itemIdSet])
     }
 
     /** 批量获取用户徽章详细信息 */
-    const getBatchBadgeInfo = async (badges: CacheBadgeReq[]) => {
+    const getBatchBadgeInfo = async (itemIds: number[]) => {
       // 没有 lastModifyTime 的要更新，lastModifyTime 距离现在 10 分钟已上的也要更新
-      const result = badges.filter(
-        (item) => !item.lastModifyTime || isDiffNow10Min(item.lastModifyTime),
-      )
+      const result = itemIds
+        .map((itemId) => {
+          const cacheBadge = badgeCachedList[itemId]
+          return { itemId, lastModifyTime: cacheBadge?.lastModifyTime }
+        })
+        .filter((item) => !item.lastModifyTime || isDiffNow10Min(item.lastModifyTime))
       if (!result.length) return
       const data = await apis.getBadgesBatch(result).send()
       data?.forEach(

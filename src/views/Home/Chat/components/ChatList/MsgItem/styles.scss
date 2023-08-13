@@ -59,7 +59,7 @@
         display: inline-flex;
         column-gap: 8px;
         width: 100%;
-        padding: 6px 12px;
+        padding: 10px 12px;
         margin: 4px 0;
         cursor: pointer;
         user-select: none;
@@ -79,13 +79,18 @@
         }
 
         &-image {
-          width: 60px;
-          height: 60px;
-          margin-top: 6px;
-          overflow: hidden;
-          background-repeat: no-repeat;
-          background-position: center;
-          background-size: cover;
+          min-width: 60px;
+          max-width: 100%;
+          min-height: 60px;
+          max-height: 100%;
+
+          &-wrapper {
+            width: 60px;
+            min-width: 60px;
+            height: 60px;
+            overflow: hidden;
+            border-radius: 8px;
+          }
         }
 
         &-title {
@@ -94,7 +99,9 @@
         }
 
         &-desc {
+          margin-top: auto;
           font-size: 12px;
+          line-height: 1.5;
           color: var(--font-light);
         }
 

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import ToolBar from './components/ToolBar/index.vue'
-import SideBar from './components/SideBar/index.vue'
-import ChatBox from './components/ChatBox/index.vue'
 import { useImgPreviewStore, useVideoPreviewStore } from '@/stores/preview'
 import { onUnmounted, watch } from 'vue'
+import { RouterView } from 'vue-router'
+import AddFriendModal from '@/components/AddFriendModal/index.vue'
 
 const imageStore = useImgPreviewStore()
 const videoStore = useVideoPreviewStore()
@@ -34,8 +34,7 @@ onUnmounted(() => {
   <main class="home">
     <div class="wrapper">
       <ToolBar />
-      <SideBar />
-      <ChatBox />
+      <RouterView />
     </div>
     <footer class="footer">
       <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">闽ICP备2023004110号</a>
@@ -49,6 +48,7 @@ onUnmounted(() => {
       :url-list="[imageStore.previewUrl]"
       @close="imageStore.close()"
     />
+    <AddFriendModal />
     <div v-if="videoStore.isPlaying" class="video-play" style="pointer-events: none">
       <Icon icon="guanbi1" class="close" :size="30" @click="videoStore.close()" />
       <VideoPlayer :url="videoStore.previewUrl" style="pointer-events: auto" />

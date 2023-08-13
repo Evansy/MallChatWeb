@@ -9,11 +9,16 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    Avatar: typeof import('./components/avatar/index.vue')['default']
+    AddFriendModal: typeof import('./components/AddFriendModal/index.vue')['default']
+    Avatar: typeof import('./components/Avatar/index.vue')['default']
     ElAlert: typeof import('element-plus/es')['ElAlert']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElDialog: typeof import('element-plus/es')['ElDialog']
+    ElDivider: typeof import('element-plus/es')['ElDivider']
+    ElDropdown: typeof import('element-plus/es')['ElDropdown']
+    ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
+    ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
     ElIcon: typeof import('element-plus/es')['ElIcon']
     ElImageViewer: typeof import('element-plus/es')['ElImageViewer']
     ElInput: typeof import('element-plus/es')['ElInput']
@@ -21,6 +26,8 @@ declare module '@vue/runtime-core' {
     ElProgress: typeof import('element-plus/es')['ElProgress']
     ElText: typeof import('element-plus/es')['ElText']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
+    ElTree: typeof import('element-plus/es')['ElTree']
+    ElTreeV2: typeof import('element-plus/es')['ElTreeV2']
     Emoji: typeof import('./components/RenderMessage/emoji.vue')['default']
     File: typeof import('./components/RenderMessage/file.vue')['default']
     Icon: typeof import('./components/Icon/index.vue')['default']

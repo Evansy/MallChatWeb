@@ -3,6 +3,7 @@ import { computed, inject } from 'vue'
 import apis from '@/services/apis'
 import { ContextMenu, ContextMenuItem, type MenuOptions } from '@imengyu/vue3-context-menu'
 import { useUserStore } from '@/stores/user'
+import { useGlobalStore } from '@/stores/global'
 import { PowerEnum } from '@/enums'
 
 const onAtUser = inject<(uid: number, ignore: boolean) => void>('onSelectPerson')
@@ -15,6 +16,7 @@ const props = defineProps<{
 }>()
 
 const userInfo = useUserStore()?.userInfo
+const globalStore = useGlobalStore()
 const isAdmin = computed(() => userInfo?.power === PowerEnum.ADMIN)
 
 // 拉黑用户
@@ -23,6 +25,11 @@ const onBlockUser = async () => {
   if (uid) {
     await apis.blockUser({ uid }).send()
   }
+}
+// 添加好友
+const onAddFriend = async () => {
+  globalStore.addFriendModalInfo.show = true
+  globalStore.addFriendModalInfo.uid = props.uid
 }
 </script>
 
@@ -41,6 +48,11 @@ const onBlockUser = async () => {
     <ContextMenuItem v-if="isAdmin" label="拉黑(管理)" @click="onBlockUser">
       <template #icon>
         <Icon icon="lahei" :size="13" />
+      </template>
+    </ContextMenuItem>
+    <ContextMenuItem vLoginShow label="添加好友" @click="onAddFriend">
+      <template #icon>
+        <Icon icon="tianjia" :size="13" />
       </template>
     </ContextMenuItem>
   </ContextMenu>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, toRefs, type Ref, type PropType, inject } from 'vue'
+import { computed, nextTick, onMounted, ref, toRefs, type Ref, inject } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useChatStore, pageSize } from '@/stores/chat'
 import { formatTimestamp } from '@/utils/computedTime'
@@ -11,33 +11,26 @@ import type { TooltipTriggerType } from 'element-plus/es/components/tooltip/src/
 import { useLikeToggle } from '@/hooks/useLikeToggle'
 import { MsgEnum } from '@/enums'
 
-const props = defineProps({
-  // 消息体
-  msg: {
-    type: Object as PropType<MessageType>,
-    required: true,
+const props = withDefaults(
+  defineProps<{
+    // 消息体
+    msg: MessageType
+    // 是否显示时间
+    isShowTime?: boolean
+    // 是否显示时间段
+    isShowTimeBlock?: boolean
+    // 消息气泡模式：左右分布-spread、左对齐-left、右对齐-right
+    bubbleMode?: string
+    // 消息气泡操作触发方式
+    tooltipTrigger?: TooltipTriggerType | TooltipTriggerType[]
+  }>(),
+  {
+    isShowTime: true,
+    isShowTimeBlock: true,
+    bubbleMode: 'spread',
+    tooltipTrigger: () => ['hover'],
   },
-  // 是否显示时间
-  isShowTime: {
-    type: Boolean,
-    default: true,
-  },
-  // 是否显示时间段
-  isShowTimeBlock: {
-    type: Boolean,
-    default: true,
-  },
-  // 消息气泡模式：左右分布-spread、左对齐-left、右对齐-right
-  bubbleMode: {
-    type: String,
-    default: 'spread',
-  },
-  // 消息气泡操作触发方式
-  tooltipTrigger: {
-    type: [String, Array] as PropType<TooltipTriggerType | TooltipTriggerType[]>,
-    default: 'hover',
-  },
-})
+)
 
 // 多根元素的时候，不加这个透传属性会报 warning
 defineOptions({ inheritAttrs: false })

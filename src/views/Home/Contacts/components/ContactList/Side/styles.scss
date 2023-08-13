@@ -1,0 +1,55 @@
+.contact-tree {
+  // width: 24%;
+  width: 300px;
+  height: 100%;
+  padding: 20px 10px;
+}
+
+.item-info {
+  display: flex;
+  flex: 1;
+  align-items: stretch;
+
+  &-right {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-right: 18px;
+    margin-left: 8px;
+  }
+
+  &.contact-item {
+    .item-info-right {
+      justify-content: center;
+    }
+  }
+
+  &-name {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  &-accept-btn {
+    font-size: 12px;
+    color: var(--color-white);
+    appearance: none;
+    cursor: pointer;
+    background-color: var(--color-primary);
+    border: none;
+    border-radius: 4px;
+  }
+
+  &-accept-text {
+    font-size: 12px;
+    color: var(--font-gray);
+  }
+
+  &-msg {
+    font-size: 12px;
+    color: var(--font-light);
+  }
+}

@@ -10,6 +10,11 @@ import { useCachedStore } from '@/stores/cached'
 export const useUserInfo = (uid?: number | ComputedRef<number | undefined>) => {
   const cachedStore = useCachedStore()
   const userInfo = computed(() => (uid && cachedStore.userCachedList[toValue(uid as number)]) || {})
+  // 如果没有就请求
+  const resultUid = toValue(uid as number)
+  if (resultUid && Object.keys(userInfo.value).length === 0) {
+    cachedStore.getBatchUserInfo([resultUid])
+  }
   return userInfo
 }
 
@@ -23,5 +28,10 @@ export const useBadgeInfo = (itemId?: number | ComputedRef<number | undefined>) 
   const badgeInfo = computed(
     () => (itemId && cachedStore.badgeCachedList[toValue(itemId as number)]) || {},
   )
+  // 如果没有就请求
+  const resultItemId = toValue(itemId as number)
+  if (resultItemId && Object.keys(badgeInfo.value).length === 0) {
+    cachedStore.getBatchBadgeInfo([resultItemId])
+  }
   return badgeInfo
 }

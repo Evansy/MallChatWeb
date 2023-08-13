@@ -1,17 +1,11 @@
 <script setup lang="ts">
 import { toRef, ref } from 'vue'
-import type { PropType } from 'vue'
 import { OnlineEnum } from '@/enums'
 import type { UserItem } from '@/services/types'
 import { useUserInfo } from '@/hooks/useCached'
 import { useUserStore } from '@/stores/user'
 import ContextMenu from '../ContextMenu/index.vue'
-const props = defineProps({
-  user: {
-    type: Object as PropType<UserItem>,
-    required: true,
-  },
-})
+const props = defineProps<{ user: UserItem }>()
 const user = toRef(props.user)
 const userInfo = useUserInfo(user.value?.uid)
 const isShowMenu = ref(false) // 是否显示菜单
@@ -35,7 +29,12 @@ const handleRightClick = (e: MouseEvent) => {
 </script>
 
 <template>
-  <li class="user-list-item" :key="user.uid" @contextmenu.prevent.stop="handleRightClick($event)">
+  <li
+    class="user-list-item"
+    tabindex="0"
+    :key="user.uid"
+    @contextmenu.prevent.stop="handleRightClick($event)"
+  >
     <Avatar
       :src="userInfo.avatar"
       :size="24"

@@ -6,7 +6,6 @@ import type { UserItem } from '@/services/types'
 import { pageSize } from './chat'
 import cloneDeep from 'lodash/cloneDeep'
 import { OnlineEnum } from '@/enums'
-import type { CacheUserReq } from '@/services/types'
 import { uniqueUserList } from '@/utils/unique'
 
 const sorAction = (pre: UserItem, next: UserItem) => {
@@ -48,17 +47,9 @@ export const useGroupStore = defineStore('group', () => {
 
     /** 收集需要请求用户详情的 uid */
     const uidCollectYet: Set<number> = new Set() // 去重用
-    const uidCollects: CacheUserReq[] = []
-    const collectUidItem = (uid: number) => {
-      if (uidCollectYet.has(uid)) return
-      const cacheUser = cachedStore.userCachedList[uid]
-      uidCollects.push({ uid, lastModifyTime: cacheUser?.lastModifyTime })
-      // 添加收集过的 uid
-      uidCollectYet.add(uid)
-    }
-    data.list?.forEach((user) => collectUidItem(user.uid))
+    data.list?.forEach((user) => uidCollectYet.add(user.uid))
     // 获取用户信息缓存
-    cachedStore.getBatchUserInfo(uidCollects)
+    cachedStore.getBatchUserInfo([...uidCollectYet])
   }
 
   // 获取群成员数量统计

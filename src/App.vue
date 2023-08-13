@@ -2,6 +2,9 @@
 import { RouterView } from 'vue-router'
 // 全局导入 toast 样式
 import 'element-plus/es/components/message/style/css'
+import 'element-plus/es/components/message-box/style/css'
+// element dark 模式
+import 'element-plus/theme-chalk/dark/css-vars.css'
 </script>
 
 <template>
@@ -9,6 +12,7 @@ import 'element-plus/es/components/message/style/css'
     <RouterView />
   </div>
 </template>
+
 <style scoped>
 .app-wrapper {
   width: 100vw;

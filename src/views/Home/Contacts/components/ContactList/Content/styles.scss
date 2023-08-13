@@ -1,0 +1,51 @@
+.contact-content {
+  flex: 1;
+  background-color: var(--background-secondary);
+  border-radius: 8px;
+}
+
+.contact-main {
+  width: 400px;
+  margin: 30px auto;
+}
+
+.contact-info-wrapper {
+  display: flex;
+  column-gap: 10px;
+}
+
+.contact-request-msg {
+  font-size: 12px;
+  color: var(--font-light);
+}
+
+.contact-info-more {
+  height: 20px;
+
+  &-dropdown {
+    margin-left: auto;
+  }
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  color: var(--font-light);
+
+  &-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-white);
+  }
+
+  &-uid {
+    margin-top: auto;
+  }
+
+  &-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

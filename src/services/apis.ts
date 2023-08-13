@@ -12,6 +12,9 @@ import type {
   CacheUserReq,
   CacheBadgeReq,
   EmojiItem,
+  RequestFriendItem,
+  ContactItem,
+  SessionItem,
 } from '@/services/types'
 import { alovaIns } from './request'
 import urls from './urls'
@@ -23,7 +26,8 @@ const deleteRequest = <T>(url: string, params?: any) => alovaIns.Delete<T, unkno
 
 export default {
   /** 获取群成员列表 */
-  getGroupList: (params?: any) => getRequest<ListResponse<UserItem>>(urls.getGroupUserList, params),
+  getGroupList: (params?: any) =>
+    getRequest<ListResponse<UserItem>>(urls.getGroupUserList, { ...params, localCache: 0 }),
   /** 获取群成员统计 */
   getMemberStatistic: () => getRequest<GroupStatisticType>(urls.getMemberStatistic),
   /** 房间内的所有群成员列表-@专用 */
@@ -67,4 +71,21 @@ export default {
     getRequest<EmojiItem[]>(urls.getEmoji, { localCache: 0, params }),
   /** 删除id */
   deleteEmoji: (params: { id: number }) => deleteRequest<EmojiItem[]>(urls.deleteEmoji, params),
+  /** 获取联系人列表 */
+  getContactList: (params?: any) =>
+    getRequest<ListResponse<ContactItem>>(urls.getContactList, params),
+  /** 获取好友申请列表 */
+  requestFriendList: (params?: any) =>
+    getRequest<ListResponse<RequestFriendItem>>(urls.requestFriendList, params),
+  /** 发送添加好友请求 */
+  sendAddFriendRequest: (params: { targetUid: number; msg: string }) =>
+    postRequest<EmojiItem[]>(urls.sendAddFriendRequest, params),
+  /** 同意好友申请 */
+  applyFriendRequest: (params: { applyId: number }) =>
+    putRequest(urls.sendAddFriendRequest, params),
+  /** 同意好友申请 */
+  deleteFriend: (params: { applyId: number }) => deleteRequest(urls.deleteFriend, params),
+  /** 会话列表 */
+  getSessionList: (params?: any) =>
+    getRequest<ListResponse<SessionItem>>(urls.getSessionList, params),
 }

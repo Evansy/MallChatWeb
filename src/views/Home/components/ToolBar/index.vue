@@ -63,6 +63,15 @@ const menuList = [
 <template>
   <aside class="side-toolbar">
     <Avatar :src="avatar" :size="isPc ? 50 : 40" v-login="showSettingBox" />
+    <div class="tool-icons">
+      <router-link exactActiveClass="tool-icon-active" to="/">
+        <Icon class="tool-icon" icon="chat" :size="28" />
+      </router-link>
+      <router-link exactActiveClass="tool-icon-active" to="/contact">
+        <Icon class="tool-icon" icon="group" :size="28" />
+      </router-link>
+    </div>
+
     <div class="menu">
       <el-tooltip effect="dark" :placement="isPc ? 'right' : 'bottom'">
         <template #content>
