@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { inject } from 'vue'
 import { useLikeToggle } from '@/hooks/useLikeToggle'
 import { useChatStore } from '@/stores/chat'
 import type { MessageType } from '@/services/types'
+import eventBus from '@/utils/eventBus'
 
 const props = defineProps<{ msg: MessageType }>()
 
-const focusMsgInput = inject<() => void>('focusMsgInput')
 const chatStore = useChatStore()
 
 const { isLike, isDisLike, onLike, onDisLike } = useLikeToggle(props.msg.message)
@@ -17,7 +16,7 @@ const { isLike, isDisLike, onLike, onDisLike } = useLikeToggle(props.msg.message
 const onReplyMsg = async (msgFromUser: MessageType) => {
   if (!msgFromUser) return
   chatStore.currentMsgReply = msgFromUser
-  focusMsgInput?.()
+  eventBus.emit('focusMsgInput')
 }
 </script>
 

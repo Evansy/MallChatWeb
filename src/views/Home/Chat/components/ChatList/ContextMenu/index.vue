@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject } from 'vue'
+import { computed } from 'vue'
 import { ElMessage } from 'element-plus'
 import apis from '@/services/apis'
 import {
@@ -16,8 +16,7 @@ import { MsgEnum, PowerEnum } from '@/enums'
 import { useEmojiStore } from '@/stores/emoji'
 import { useEmojiUpload } from '@/hooks/useEmojiUpload'
 import { urlToFile } from '@/utils'
-
-const onAtUser = inject<(uid: number, ignore: boolean) => void>('onSelectPerson')
+import eventBus from '@/utils/eventBus'
 
 const props = defineProps<{
   // 消息体
@@ -33,6 +32,8 @@ const chatStore = useChatStore()
 // FIXME 未登录到登录这些监听没有变化。需处理
 const isCurrentUser = computed(() => props.msg?.fromUser.uid === userInfo.uid)
 const isAdmin = computed(() => userInfo?.power === PowerEnum.ADMIN)
+const onAtUser = (uid: number, ignoreCheck: boolean) =>
+  eventBus.emit('onSelectPerson', { uid, ignoreCheck })
 
 // 撤回
 const onRecall = async () => {
@@ -114,7 +115,7 @@ const onDelete = () => chatStore.deleteMsg(props.msg.message.id)
       ...props.options,
     }"
   >
-    <ContextMenuItem label="艾特Ta" @click="onAtUser?.(msg.fromUser.uid, true)" v-login-show>
+    <ContextMenuItem label="艾特Ta" @click="onAtUser(msg.fromUser.uid, true)" v-login-show>
       <template #icon> <span class="icon">@</span> </template>
     </ContextMenuItem>
     <ContextMenuItem

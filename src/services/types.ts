@@ -344,6 +344,22 @@ export type ContactItem = {
   uid: number
 }
 
+/** 是否全员展示的会话 0否 1是 */
+export enum IsAllUserEnum {
+  /** 0否 */
+  Not,
+  /** 1是 */
+  Yes,
+}
+
+/** 房间类型 1群聊 2单聊 */
+export enum RoomTypeEnum {
+  /** 1群聊 */
+  Group = 1,
+  /** 2单聊 */
+  Single,
+}
+
 /** 会话列表项 */
 export type SessionItem = {
   /** 房间最后活跃时间(用来排序) */
@@ -351,7 +367,7 @@ export type SessionItem = {
   /** 会话头像 */
   avatar: string
   /** 是否全员展示的会话 0否 1是 */
-  hot_Flag: number
+  hot_Flag: IsAllUserEnum
   /** 会话名称 */
   name: string
   /** 房间id */
@@ -359,7 +375,7 @@ export type SessionItem = {
   /** 最新消息 */
   text: string
   /** 房间类型 1群聊 2单聊 */
-  type: number
+  type: RoomTypeEnum
   /** 未读数 */
   unreadCount: number
 }

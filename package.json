@@ -28,6 +28,7 @@
     "dayjs": "^1.11.9",
     "element-plus": "^2.3.9",
     "lodash": "^4.17.21",
+    "mitt": "^3.0.1",
     "pinia": "^2.1.6",
     "pinia-plugin-persistedstate": "^3.2.0",
     "qrcode.vue": "^3.4.1",

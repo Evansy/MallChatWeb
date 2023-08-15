@@ -1,4 +1,4 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
-  "cSpell.words": ["mallchat"]
+  "cSpell.words": ["mallchat", "vueuse", "wechat", "weixin"]
 }

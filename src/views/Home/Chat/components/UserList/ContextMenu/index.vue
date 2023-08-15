@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { computed, inject } from 'vue'
+import { computed } from 'vue'
 import apis from '@/services/apis'
 import { ContextMenu, ContextMenuItem, type MenuOptions } from '@imengyu/vue3-context-menu'
 import { useUserStore } from '@/stores/user'
 import { useGlobalStore } from '@/stores/global'
 import { PowerEnum } from '@/enums'
-
-const onAtUser = inject<(uid: number, ignore: boolean) => void>('onSelectPerson')
+import eventBus from '@/utils/eventBus'
 
 const props = defineProps<{
   // 消息体
@@ -18,6 +17,8 @@ const props = defineProps<{
 const userInfo = useUserStore()?.userInfo
 const globalStore = useGlobalStore()
 const isAdmin = computed(() => userInfo?.power === PowerEnum.ADMIN)
+const onAtUser = (uid: number, ignoreCheck: boolean) =>
+  eventBus.emit('onSelectPerson', { uid, ignoreCheck })
 
 // 拉黑用户
 const onBlockUser = async () => {

@@ -1,18 +1,12 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useChatStore } from '@/stores/chat'
+import { IsAllUserEnum } from '@/services/types'
 import { formatTimestamp } from '@/utils/computedTime'
 
 // 选中的聊天对话
 const activeChat = ref(1)
 const chatStore = useChatStore()
-
-// 计算最后一条消息
-// const lastMassage = computed(
-//   () => chatStore.chatMessageList?.[chatStore.chatMessageList?.length - 1],
-// )
-// const lastUid = computed(() => lastMassage.value?.fromUser.uid)
-// const lastUserInfo = useUserInfo(lastUid)
 
 // mock数据等后端接口完成后变动0
 const mockData = computed(() => {
@@ -32,7 +26,7 @@ const mockData = computed(() => {
   return chatStore.sessionList.map((item) => ({
     roomId: item.roomId,
     name: item.name,
-    tag: item.hot_Flag === 1 ? '官方' : '',
+    tag: item.hot_Flag === IsAllUserEnum.Yes ? '官方' : '',
     avatar: item.avatar,
     lastMsg: item.text || '欢迎使用MallChat',
     lastMsgTime: formatTimestamp(item?.activeTime),

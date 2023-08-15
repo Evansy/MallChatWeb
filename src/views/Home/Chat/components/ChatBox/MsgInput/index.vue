@@ -1,6 +1,15 @@
 <script setup lang="ts">
 // 艾特功能参考自 https://github.com/MrHGJ/at-mentions
-import { ref, reactive, toRefs, watch, watchEffect, type StyleValue, inject } from 'vue'
+import {
+  ref,
+  reactive,
+  toRefs,
+  watch,
+  watchEffect,
+  onMounted,
+  nextTick,
+  type StyleValue,
+} from 'vue'
 import type { IMention, INode } from './types'
 import type { CacheUserItem } from '@/services/types'
 import { NodeType } from './types'
@@ -13,6 +22,8 @@ import {
 } from './utils'
 import { useCachedStore } from '@/stores/cached'
 import VirtualList from '@/components/VirtualList'
+import eventBus from '@/utils/eventBus'
+
 import MentionItem from './item.vue'
 import PasteImageDialog from '../PasteImageDialog/index.vue'
 
@@ -49,7 +60,6 @@ const emit = defineEmits([
   'send',
 ])
 
-const focusMsgInput = inject<() => void>('focusMsgInput')
 const { modelValue: value, mentions, maxLength, disabled } = toRefs(props)
 const editorRef = ref<HTMLElement | null>()
 const scrollRef = ref()
@@ -170,6 +180,12 @@ watch(disabled, (newVal) => {
       editorRef.value?.focus()
     })
   }
+})
+
+onMounted(() => {
+  nextTick(() => {
+    editorRef.value?.focus()
+  })
 })
 
 // 当输入框值发生变化时，解析它的数据，并回传
@@ -504,7 +520,7 @@ const onPaste = (e: ClipboardEvent) => {
 //
 const onSelectPerson = (uid: number, ignore = false) => {
   if (!uid) return
-  focusMsgInput?.()
+  eventBus.emit('focusMsgInput')
   setTimeout(() => {
     const userItem = cachedStore.userCachedList[uid]
     userItem && selectPerson?.(userItem as CacheUserItem, ignore)
@@ -528,6 +544,7 @@ const getKey = (item: CacheUserItem) => item.uid
       ref="editorRef"
       v-bind="$attrs"
       class="input"
+      id="at-mentions-input"
       :text="modelValue"
       :contenteditable="!disabled"
       @input="onInputText"
@@ -548,7 +565,7 @@ const getKey = (item: CacheUserItem) => item.uid
       <VirtualList
         v-if="personList?.length"
         ref="scrollRef"
-        class="person-warpper"
+        class="person-wrapper"
         dataPropName="item"
         :itemProps="{ activeIndex, onSelect: onSelectPerson }"
         :data="personList"

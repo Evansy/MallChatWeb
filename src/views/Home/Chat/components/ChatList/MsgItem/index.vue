@@ -10,6 +10,7 @@ import ContextMenu from '../ContextMenu/index.vue'
 import type { TooltipTriggerType } from 'element-plus/es/components/tooltip/src/trigger'
 import { useLikeToggle } from '@/hooks/useLikeToggle'
 import { MsgEnum } from '@/enums'
+import eventBus from '@/utils/eventBus'
 
 const props = withDefaults(
   defineProps<{
@@ -49,7 +50,8 @@ const chatCls = computed(() => ({
   'right': (isCurrentUser.value && props.bubbleMode === 'spread') || props.bubbleMode === 'right',
 }))
 
-const onAtUser = inject<(uid: number, ignore: boolean) => void>('onSelectPerson')
+const onAtUser = (uid: number, ignoreCheck: boolean) =>
+  eventBus.emit('onSelectPerson', { uid, ignoreCheck })
 const renderMsgRef = ref<HTMLElement | null>(null)
 const boxRef = ref<HTMLElement | null>(null)
 const tooltipPlacement = ref()
