@@ -1,16 +1,20 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, toRefs, type Ref, inject } from 'vue'
+import { computed, nextTick, onMounted, ref, toRefs, type Ref, inject, watch, reactive } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useChatStore, pageSize } from '@/stores/chat'
 import { formatTimestamp } from '@/utils/computedTime'
 import { useUserInfo, useBadgeInfo } from '@/hooks/useCached'
 import type { MessageType, MsgType } from '@/services/types'
-import MsgOption from '../MsgOption/index.vue'
-import ContextMenu from '../ContextMenu/index.vue'
+import { useElementVisibility } from '@vueuse/core'
 import type { TooltipTriggerType } from 'element-plus/es/components/tooltip/src/trigger'
 import { useLikeToggle } from '@/hooks/useLikeToggle'
 import { MsgEnum } from '@/enums'
 import eventBus from '@/utils/eventBus'
+import { useGlobalStore } from '@/stores/global'
+
+import MsgOption from '../MsgOption/index.vue'
+import ContextMenu from '../ContextMenu/index.vue'
+import UserContextMenu from '../UserContextMenu/index.vue'
 
 const props = withDefaults(
   defineProps<{
@@ -23,13 +27,13 @@ const props = withDefaults(
     // 消息气泡模式：左右分布-spread、左对齐-left、右对齐-right
     bubbleMode?: string
     // 消息气泡操作触发方式
-    tooltipTrigger?: TooltipTriggerType | TooltipTriggerType[]
+    tooltipTrigger?: TooltipTriggerType
   }>(),
   {
     isShowTime: true,
     isShowTimeBlock: true,
     bubbleMode: 'spread',
-    tooltipTrigger: () => ['hover'],
+    tooltipTrigger: () => 'hover',
   },
 )
 
@@ -40,6 +44,7 @@ const { message, fromUser } = toRefs(props.msg)
 
 const userStore = useUserStore()
 const chatStore = useChatStore()
+const globalStore = useGlobalStore()
 const userInfo = useUserInfo(fromUser.value.uid)
 const wearingItemId = computed(() => userInfo?.value?.wearingItemId)
 const badgeInfo = useBadgeInfo(wearingItemId)
@@ -50,18 +55,15 @@ const chatCls = computed(() => ({
   'right': (isCurrentUser.value && props.bubbleMode === 'spread') || props.bubbleMode === 'right',
 }))
 
-const onAtUser = (uid: number, ignoreCheck: boolean) =>
-  eventBus.emit('onSelectPerson', { uid, ignoreCheck })
 const renderMsgRef = ref<HTMLElement | null>(null)
 const boxRef = ref<HTMLElement | null>(null)
 const tooltipPlacement = ref()
+const readCount = reactive<{ read: number; unread: number | null }>({ read: 0, unread: null })
 const virtualListRef = inject<Ref>('virtualListRef')
 const isShowMenu = ref(false) // 是否显示菜单
+const isShowUserMenu = ref(false) // 是否显示用户名及头像右键菜单
 // 弹出定位
-const menuOptions = ref({
-  x: 0,
-  y: 0,
-})
+const menuOptions = ref({ x: 0, y: 0 })
 const { isLike, isDisLike, likeCount, dislikeCount, onLike, onDisLike } = useLikeToggle(
   props.msg.message,
 )
@@ -106,6 +108,23 @@ const handleRightClick = (e: MouseEvent) => {
   isShowMenu.value = true
 }
 
+/** 右键菜单 */
+const handleUserRightClick = (e: MouseEvent) => {
+  // perf: 未登录时，禁用右键菜单功能
+  if (!userStore.isSign) {
+    return
+  }
+
+  // TODO：看它源码里提供了一个transformMenuPosition函数可以控制在容器范围内弹窗 我试验了一下报错
+  // https://github.com/imengyu/vue3-context-menu/blob/f91a4140b4a425fa2770449a8be3570836cdfc23/examples/views/ChangeContainer.vue#LL242C5-L242C5
+  const { x, y } = e
+  menuOptions.value.x = x
+  menuOptions.value.y = y
+  isShowUserMenu.value = true
+}
+
+const msgVisibleEl = ref(null)
+
 onMounted(() => {
   nextTick(() => {
     if (renderMsgRef.value && boxRef.value) {
@@ -120,29 +139,65 @@ onMounted(() => {
       }
     }
   })
+
+  // 自己的消息才监听未读数计算
+  if (isCurrentUser.value) {
+    // 做元素进入退出视口监听，在视口内的自己的消息就做
+    // ~~5分钟内每10s中查询一次已读数~~
+    const targetIsVisible = useElementVisibility(msgVisibleEl)
+    watch(targetIsVisible, (visible) => {
+      if (visible) {
+        eventBus.emit('onAddReadCountTask', { msgId: props.msg.message.id })
+      } else {
+        eventBus.emit('onRemoveReadCountTask', { msgId: props.msg.message.id })
+      }
+    })
+  }
+
+  // 已读数
+  eventBus.on('onGetReadCount', (res) => {
+    const currentMsgCount = res.get(props.msg.message.id)
+    if (currentMsgCount) {
+      readCount.read = currentMsgCount.readCount
+      readCount.unread = currentMsgCount.unReadCount
+    }
+  })
 })
+
+const currentReadList = (msgId: number) => {
+  // 全部已读禁止打开弹窗。
+  if (readCount.unread === 0) return
+  globalStore.currentReadUnreadList.msgId = msgId
+  globalStore.currentReadUnreadList.show = true
+}
 </script>
 
 <template>
   <span v-if="isShowTimeBlock && msg.timeBlock" class="send-time-block">{{ msg.timeBlock }}</span>
   <span v-if="isRecall" class="send-time-block">{{ message.body }}</span>
   <transition name="remove">
-    <div :class="chatCls" v-if="!isRecall">
+    <div ref="msgVisibleEl" :class="chatCls" v-if="!isRecall">
+      <!-- 用户头像 -->
       <Avatar :src="userInfo.avatar" />
       <div class="chat-item-box" ref="boxRef">
         <div class="chat-item-user-info">
+          <!-- 用户徽章悬浮说明 -->
           <el-tooltip
             effect="dark"
             :content="badgeInfo?.describe"
             :placement="isCurrentUser ? 'top-end' : 'top-start'"
             :teleported="false"
           >
+            <!-- 用户徽章 -->
             <img v-show="badgeInfo?.img" class="user-badge" :src="badgeInfo?.img" />
           </el-tooltip>
-          <span class="user-name" @click="onAtUser?.(userInfo.uid!, true)">
+          <!-- 用户名 -->
+          <span class="user-name" @contextmenu.prevent.stop="handleUserRightClick($event)">
             {{ userInfo.name }}
           </span>
+          <!-- 消息归属地 -->
           <span class="user-ip">({{ userInfo.locPlace || '未知' }})</span>
+          <!-- 消息发送时间 -->
           <span class="send-time" v-if="isShowTime">
             {{ formatTimestamp(msg.message.sendTime) }}
           </span>
@@ -156,6 +211,7 @@ onMounted(() => {
           :show-arrow="false"
           :teleported="false"
         >
+          <!-- 消息的操作，点赞回复那些 -->
           <template #content>
             <MsgOption :msg="msg" />
           </template>
@@ -164,10 +220,27 @@ onMounted(() => {
             :class="['chat-item-content', { uploading: msg?.loading }]"
             @contextmenu.prevent.stop="handleRightClick($event)"
           >
+            <!-- 这里是未读数计算 -->
+            <div
+              v-if="isCurrentUser"
+              @click="currentReadList(msg.message.id)"
+              class="chat-item-read-count"
+              :class="{
+                'is-gray': readCount.unread === 0,
+              }"
+            >
+              <span class="chat-item-read-count-text" v-if="readCount.unread !== 0">
+                {{ readCount.read }}
+              </span>
+              <el-icon v-else><IEpCheck /></el-icon>
+            </div>
+            <!-- 消息加载中 -->
             <Icon v-if="msg?.loading" icon="loading" :size="20" spin />
+            <!-- 渲染消息内容体 -->
             <RenderMessage :message="message" />
           </div>
         </el-tooltip>
+        <!-- 消息回复部分 -->
         <div
           v-if="message.body?.reply"
           class="chat-item-reply"
@@ -179,6 +252,7 @@ onMounted(() => {
             {{ message.body.reply.username }}: {{ message.body.reply.body }}
           </span>
         </div>
+        <!-- 点赞数量和倒赞数量及动画 -->
         <div v-if="likeCount + dislikeCount > 0" class="extra">
           <transition name="fade">
             <span
@@ -209,6 +283,7 @@ onMounted(() => {
     </div>
   </transition>
   <ContextMenu v-model:show="isShowMenu" :options="menuOptions" :msg="msg" />
+  <UserContextMenu v-model:show="isShowUserMenu" :options="menuOptions" :uid="msg.fromUser.uid" />
 </template>
 
 <style lang="scss" src="./styles.scss" />

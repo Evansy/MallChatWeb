@@ -4,6 +4,7 @@ import type { ElInput } from 'element-plus'
 import { useWsLoginStore } from '@/stores/ws'
 import { useUserStore } from '@/stores/user'
 import { useChatStore } from '@/stores/chat'
+import { useGlobalStore } from '@/stores/global'
 import { useUserInfo } from '@/hooks/useCached'
 import MsgInput from '../MsgInput/index.vue'
 import { insertInputText } from '../MsgInput/utils'
@@ -20,6 +21,7 @@ import { useRecording } from '@/hooks/useRecording'
 import { MsgEnum } from '@/enums'
 import { useMockMessage } from '@/hooks/useMockMessage'
 import { generateBody } from '@/utils'
+import renderReplyContent from '@/utils/renderReplyContent'
 import eventBus from '@/utils/eventBus'
 import { ElMessage } from 'element-plus'
 import throttle from 'lodash/throttle'
@@ -27,6 +29,7 @@ import throttle from 'lodash/throttle'
 const client = judgeClient()
 
 const chatStore = useChatStore()
+const globalStore = useGlobalStore()
 const isSending = ref(false)
 const inputMsg = ref('')
 const mentionRef = ref<typeof ElInput>()
@@ -65,9 +68,9 @@ onBeforeUnmount(() => {
 })
 
 // 发送消息
-const send = (msgType: MsgEnum, body: any, roomId = 1) => {
+const send = (msgType: MsgEnum, body: any) => {
   apis
-    .sendMsg({ roomId, msgType, body })
+    .sendMsg({ roomId: globalStore.currentSession.roomId, msgType, body })
     .send()
     .then((res) => {
       if (res.message.type === MsgEnum.TEXT) {
@@ -93,7 +96,7 @@ const sendMsgHandler = () => {
   }
 
   isSending.value = true
-  send(1, {
+  send(MsgEnum.TEXT, {
     content: inputMsg.value,
     replyMsgId: currentMsgReply.value.message?.id,
     atUidList: mentionList.value.map((item) => item.uid),
@@ -113,22 +116,7 @@ const emojiList = computed(() => emojiStore.emojiList)
 const showReplyContent = () => {
   const name = currentReplyUser?.value.name
   const type = currentMsgReply?.value.message?.type
-  if (type === MsgEnum.TEXT) {
-    return `${name}: ${currentMsgReply?.value.message?.body?.content}`
-  }
-  if (type === MsgEnum.IMAGE) {
-    return `${name}: [图片]`
-  }
-  if (type === MsgEnum.FILE) {
-    return `${name}: [文件]`
-  }
-  if (type === MsgEnum.VOICE) {
-    return `${name}: [语音]`
-  }
-  if (type === MsgEnum.VIDEO) {
-    return `${name}: [视频]`
-  }
-  return ''
+  return renderReplyContent(name, type, currentMsgReply?.value.message?.body?.content)
 }
 
 // 置空回复的消息

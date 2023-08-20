@@ -4,11 +4,10 @@ import { useContactStore } from '@/stores/contacts'
 import { RequestFriendAgreeStatus } from '@/services/types'
 import type { RequestFriendItem } from '@/services/types'
 import { useUserInfo } from '@/hooks/useCached'
-import type { TreeNode, TreeNodeData } from 'element-plus/es/components/tree-v2/src/types'
 
-const props = defineProps<{ node: TreeNode; data: TreeNodeData & { item: RequestFriendItem } }>()
+const props = defineProps<{ item: RequestFriendItem }>()
 
-const { item } = toRefs(props.data)
+const { item } = toRefs(props)
 
 const contactStore = useContactStore()
 
@@ -17,24 +16,21 @@ const currentUser = useUserInfo(currentUid.value)
 </script>
 
 <template>
-  <span v-if="!node.isLeaf">{{ node.label }}</span>
-  <div class="item-info" v-else>
+  <div class="item-info">
     <Avatar class="avatar" :src="currentUser.avatar" :size="40" />
     <div class="item-info-right">
       <span class="item-info-name">
         {{ currentUser.name }}
-        <template v-if="node.isLeaf && data.item">
-          <button
-            class="item-info-accept-btn"
-            v-if="data.item.status === RequestFriendAgreeStatus.Waiting"
-            @click="contactStore.onAcceptFriend(data.item.applyId)"
-          >
-            接受
-          </button>
-          <span class="item-info-accept-text" v-else>已添加</span>
-        </template></span
-      >
-      <span class="item-info-msg">{{ data.item?.msg }}</span>
+        <button
+          class="item-info-accept-btn"
+          v-if="item.status === RequestFriendAgreeStatus.Waiting"
+          @click="contactStore.onAcceptFriend(item.applyId)"
+        >
+          接受
+        </button>
+        <span class="item-info-accept-text" v-else>已添加</span>
+      </span>
+      <span class="item-info-msg">{{ item?.msg }}</span>
     </div>
   </div>
 </template>

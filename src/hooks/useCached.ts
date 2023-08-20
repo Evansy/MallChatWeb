@@ -1,4 +1,4 @@
-import { computed, toValue } from 'vue'
+import { computed, toValue, type Ref } from 'vue'
 import type { ComputedRef } from 'vue'
 import { useCachedStore } from '@/stores/cached'
 
@@ -7,7 +7,7 @@ import { useCachedStore } from '@/stores/cached'
  * @param uid 用户 ID
  * @description 引入该Hook后，可响应式获取用户信息
  */
-export const useUserInfo = (uid?: number | ComputedRef<number | undefined>) => {
+export const useUserInfo = (uid?: number | ComputedRef<number | undefined> | Ref<number>) => {
   const cachedStore = useCachedStore()
   const userInfo = computed(() => (uid && cachedStore.userCachedList[toValue(uid as number)]) || {})
   // 如果没有就请求

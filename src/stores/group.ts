@@ -26,9 +26,7 @@ export const useGroupStore = defineStore('group', () => {
   const cachedStore = useCachedStore()
   // 消息列表
   const userList = ref<UserItem[]>([])
-  const isLast = ref(false)
-  const loading = ref(true)
-  const cursor = ref()
+  const userListOptions = reactive({ isLast: false, loading: true, cursor: '' })
   const countInfo = reactive({ onlineNum: 0, totalNum: 0 })
 
   // 移动端控制显隐
@@ -36,14 +34,16 @@ export const useGroupStore = defineStore('group', () => {
 
   // 获取群成员
   const getGroupUserList = async () => {
-    const data = await apis.getGroupList({ params: { pageSize, cursor: cursor.value } }).send()
+    const data = await apis
+      .getGroupList({ params: { pageSize, cursor: userListOptions.cursor } })
+      .send()
     if (!data) return
     const tempNew = cloneDeep(uniqueUserList([...data.list, ...userList.value]))
     tempNew.sort(sorAction)
     userList.value = tempNew
-    cursor.value = data.cursor
-    isLast.value = data.isLast
-    loading.value = false
+    userListOptions.cursor = data.cursor
+    userListOptions.isLast = data.isLast
+    userListOptions.loading = false
 
     /** 收集需要请求用户详情的 uid */
     const uidCollectYet: Set<number> = new Set() // 去重用
@@ -65,7 +65,7 @@ export const useGroupStore = defineStore('group', () => {
 
   // 加载更多群成员
   const loadMore = async () => {
-    if (isLast.value) return
+    if (userListOptions.isLast) return
     await getGroupUserList()
   }
 
@@ -89,7 +89,7 @@ export const useGroupStore = defineStore('group', () => {
 
   return {
     userList,
-    loading,
+    userListOptions,
     loadMore,
     getGroupUserList,
     countInfo,

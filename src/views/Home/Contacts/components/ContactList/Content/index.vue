@@ -2,13 +2,15 @@
 import { computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useContactStore } from '@/stores/contacts'
+import { useGlobalStore } from '@/stores/global'
 import { useUserInfo } from '@/hooks/useCached'
 import { RequestFriendAgreeStatus } from '@/services/types'
 import type { RequestFriendItem } from '@/services/types'
 
 const contactStore = useContactStore()
+const globalStore = useGlobalStore()
 
-const selectedContact = computed(() => contactStore.selectedContact as RequestFriendItem)
+const selectedContact = computed(() => globalStore.currentSelectedContact as RequestFriendItem)
 const selectedContactUid = computed(() => selectedContact?.value?.uid)
 const isNotFriend = computed(
   () => selectedContact.value?.status === RequestFriendAgreeStatus.Waiting,

@@ -58,6 +58,7 @@
     .message-time {
       font-size: 12px;
       color: var(--font-light);
+      white-space: nowrap;
     }
 
     &:hover {

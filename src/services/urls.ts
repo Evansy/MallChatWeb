@@ -19,6 +19,7 @@ export default {
   addEmoji: `${prefix}/capi/user/emoji`, // 增加表情
   deleteEmoji: `${prefix}/capi/user/emoji`, // 删除表情
   getEmoji: `${prefix}/capi/user/emoji/list`, // 查询表情包
+
   // -------------- 好友相关 ---------------
   getContactList: `${prefix}/capi/user/friend/page`, // 联系人列表
   requestFriendList: `${prefix}/capi/user/friend/apply/page`, // 好友申请列表
@@ -27,4 +28,6 @@ export default {
 
   // -------------- 聊天室相关 ---------------
   getSessionList: `${prefix}/capi/chat/public/contact/page`, // 会话列表
+  getMsgReadList: `${prefix}/capi/chat/msg/read/page`, // 消息的已读未读列表
+  getMsgReadCount: `${prefix}/capi/chat/msg/read`, // 消息已读未读数
 }

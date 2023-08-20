@@ -4,6 +4,9 @@ import { useImgPreviewStore, useVideoPreviewStore } from '@/stores/preview'
 import { onUnmounted, watch } from 'vue'
 import { RouterView } from 'vue-router'
 import AddFriendModal from '@/components/AddFriendModal/index.vue'
+import MsgReadModal from '@/components/MsgReadModal/index.vue'
+import CreateGroupModal from '@/components/CreateGroupModal/index.vue'
+import { initListener, clearListener } from '@/utils/readCountQueue'
 
 const imageStore = useImgPreviewStore()
 const videoStore = useVideoPreviewStore()
@@ -25,8 +28,11 @@ watch(
   },
 )
 
+initListener()
+
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyDown)
+  clearListener()
 })
 </script>
 
@@ -48,12 +54,14 @@ onUnmounted(() => {
       :url-list="[imageStore.previewUrl]"
       @close="imageStore.close()"
     />
-    <AddFriendModal />
     <div v-if="videoStore.isPlaying" class="video-play" style="pointer-events: none">
       <Icon icon="guanbi1" class="close" :size="30" @click="videoStore.close()" />
       <VideoPlayer :url="videoStore.previewUrl" style="pointer-events: auto" />
     </div>
+    <AddFriendModal />
     <LoginBox />
+    <MsgReadModal />
+    <CreateGroupModal />
   </main>
 </template>
 

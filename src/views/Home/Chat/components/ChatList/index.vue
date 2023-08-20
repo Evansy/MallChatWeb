@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, nextTick, provide } from 'vue'
+import { ref, onMounted, nextTick, provide, computed } from 'vue'
 import throttle from 'lodash/throttle'
 import { useChatStore } from '@/stores/chat'
 import type { MessageType } from '@/services/types'
@@ -8,6 +8,9 @@ import MsgItem from './MsgItem/index.vue'
 
 const chatStore = useChatStore()
 const virtualListRef = ref()
+const messageOptions = computed(() => chatStore.currentMessageOptions)
+const chatMessageList = computed(() => chatStore.chatMessageList)
+const currentNewMsgCount = computed(() => chatStore.currentNewMsgCount)
 
 // 回到底部
 const goToBottom = () => {
@@ -20,7 +23,9 @@ const goToBottom = () => {
 // 回到最新消息
 const goToNewMessage = () => {
   // 未读消息数 = 总数 - 新消息数
-  virtualListRef.value.scrollToIndex(chatStore.chatMessageList.length - chatStore.newMsgCount)
+  virtualListRef.value.scrollToIndex(
+    chatMessageList.value.length - (currentNewMsgCount.value?.count || 0),
+  )
   chatStore.clearNewMsgCount()
 }
 
@@ -36,8 +41,8 @@ onMounted(() => {
 })
 
 // 到顶部时触发函数 记录旧的滚动高度，加载更多消息后滚动回加载时那条消息的位置
-const onTotop = async () => {
-  if (chatStore.isLoading) return
+const onToTop = async () => {
+  if (messageOptions.value?.isLoading) return
   const oldIndex = virtualListRef.value.getSizes()
   await chatStore.loadMore()
   virtualListRef.value.scrollToIndex(virtualListRef.value.getSizes() - oldIndex)
@@ -52,10 +57,10 @@ const onScroll = throttle((eventData) => {
   // 是否已滚动到底部最后一个可视范围内
   const isScrollEnd = offset + clientSize >= scrollSize - clientSize
   if (isScrollEnd) {
-    chatStore.isStartCount = false
+    currentNewMsgCount.value && (currentNewMsgCount.value.isStart = false)
     chatStore.clearNewMsgCount()
   } else {
-    chatStore.isStartCount = true
+    currentNewMsgCount.value && (currentNewMsgCount.value.isStart = true)
   }
 }, 100)
 
@@ -64,28 +69,32 @@ const getKey = (item: MessageType) => item.message.id
 
 <template>
   <div class="chat-msg-list" @contextmenu.prevent>
-    <el-icon v-if="chatStore.isLoading" :size="14" class="loading">
+    <el-icon v-if="messageOptions?.isLoading" :size="14" class="loading">
       <IEpLoading />消息加载中
     </el-icon>
     <VirtualList
-      v-if="chatStore.chatMessageList?.length"
+      v-if="chatMessageList?.length"
       ref="virtualListRef"
       class="virtual-list scroll-hover"
       dataPropName="msg"
-      :data="chatStore.chatMessageList"
+      :data="chatMessageList"
       :data-key="getKey"
       :item="MsgItem"
       :size="20"
-      @totop="onTotop"
+      @totop="onToTop"
       @scroll="onScroll"
       @ok="goToBottom"
     />
     <!-- <VideoPlayer></VideoPlayer> -->
-    <template v-if="!chatStore.isLoading && chatStore.chatMessageList?.length === 0">
+    <template v-if="!messageOptions?.isLoading && chatMessageList?.length === 0">
       <div class="empty">暂无消息，快来发送第一条消息吧~</div>
     </template>
-    <span class="new-msgs-tips" v-show="chatStore.newMsgCount > 0" @click="goToNewMessage">
-      {{ chatStore.newMsgCount }} 条新消息
+    <span
+      class="new-msgs-tips"
+      v-show="currentNewMsgCount?.count && currentNewMsgCount.count > 0"
+      @click="goToNewMessage"
+    >
+      {{ currentNewMsgCount?.count }} 条新消息
       <el-icon :size="10"><IEpArrowDownBold /></el-icon>
     </span>
   </div>

@@ -271,6 +271,8 @@ export type EmojiBody = {
 export type MsgType = {
   /** 消息ID */
   id: number
+  /**  房间 ID */
+  roomId: number
   /** 消息类型 */
   type: MsgEnum
   /** 动态消息体-`根据消息类型变化` */
@@ -378,4 +380,14 @@ export type SessionItem = {
   type: RoomTypeEnum
   /** 未读数 */
   unreadCount: number
+}
+
+/** 消息已读未读数列表项 */
+export type MsgReadUnReadCountType = {
+  /** 消息 ID */
+  msgId: number
+  /** 已读数 */
+  readCount: number
+  /** 未读数 */
+  unReadCount: number | null
 }

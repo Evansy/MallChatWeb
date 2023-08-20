@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useGlobalStore } from '@/stores/global'
+import { RoomTypeEnum } from '@/services/types'
 
 import UserList from '../UserList/index.vue'
 import ChatList from '../ChatList/index.vue'
 import SendBar from './SendBar/index.vue'
 
 const isSelect = ref(false)
+const globalStore = useGlobalStore()
+const currentSession = computed(() => globalStore.currentSession)
 </script>
 
 <template>
@@ -19,7 +23,7 @@ const isSelect = ref(false)
         <SendBar />
       </div>
     </div>
-    <UserList />
+    <UserList v-show="currentSession.type === RoomTypeEnum.Group" />
   </div>
 </template>
 

@@ -15,6 +15,7 @@ import type {
   RequestFriendItem,
   ContactItem,
   SessionItem,
+  MsgReadUnReadCountType,
 } from '@/services/types'
 import { alovaIns } from './request'
 import urls from './urls'
@@ -40,7 +41,8 @@ export default {
   getBadgesBatch: (badges: CacheBadgeReq[]) =>
     postRequest<CacheBadgeItem[]>(urls.getBadgesBatch, { reqList: badges }),
   /** 获取消息列表 */
-  getMsgList: (params?: any) => getRequest<ListResponse<MessageType>>(urls.getMsgList, params),
+  getMsgList: (params?: any) =>
+    getRequest<ListResponse<MessageType>>(urls.getMsgList, { localCache: 0, ...params }),
   /** 发送消息 */
   sendMsg: (data?: MessageReq) => postRequest<MessageType>(urls.sendMsg, data),
   /** 标记消息，点赞等 */
@@ -73,10 +75,10 @@ export default {
   deleteEmoji: (params: { id: number }) => deleteRequest<EmojiItem[]>(urls.deleteEmoji, params),
   /** 获取联系人列表 */
   getContactList: (params?: any) =>
-    getRequest<ListResponse<ContactItem>>(urls.getContactList, params),
+    getRequest<ListResponse<ContactItem>>(urls.getContactList, { localCache: 0, params }),
   /** 获取好友申请列表 */
   requestFriendList: (params?: any) =>
-    getRequest<ListResponse<RequestFriendItem>>(urls.requestFriendList, params),
+    getRequest<ListResponse<RequestFriendItem>>(urls.requestFriendList, { localCache: 0, params }),
   /** 发送添加好友请求 */
   sendAddFriendRequest: (params: { targetUid: number; msg: string }) =>
     postRequest<EmojiItem[]>(urls.sendAddFriendRequest, params),
@@ -88,4 +90,12 @@ export default {
   /** 会话列表 */
   getSessionList: (params?: any) =>
     getRequest<ListResponse<SessionItem>>(urls.getSessionList, params),
+  /** 消息的已读未读列表 */
+  getMsgReadList: (params?: any) =>
+    getRequest<ListResponse<{ uid: number }>>(urls.getMsgReadList, { localCache: 0, ...params }),
+  /** 消息已读未读数 */
+  getMsgReadCount: (params?: any) =>
+    getRequest<MsgReadUnReadCountType[]>(urls.getMsgReadCount, { localCache: 0, ...params }),
+  /** 消息阅读上报 */
+  markMsgRead: (params?: any) => putRequest<MsgReadUnReadCountType[]>(urls.getMsgReadCount, params),
 }

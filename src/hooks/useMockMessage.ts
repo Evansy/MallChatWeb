@@ -1,12 +1,15 @@
 import type { MessageType } from '@/services/types'
 import { computed } from 'vue'
+import { useGlobalStore } from '@/stores/global'
 
 /**
  * Mock 消息 Hook
  */
 export const useMockMessage = () => {
+  const globalStore = useGlobalStore()
   // 获取本地存储的用户信息
   const userInfo = computed(() => JSON.parse(localStorage.getItem('USER_INFO') || '{}'))
+  const currentRoomId = computed(() => globalStore.currentSession.roomId)
 
   /**
    * 模拟消息生成
@@ -32,6 +35,7 @@ export const useMockMessage = () => {
       },
       message: {
         id: uniqueId,
+        roomId: currentRoomId.value,
         sendTime: Number(currentTimeStamp),
         content,
         urlContentMap: {},

@@ -49,7 +49,7 @@ const hiddenGroupListShow = () => (groupStore.showGroupList = false)
         tag="ul"
         name="fade"
         class="user-list"
-        v-loading.lock="groupStore.loading"
+        v-loading.lock="groupStore.userListOptions.loading"
       >
         <UserItem v-for="user in groupUserList" :key="user.uid" :user="user" />
         <li key="visible_el" ref="groupListLastElRef">&nbsp;</li>
