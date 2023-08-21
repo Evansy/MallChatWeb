@@ -33,7 +33,7 @@ const onAtUser = (uid: number, ignoreCheck: boolean) =>
     <ContextMenuItem label="艾特Ta" @click="onAtUser?.(props.uid, true)" v-login-show>
       <template #icon> <span class="icon">@</span> </template>
     </ContextMenuItem>
-    <ContextMenuItem vLoginShow label="添加好友" @click="onAddFriend">
+    <ContextMenuItem vLoginShow v-friends="uid" label="添加好友" @click="onAddFriend">
       <template #icon>
         <Icon icon="tianjia" :size="13" />
       </template>

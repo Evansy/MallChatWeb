@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, reactive, watch } from 'vue'
-import { RoomTypeEnum } from '@/services/types'
+import { RoomTypeEnum } from '@/enums'
 import type { ContactItem, RequestFriendItem } from '@/services/types'
 import { clearQueue } from '@/utils/readCountQueue'
 import apis from '@/services/apis'
@@ -21,10 +21,10 @@ export const useGlobalStore = defineStore('global', () => {
     uid: undefined,
   })
   // 创建群聊
-  const createGroupModalInfo = reactive<{ show: boolean }>({ show: false })
-
-  // 初始化标记房间最新消息已读
-  apis.markMsgRead({ roomId: currentSession.roomId }).send()
+  const createGroupModalInfo = reactive<{ show: boolean; selectedUid: number[] }>({
+    show: false,
+    selectedUid: [],
+  })
 
   // 切换会话的时候重置消息已读数查询
   watch(currentSession, (val) => {

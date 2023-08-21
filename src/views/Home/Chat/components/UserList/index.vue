@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import { computed, ref, onUnmounted, onMounted, nextTick } from 'vue'
+import { Plus } from '@element-plus/icons-vue'
 
 import { useGroupStore } from '@/stores/group'
+import { useGlobalStore } from '@/stores/global'
+import { RoleEnum } from '@/enums'
 import UserItem from './UserItem/index.vue'
 
 const groupListLastElRef = ref<HTMLDivElement>()
 const groupStore = useGroupStore()
+const globalStore = useGlobalStore()
 const groupUserList = computed(() => groupStore.userList)
 const statistic = computed(() => groupStore.countInfo)
 
@@ -33,6 +37,11 @@ onMounted(() => {
 })
 
 const hiddenGroupListShow = () => (groupStore.showGroupList = false)
+const onAddGroupMember = () => {
+  globalStore.createGroupModalInfo.show = true
+  // TODO 禁用已经邀请的人
+  // globalStore.createGroupModalInfo.selectedUid = true
+}
 </script>
 
 <template>
@@ -43,7 +52,17 @@ const hiddenGroupListShow = () => (groupStore.showGroupList = false)
       :class="groupStore.showGroupList ? 'show' : ''"
     />
     <div class="user-list-wrapper" :class="groupStore.showGroupList ? 'show' : ''">
-      <div class="user-list-header">在线人数：{{ statistic.onlineNum || 0 }}</div>
+      <div class="user-list-header">
+        在线人数：{{ statistic.onlineNum || 0 }}
+        <el-button
+          type="primary"
+          :icon="Plus"
+          circle
+          size="small"
+          @click="onAddGroupMember"
+          v-if="[RoleEnum.LORD, RoleEnum.ADMIN].includes(statistic.role)"
+        />
+      </div>
       <TransitionGroup
         v-show="groupUserList?.length"
         tag="ul"

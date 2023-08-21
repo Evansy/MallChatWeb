@@ -3,7 +3,15 @@
  * 注意：请使用TSDoc规范进行注释，以便在使用时能够获得良好提示。
  * @see TSDoc规范https://tsdoc.org/
  **/
-import type { OnlineEnum, MsgEnum, ActEnum, SexEnum, IsYetEnum, MarkEnum } from '@/enums'
+import type {
+  OnlineEnum,
+  MsgEnum,
+  ActEnum,
+  SexEnum,
+  IsYetEnum,
+  MarkEnum,
+  RoomTypeEnum,
+} from '@/enums'
 
 /***/
 export type ListResponse<T extends unknown> = {
@@ -19,6 +27,19 @@ export type CacheBadgeReq = {
   lastModifyTime?: number
   /** 徽章 ID */
   itemId: number
+}
+
+export type GroupDetailReq = {
+  /** 群头像 */
+  avatar: string
+  /** 群名称 */
+  groupName: string
+  /** 在线人数 */
+  onlineNum: number
+  /** 成员角色 1群主 2管理员 3普通成员 4踢出群聊 */
+  role: number
+  /** 房间id */
+  roomId: number
 }
 
 export type CacheBadgeItem = {
@@ -352,14 +373,6 @@ export enum IsAllUserEnum {
   Not,
   /** 1是 */
   Yes,
-}
-
-/** 房间类型 1群聊 2单聊 */
-export enum RoomTypeEnum {
-  /** 1群聊 */
-  Group = 1,
-  /** 2单聊 */
-  Single,
 }
 
 /** 会话列表项 */

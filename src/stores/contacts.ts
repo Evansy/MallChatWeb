@@ -17,7 +17,8 @@ export const useContactStore = defineStore('contact', () => {
     contactsOptions.isLoading = true
     const data = await apis
       .getContactList({
-        pageSize,
+        // TODO 先写 100，稍后优化
+        pageSize: 100,
         cursor: isFresh || !contactsOptions.cursor ? undefined : contactsOptions.cursor,
       })
       .send()

@@ -67,7 +67,7 @@ const menuOptions = ref({ x: 0, y: 0 })
 const { isLike, isDisLike, likeCount, dislikeCount, onLike, onDisLike } = useLikeToggle(
   props.msg.message,
 )
-const isRecall = computed(() => message.value.type === MsgEnum.RECALL)
+const isRecall = computed(() => [MsgEnum.RECALL, MsgEnum.SYSTEM].includes(message.value.type))
 
 // 滚动到消息
 const scrollToMsg = async (msg: MsgType) => {

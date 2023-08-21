@@ -2,11 +2,12 @@ import { ref, reactive, computed, watch } from 'vue'
 import { defineStore } from 'pinia'
 import apis from '@/services/apis'
 import type { MessageType, MarkItemType, RevokedMsgType, SessionItem } from '@/services/types'
-import { MarkEnum } from '@/enums'
+import { MarkEnum, RoomTypeEnum } from '@/enums'
 import { computedTimeBlock } from '@/utils/computedTime'
 import { useCachedStore } from '@/stores/cached'
 import { useUserStore } from '@/stores/user'
 import { useGlobalStore } from '@/stores/global'
+import { useGroupStore } from '@/stores/group'
 import shakeTitle from '@/utils/shakeTitle'
 import notify from '@/utils/notification'
 import { MsgEnum } from '@/enums'
@@ -17,10 +18,12 @@ export const useChatStore = defineStore('chat', () => {
   const cachedStore = useCachedStore()
   const userStore = useUserStore()
   const globalStore = useGlobalStore()
+  const groupStore = useGroupStore()
   const sessionList = reactive<SessionItem[]>([]) // 会话列表
   const sessionOptions = reactive({ isLast: false, isLoading: false, cursor: '' })
 
   const currentRoomId = computed(() => globalStore.currentSession.roomId)
+  const currentRoomType = computed(() => globalStore.currentSession.type)
 
   const messageMap = reactive<Map<number, Map<number, MessageType>>>(
     new Map([[currentRoomId.value, new Map()]]),
@@ -114,6 +117,12 @@ export const useChatStore = defineStore('chat', () => {
         }
         getMsgList()
       }
+
+      // 群组的时候去请求
+      if (currentRoomType.value === RoomTypeEnum.Group) {
+        groupStore.getGroupUserList(true)
+        groupStore.getCountStatistic()
+      }
     }
 
     // 重置当前回复的消息
@@ -177,12 +186,12 @@ export const useChatStore = defineStore('chat', () => {
   }
 
   const getSessionList = async (isFresh = false) => {
-    if (sessionOptions.isLast || sessionOptions.isLoading) return
+    if (!isFresh && (sessionOptions.isLast || sessionOptions.isLoading)) return
     sessionOptions.isLoading = true
     const data = await apis
       .getSessionList({
         params: {
-          pageSize,
+          pageSize: sessionList.length || pageSize,
           cursor: isFresh || !sessionOptions.cursor ? undefined : sessionOptions.cursor,
         },
       })
@@ -197,10 +206,14 @@ export const useChatStore = defineStore('chat', () => {
     sessionOptions.cursor = data.cursor
     sessionOptions.isLast = data.isLast
     sessionOptions.isLoading = false
-  }
 
-  // 默认执行一次
-  getMsgList()
+    globalStore.currentSession.roomId = data.list[0].roomId
+    globalStore.currentSession.type = data.list[0].type
+    // 用会话列表第一个去请求消息列表
+    getMsgList()
+    // 请求第一个群成员列表
+    currentRoomType.value === RoomTypeEnum.Group && groupStore.getGroupUserList(true)
+  }
 
   const pushMsg = (msg: MessageType) => {
     const current = messageMap.get(msg.message.roomId)
@@ -211,6 +224,12 @@ export const useChatStore = defineStore('chat', () => {
     const uid = msg.fromUser.uid
     const cacheUser = cachedStore.userCachedList[uid]
     cachedStore.getBatchUserInfo([uid])
+
+    // 发完消息就要刷新会话列表，
+    //  FIXME 如果当前会话已经置顶了，可以不用刷新
+    if (globalStore.currentSession.roomId !== msg.message.roomId) {
+      getSessionList(true)
+    }
 
     // 如果收到的消息里面是艾特自己的就发送系统通知
     if (msg.message.body.atUidList?.includes(userStore.userInfo.uid) && cacheUser) {

@@ -27,6 +27,8 @@ export enum MsgEnum {
   VIDEO,
   /** 表情包 */
   EMOJI,
+  /** 系统消息 */
+  SYSTEM,
 }
 
 /**
@@ -67,4 +69,24 @@ export enum IsYetEnum {
 export enum MarkEnum {
   LIKE = 1,
   DISLIKE,
+}
+
+// 成员角色 1群主 2管理员 3普通成员 4踢出群聊
+export enum RoleEnum {
+  /** 1群主 */
+  LORD = 1,
+  /** 2管理员 */
+  ADMIN,
+  /** 3普通成员 */
+  NORMAL,
+  /** 4踢出群聊 */
+  REMOVED,
+}
+
+/** 房间类型 1群聊 2单聊 */
+export enum RoomTypeEnum {
+  /** 1群聊 */
+  Group = 1,
+  /** 2单聊 */
+  Single,
 }

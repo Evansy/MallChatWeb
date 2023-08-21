@@ -16,6 +16,7 @@ import type {
   ContactItem,
   SessionItem,
   MsgReadUnReadCountType,
+  GroupDetailReq,
 } from '@/services/types'
 import { alovaIns } from './request'
 import urls from './urls'
@@ -98,4 +99,10 @@ export default {
     getRequest<MsgReadUnReadCountType[]>(urls.getMsgReadCount, { localCache: 0, ...params }),
   /** 消息阅读上报 */
   markMsgRead: (params?: any) => putRequest<MsgReadUnReadCountType[]>(urls.getMsgReadCount, params),
+  /** 新增群组 */
+  createGroup: (params: { uidList: number[] }) =>
+    postRequest<{ id: number }>(urls.createGroup, params),
+  /** 群组详情 */
+  groupDetail: (params: { id: number }) =>
+    getRequest<GroupDetailReq>(urls.groupDetail, { localCache: 0, params }),
 }

@@ -1,7 +1,6 @@
 // 本地配置到 .env 里面修改。生产配置在 .env.production 里面
 const prefix = import.meta.env.PROD ? import.meta.env.VITE_API_PREFIX : ''
 export default {
-  getGroupUserList: `${prefix}/capi/room/public/group/member/page`,
   getMemberStatistic: `${prefix}/capi/chat/public/member/statistic`,
   getUserInfoBatch: `${prefix}/capi/user/public/summary/userInfo/batch`,
   getBadgesBatch: `${prefix}/capi/user/public/badges/batch`,
@@ -30,4 +29,7 @@ export default {
   getSessionList: `${prefix}/capi/chat/public/contact/page`, // 会话列表
   getMsgReadList: `${prefix}/capi/chat/msg/read/page`, // 消息的已读未读列表
   getMsgReadCount: `${prefix}/capi/chat/msg/read`, // 消息已读未读数
+  createGroup: `${prefix}/capi/room/group`, // 新增群组
+  getGroupUserList: `${prefix}/capi/room/public/group/member/page`,
+  groupDetail: `${prefix}/capi/room/public/group`, // 群组详情
 }

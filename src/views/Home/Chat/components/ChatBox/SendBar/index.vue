@@ -5,6 +5,7 @@ import { useWsLoginStore } from '@/stores/ws'
 import { useUserStore } from '@/stores/user'
 import { useChatStore } from '@/stores/chat'
 import { useGlobalStore } from '@/stores/global'
+import { useGroupStore } from '@/stores/group'
 import { useUserInfo } from '@/hooks/useCached'
 import MsgInput from '../MsgInput/index.vue'
 import { insertInputText } from '../MsgInput/utils'
@@ -12,6 +13,7 @@ import apis from '@/services/apis'
 import { judgeClient } from '@/utils/detectDevice'
 import { emojis } from '../constant'
 import { useEmojiStore } from '@/stores/emoji'
+import { RoleEnum } from '@/enums'
 
 import type { IMention } from '../MsgInput/types'
 import { useFileDialog } from '@vueuse/core'
@@ -81,6 +83,10 @@ const send = (msgType: MsgEnum, body: any) => {
       }
       inputMsg.value = '' // 清空输入列表
       onClearReply() // 置空回复的消息
+
+      // 发完消息就要刷新会话列表，
+      //  FIXME 如果当前会话已经置顶了，可以不用刷新
+      chatStore.getSessionList(true)
     })
     .finally(() => {
       isSending.value = false
@@ -106,11 +112,15 @@ const sendMsgHandler = () => {
 const loginStore = useWsLoginStore() // 显示登录框
 const userStore = useUserStore() // 是否已登录
 const emojiStore = useEmojiStore()
+const groupStore = useGroupStore()
 const isSign = computed(() => userStore.isSign)
 const currentMsgReply = computed(() => (userStore.isSign && chatStore.currentMsgReply) || {})
 const currentReplUid = computed(() => currentMsgReply?.value.fromUser?.uid as number)
 const currentReplyUser = useUserInfo(currentReplUid)
 const emojiList = computed(() => emojiStore.emojiList)
+
+// 是否被提出群聊
+const isRemoved = computed(() => groupStore.countInfo.role === RoleEnum.REMOVED)
 
 // 计算展示的回复消息的内容
 const showReplyContent = () => {
@@ -363,6 +373,7 @@ const sendEmoji = throttle((url: string) => {
       <ElIcon class="icon-lock"><IEpLock /></ElIcon>
       点我<span class="tips-text">登录</span>之后再发言~
     </span>
+    <span v-if="isSign && isRemoved" class="tips"> 您已被踢出群聊，无法再发送消息 </span>
   </div>
 </template>
 

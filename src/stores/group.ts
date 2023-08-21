@@ -1,8 +1,9 @@
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import apis from '@/services/apis'
 import { defineStore } from 'pinia'
 import { useCachedStore } from '@/stores/cached'
-import type { UserItem } from '@/services/types'
+import { useGlobalStore } from '@/stores/global'
+import type { UserItem, GroupDetailReq } from '@/services/types'
 import { pageSize } from './chat'
 import cloneDeep from 'lodash/cloneDeep'
 import { OnlineEnum } from '@/enums'
@@ -24,21 +25,37 @@ const sorAction = (pre: UserItem, next: UserItem) => {
 
 export const useGroupStore = defineStore('group', () => {
   const cachedStore = useCachedStore()
+  const globalStore = useGlobalStore()
   // 消息列表
   const userList = ref<UserItem[]>([])
   const userListOptions = reactive({ isLast: false, loading: true, cursor: '' })
-  const countInfo = reactive({ onlineNum: 0, totalNum: 0 })
+  const currentRoomId = computed(() => globalStore.currentSession.roomId)
+  const countInfo = ref<GroupDetailReq>({
+    avatar: '',
+    groupName: '',
+    onlineNum: 0,
+    role: 0,
+    roomId: currentRoomId.value,
+  })
 
   // 移动端控制显隐
   const showGroupList = ref(false)
 
   // 获取群成员
-  const getGroupUserList = async () => {
+  const getGroupUserList = async (refresh = false) => {
     const data = await apis
-      .getGroupList({ params: { pageSize, cursor: userListOptions.cursor } })
+      .getGroupList({
+        params: {
+          pageSize,
+          cursor: refresh ? undefined : userListOptions.cursor,
+          roomId: currentRoomId.value,
+        },
+      })
       .send()
     if (!data) return
-    const tempNew = cloneDeep(uniqueUserList([...data.list, ...userList.value]))
+    const tempNew = cloneDeep(
+      uniqueUserList(refresh ? data.list : [...data.list, ...userList.value]),
+    )
     tempNew.sort(sorAction)
     userList.value = tempNew
     userListOptions.cursor = data.cursor
@@ -54,14 +71,9 @@ export const useGroupStore = defineStore('group', () => {
 
   // 获取群成员数量统计
   const getCountStatistic = async () => {
-    const data = await apis.getMemberStatistic().send()
-    countInfo.onlineNum = data.onlineNum
-    countInfo.totalNum = data.totalNum
+    const data = await apis.groupDetail({ id: currentRoomId.value }).send()
+    countInfo.value = data
   }
-
-  // 默认执行一次
-  getGroupUserList()
-  getCountStatistic()
 
   // 加载更多群成员
   const loadMore = async () => {
@@ -92,6 +104,7 @@ export const useGroupStore = defineStore('group', () => {
     userListOptions,
     loadMore,
     getGroupUserList,
+    getCountStatistic,
     countInfo,
     batchUpdateUserStatus,
     showGroupList,

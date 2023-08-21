@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useGlobalStore } from '@/stores/global'
-import { RoomTypeEnum } from '@/services/types'
+import { RoomTypeEnum } from '@/enums'
 
 import UserList from '../UserList/index.vue'
 import ChatList from '../ChatList/index.vue'

@@ -3,6 +3,7 @@ import { MsgEnum } from '@/enums'
 // 计算展示的回复消息的内容
 const renderReplyContent = (name?: string, type?: MsgEnum, content?: string) => {
   switch (type) {
+    case MsgEnum.SYSTEM:
     case MsgEnum.TEXT: {
       return `${name}: ${content}`
     }

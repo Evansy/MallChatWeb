@@ -176,7 +176,7 @@ class WS {
       case WsResponseMessageType.OnOffLine: {
         const data = params.data as OnStatusChangeType
         groupStore.countInfo.onlineNum = data.onlineNum
-        groupStore.countInfo.totalNum = data.totalNum
+        // groupStore.countInfo.totalNum = data.totalNum
         groupStore.batchUpdateUserStatus(data.changeList)
         break
       }

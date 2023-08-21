@@ -2,8 +2,8 @@
 import { computed } from 'vue'
 import { useChatStore } from '@/stores/chat'
 import { useGlobalStore } from '@/stores/global'
-import { IsAllUserEnum, RoomTypeEnum } from '@/services/types'
-import { MsgEnum } from '@/enums'
+import { IsAllUserEnum } from '@/services/types'
+import { MsgEnum, RoomTypeEnum } from '@/enums'
 import { useUserInfo } from '@/hooks/useCached'
 import { formatTimestamp } from '@/utils/computedTime'
 import renderReplyContent from '@/utils/renderReplyContent'
@@ -28,7 +28,7 @@ const sessionList = computed(() =>
           : renderReplyContent(
               lastMsgUserName.value.name,
               lastMsg.message?.type,
-              lastMsg.message?.body?.content,
+              lastMsg.message?.body?.content || lastMsg.message?.body,
             )
     }
     return {
