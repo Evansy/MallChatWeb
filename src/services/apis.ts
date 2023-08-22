@@ -11,6 +11,12 @@ import type {
   CacheBadgeItem,
   CacheUserReq,
   CacheBadgeReq,
+  EmojiItem,
+  RequestFriendItem,
+  ContactItem,
+  SessionItem,
+  MsgReadUnReadCountType,
+  GroupDetailReq,
 } from '@/services/types'
 import { alovaIns } from './request'
 import urls from './urls'
@@ -18,10 +24,12 @@ import urls from './urls'
 const getRequest = <T>(url: string, config?: any) => alovaIns.Get<T>(url, config)
 const postRequest = <T>(url: string, params?: any) => alovaIns.Post<T, unknown>(url, params)
 const putRequest = <T>(url: string, params?: any) => alovaIns.Put<T, unknown>(url, params)
+const deleteRequest = <T>(url: string, params?: any) => alovaIns.Delete<T, unknown>(url, params)
 
 export default {
   /** 获取群成员列表 */
-  getGroupList: (params?: any) => getRequest<ListResponse<UserItem>>(urls.getGroupUserList, params),
+  getGroupList: (params?: any) =>
+    getRequest<ListResponse<UserItem>>(urls.getGroupUserList, { ...params, localCache: 0 }),
   /** 获取群成员统计 */
   getMemberStatistic: () => getRequest<GroupStatisticType>(urls.getMemberStatistic),
   /** 房间内的所有群成员列表-@专用 */
@@ -34,7 +42,8 @@ export default {
   getBadgesBatch: (badges: CacheBadgeReq[]) =>
     postRequest<CacheBadgeItem[]>(urls.getBadgesBatch, { reqList: badges }),
   /** 获取消息列表 */
-  getMsgList: (params?: any) => getRequest<ListResponse<MessageType>>(urls.getMsgList, params),
+  getMsgList: (params?: any) =>
+    getRequest<ListResponse<MessageType>>(urls.getMsgList, { localCache: 0, ...params }),
   /** 发送消息 */
   sendMsg: (data?: MessageReq) => postRequest<MessageType>(urls.sendMsg, data),
   /** 标记消息，点赞等 */
@@ -51,4 +60,49 @@ export default {
   recallMsg: (data: { msgId: number; roomId: number }) => putRequest<void>(urls.recallMsg, data),
   /** 拉黑用户 */
   blockUser: (data: { uid: number }) => putRequest<void>(urls.blockUser, data),
+  /** 获取临时上传链接 */
+  getUploadUrl: (params: any) =>
+    getRequest<{ downloadUrl: string; uploadUrl: string }>(urls.fileUpload, {
+      localCache: 0,
+      params,
+    }),
+  /** 新增表情包 */
+  addEmoji: (data: { uid: number; expressionUrl: string }) =>
+    postRequest<MessageType>(urls.addEmoji, data),
+  /** 获取表情 **/
+  getEmoji: (params: { uid: number }) =>
+    getRequest<EmojiItem[]>(urls.getEmoji, { localCache: 0, params }),
+  /** 删除id */
+  deleteEmoji: (params: { id: number }) => deleteRequest<EmojiItem[]>(urls.deleteEmoji, params),
+  /** 获取联系人列表 */
+  getContactList: (params?: any) =>
+    getRequest<ListResponse<ContactItem>>(urls.getContactList, { localCache: 0, params }),
+  /** 获取好友申请列表 */
+  requestFriendList: (params?: any) =>
+    getRequest<ListResponse<RequestFriendItem>>(urls.requestFriendList, { localCache: 0, params }),
+  /** 发送添加好友请求 */
+  sendAddFriendRequest: (params: { targetUid: number; msg: string }) =>
+    postRequest<EmojiItem[]>(urls.sendAddFriendRequest, params),
+  /** 同意好友申请 */
+  applyFriendRequest: (params: { applyId: number }) =>
+    putRequest(urls.sendAddFriendRequest, params),
+  /** 同意好友申请 */
+  deleteFriend: (params: { applyId: number }) => deleteRequest(urls.deleteFriend, params),
+  /** 会话列表 */
+  getSessionList: (params?: any) =>
+    getRequest<ListResponse<SessionItem>>(urls.getSessionList, params),
+  /** 消息的已读未读列表 */
+  getMsgReadList: (params?: any) =>
+    getRequest<ListResponse<{ uid: number }>>(urls.getMsgReadList, { localCache: 0, ...params }),
+  /** 消息已读未读数 */
+  getMsgReadCount: (params?: any) =>
+    getRequest<MsgReadUnReadCountType[]>(urls.getMsgReadCount, { localCache: 0, ...params }),
+  /** 消息阅读上报 */
+  markMsgRead: (params?: any) => putRequest<MsgReadUnReadCountType[]>(urls.getMsgReadCount, params),
+  /** 新增群组 */
+  createGroup: (params: { uidList: number[] }) =>
+    postRequest<{ id: number }>(urls.createGroup, params),
+  /** 群组详情 */
+  groupDetail: (params: { id: number }) =>
+    getRequest<GroupDetailReq>(urls.groupDetail, { localCache: 0, params }),
 }

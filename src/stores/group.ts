@@ -1,31 +1,22 @@
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import apis from '@/services/apis'
 import { defineStore } from 'pinia'
 import { useCachedStore } from '@/stores/cached'
-import type { UserItem } from '@/services/types'
+import { useGlobalStore } from '@/stores/global'
+import type { UserItem, GroupDetailReq } from '@/services/types'
 import { pageSize } from './chat'
 import cloneDeep from 'lodash/cloneDeep'
-import { OnlineStatus } from '@/services/types'
-import type { CacheUserReq } from '@/services/types'
+import { OnlineEnum } from '@/enums'
 import { uniqueUserList } from '@/utils/unique'
 
 const sorAction = (pre: UserItem, next: UserItem) => {
-  if (pre.activeStatus === OnlineStatus.Online && next.activeStatus === OnlineStatus.Online) {
+  if (pre.activeStatus === OnlineEnum.ONLINE && next.activeStatus === OnlineEnum.ONLINE) {
     return next.lastOptTime < pre.lastOptTime ? -1 : 1
-  } else if (
-    pre.activeStatus !== OnlineStatus.Online &&
-    next.activeStatus !== OnlineStatus.Online
-  ) {
+  } else if (pre.activeStatus !== OnlineEnum.ONLINE && next.activeStatus !== OnlineEnum.ONLINE) {
     return next.lastOptTime < pre.lastOptTime ? -1 : 1
-  } else if (
-    pre.activeStatus === OnlineStatus.Online &&
-    next.activeStatus !== OnlineStatus.Online
-  ) {
+  } else if (pre.activeStatus === OnlineEnum.ONLINE && next.activeStatus !== OnlineEnum.ONLINE) {
     return -1
-  } else if (
-    pre.activeStatus !== OnlineStatus.Online &&
-    next.activeStatus === OnlineStatus.Online
-  ) {
+  } else if (pre.activeStatus !== OnlineEnum.ONLINE && next.activeStatus === OnlineEnum.ONLINE) {
     return 1
   } else {
     return next.lastOptTime < pre.lastOptTime ? -1 : 1
@@ -34,56 +25,59 @@ const sorAction = (pre: UserItem, next: UserItem) => {
 
 export const useGroupStore = defineStore('group', () => {
   const cachedStore = useCachedStore()
+  const globalStore = useGlobalStore()
   // 消息列表
   const userList = ref<UserItem[]>([])
-  const isLast = ref(false)
-  const loading = ref(true)
-  const cursor = ref()
-  const countInfo = reactive({ onlineNum: 0, totalNum: 0 })
+  const userListOptions = reactive({ isLast: false, loading: true, cursor: '' })
+  const currentRoomId = computed(() => globalStore.currentSession.roomId)
+  const countInfo = ref<GroupDetailReq>({
+    avatar: '',
+    groupName: '',
+    onlineNum: 0,
+    role: 0,
+    roomId: currentRoomId.value,
+  })
 
   // 移动端控制显隐
   const showGroupList = ref(false)
 
   // 获取群成员
-  const getGroupUserList = async () => {
-    const data = await apis.getGroupList({ params: { pageSize, cursor: cursor.value } }).send()
+  const getGroupUserList = async (refresh = false) => {
+    const data = await apis
+      .getGroupList({
+        params: {
+          pageSize,
+          cursor: refresh ? undefined : userListOptions.cursor,
+          roomId: currentRoomId.value,
+        },
+      })
+      .send()
     if (!data) return
-    const tempNew = cloneDeep(uniqueUserList([...data.list, ...userList.value]))
+    const tempNew = cloneDeep(
+      uniqueUserList(refresh ? data.list : [...data.list, ...userList.value]),
+    )
     tempNew.sort(sorAction)
     userList.value = tempNew
-    cursor.value = data.cursor
-    isLast.value = data.isLast
-    loading.value = false
+    userListOptions.cursor = data.cursor
+    userListOptions.isLast = data.isLast
+    userListOptions.loading = false
 
     /** 收集需要请求用户详情的 uid */
     const uidCollectYet: Set<number> = new Set() // 去重用
-    const uidCollects: CacheUserReq[] = []
-    const collectUidItem = (uid: number) => {
-      if (uidCollectYet.has(uid)) return
-      const cacheUser = cachedStore.userCachedList[uid]
-      uidCollects.push({ uid, lastModifyTime: cacheUser?.lastModifyTime })
-      // 添加收集过的 uid
-      uidCollectYet.add(uid)
-    }
-    data.list?.forEach((user) => collectUidItem(user.uid))
+    data.list?.forEach((user) => uidCollectYet.add(user.uid))
     // 获取用户信息缓存
-    cachedStore.getBatchUserInfo(uidCollects)
+    cachedStore.getBatchUserInfo([...uidCollectYet])
   }
 
   // 获取群成员数量统计
   const getCountStatistic = async () => {
-    const data = await apis.getMemberStatistic().send()
-    countInfo.onlineNum = data.onlineNum
-    countInfo.totalNum = data.totalNum
+    const data = await apis.groupDetail({ id: currentRoomId.value }).send()
+    countInfo.value = data
   }
-
-  // 默认执行一次
-  getGroupUserList()
-  getCountStatistic()
 
   // 加载更多群成员
   const loadMore = async () => {
-    if (isLast.value) return
+    if (userListOptions.isLast) return
     await getGroupUserList()
   }
 
@@ -107,9 +101,10 @@ export const useGroupStore = defineStore('group', () => {
 
   return {
     userList,
-    loading,
+    userListOptions,
     loadMore,
     getGroupUserList,
+    getCountStatistic,
     countInfo,
     batchUpdateUserStatus,
     showGroupList,

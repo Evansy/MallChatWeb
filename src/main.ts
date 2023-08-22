@@ -1,33 +1,29 @@
 import { createApp } from 'vue'
-import dayjs from 'dayjs'
-import 'dayjs/locale/zh-cn'
-import weekday from 'dayjs/plugin/weekday'
-import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css'
-// import 'element-plus/dist/index.css'
 import { createPinia } from 'pinia'
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
-
-import App from './App.vue'
-import router from './router'
-
-import '@/utils/websocket'
-import './styles/main.css'
+import dayjs from 'dayjs'
+import weekday from 'dayjs/plugin/weekday'
 import vLogin from './directives/v-login'
+import vFriends from './directives/v-friends'
+import vLoginShow from './directives/v-login-show'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import router from './router'
+import App from './App.vue'
+import 'dayjs/locale/zh-cn'
 
-// 设置 dayjs 语言
-dayjs.locale('zh-cn')
-// 设置一周起始位周一
-dayjs.extend(weekday)
+import './styles/main.css'
+import '@/utils/websocket'
+import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css'
+
+dayjs.locale('zh-cn') // 设置 dayjs 语言
+dayjs.extend(weekday) // 设置一周起始位周一
+
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate) // 数据持久化
 
 const app = createApp(App)
-
-// app.use(ElementPlus)
-const pinia = createPinia()
-pinia.use(piniaPluginPersistedstate)
 app.use(pinia)
 app.use(router)
-
-// 没登录就要求先登录的指令。
-app.directive('login', vLogin)
-
+app.directive('login', vLogin) // 登录权限指令-未登录先登录
+app.directive('login-show', vLoginShow) // 登录权限指令-未登录先登录
+app.directive('friends', vFriends) // 是否好友
 app.mount('#app')

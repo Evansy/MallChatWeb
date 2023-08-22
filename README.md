@@ -1,13 +1,35 @@
-<div align="center"><img src="https://s1.ax1x.com/2023/05/04/p9NC50f.png" /></div>
-MallChat 的【前端】项目，是一个既能购物又能即时聊天的电商系统。致力于打造互联网企业级项目的最佳实践。电商该有的购物车，订单，支付，推荐，搜索，拉新，促活，推送，物流，客服，它都必须有。持续更新 ing~~
-
 <p align="center">
-  <a href="#公众号"><img src="https://img.shields.io/badge/公众号-程序员阿斌-blue.svg?style=plasticr"></a>
-    <a href="#公众号"><img src="https://img.shields.io/badge/交流群-加入开发-green.svg?style=plasticr"></a>
-    <a href="https://gitee.com/Evansy/MallChatWeb"><img src="https://img.shields.io/badge/码云-项目地址-orange.svg?style=plasticr"></a>
-    <a href="https://github.com/Evansy/MallChatWeb"><img src="https://img.shields.io/badge/前端-项目地址-blueviolet.svg?style=plasticr"></a>
-    <a href="https://github.com/zongzibinbin/MallChat"><img src="https://img.shields.io/badge/后端-项目地址-blueviolet.svg?style=plasticr"></a>
+    <a href="" target="_blank">
+      <img src="https://s1.ax1x.com/2023/07/02/pCDR0W4.png" width="280" />
+    </a>
 </p>
+
+<h1 align="center">MallChat-抹茶</h1>
+<p align="center"><strong>一个既能购物又能即时聊天的电商系统。致力于打造互联网企业级项目的最佳实践。<br>电商该有的购物车、订单、支付、推荐、搜索、拉新、促活、推送、物流、客服、它都必须有。<em>持续更新 ing～</em></strong></p>
+
+<div align="center">
+ <a href="#公众号"><img src="https://img.shields.io/badge/公众号-程序员阿斌-blue.svg?style=plasticr"></a>
+    <a href="#公众号"><img src="https://img.shields.io/badge/交流群-加入开发-green.svg?style=plasticr"></a>
+    <a href="https://github.com/zongzibinbin/MallChat"><img src="https://img.shields.io/badge/github-项目地址-yellow.svg?style=plasticr"></a>
+    <a href="https://gitee.com/zhongzhibinbin/MallChat"><img src="https://img.shields.io/badge/码云-项目地址-orange.svg?style=plasticr"></a>
+    <a href="https://github.com/Evansy/MallChatWeb"><img src="https://img.shields.io/badge/前端-项目地址-blueviolet.svg?style=plasticr"></a>
+    <a href="https://github.com/zongzibinbin/MallChat/commits" target="_blank"><br>
+    <a href="https://github.com/Evansy/MallChatWeb/actions/workflows/deploy.yml" target="_blank">
+        <img alt="Commit" src="https://github.com/Evansy/MallChatWeb/actions/workflows/deploy.yml/badge.svg?branch=main">
+    </a>
+    <a href="https://github.com/Evansy/MallChatWeb/commits" target="_blank">
+        <img alt="Commit" src="https://img.shields.io/github/commit-activity/m/Evansy/MallChatWeb"></a>
+    <a href="https://github.com/Evansy/MallChatWeb/issues" target="_blank">
+        <img alt="Issues" src="https://img.shields.io/github/issues/Evansy/MallChatWeb">
+    </a> 
+    <a href="https://github.com/Evansy/MallChatWeb/blob/master/LICENSE" target="_blank">
+        <img alt="License: Apache-2.0" src="https://img.shields.io/badge/License-Apache--2.0-blue.svg">
+    </a> 
+    <a href="https://github.com/Evansy/MallChatWeb" target="_blank">
+        <img alt="License" src="https://img.shields.io/github/stars/Evansy/MallChatWeb.svg?style=social">
+    </a> 
+    
+</div>
 
 ## 项目导航
 
@@ -28,6 +50,7 @@ MallChat 的【前端】项目，是一个既能购物又能即时聊天的电�
 
 - 环境: node 16.18+, 包管理工具 pnpm (安装完 node 执行 `npm i pnpm -g` 即可);
 - 安装依赖: clone 工程之后，执行 `pnpm i`
+  - `pnpm` 安装报错：`node_modules/gifsicle postinstall$ node lib/install.js`, 命令后加参数 `pnpm i --ignore-scripts` 忽略 `scripts` 相关依赖即可解决
 - 启动: 按 `F5` 即可自动执行 `pnpm run dev` 并且打开浏览器
 - 部署
   - 部署到本地：执行 `pnpm build` 构建完成后把 `dist` 文件夹 放到服务器，并配置 `nginx` 即可
@@ -75,12 +98,72 @@ MallChat 的【前端】项目，是一个既能购物又能即时聊天的电�
 
 ![Stargazers over time](https://starchart.cc/Evansy/MallChatWeb.svg)
 
-## 贡献者
+## 贡献
 
-感谢各位贡献 PR 的小伙伴们~  
+**贡献之前请先阅读 行为准则 和 贡献指南。感谢所有为 MallChat 做过贡献的人!**
+
+#### 前端:
+
 <a href="https://github.com/Evansy/MallChatWeb/graphs/contributors">
 <img src="https://contrib.rocks/image?repo=Evansy/MallChatWeb" />
 </a>
+
+#### 后端:
+
+<a href="https://github.com/zongzibinbin/MallChat/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=zongzibinbin/MallChat" />
+</a>
+
+<h4>优秀贡献者:</h4>
+
+<table>
+  <tr>
+    <th>类别</th>
+    <th>用户</th>
+    <th>贡献模块</th>
+  </tr>
+  <tr>
+    <td rowspan="3">前端</td>
+    <td rowspan="3">
+      <a href="https://github.com/LIjiAngChen8"><img src="https://avatars.githubusercontent.com/u/48879481?v=4" style=" width: 80px; height: 80px;"></a>
+    </td>
+    <td><a href="https://github.com/Evansy/MallChatWeb/pull/74">图片、语音、文件类型消息收发</a></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/Evansy/MallChatWeb/pull/50">消息互动操作(撤回、点赞、删除)</a></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/Evansy/MallChatWeb/pull/17">虚拟列表</a></td>
+  </tr>
+  <tr>
+    <td rowspan="5">后端</td>
+    <td rowspan="2">
+      <a href="https://github.com/1045078399"><img src="https://avatars.githubusercontent.com/u/82020261?v=4" style=" width: 80px; height: 80px;"></a>
+    </td>
+    <td><a href="https://github.com/zongzibinbin/MallChat/pull/31">DFA敏感词检测</a></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/zongzibinbin/MallChat/pull/64">OpenAI聊天机器人</a></td>
+  </tr>
+  <tr>
+    <td rowspan="1">
+      <a href="https://github.com/xiaocairush"><img src="https://avatars.githubusercontent.com/u/6416523?v=4" style=" width: 80px; height: 80px;"></a>
+    </td>
+    <td><a href="https://github.com/zongzibinbin/MallChat/pull/99">Ac自动机敏感词检测</a></td>
+  </tr>
+    <tr>
+    <td rowspan="1">
+      <a href="https://github.com/linzhihan"><img src="https://avatars.githubusercontent.com/u/58815955?v=4" style=" width: 80px; height: 80px;"></a>
+    </td>
+    <td><a href="https://github.com/zongzibinbin/MallChat/pull/95">限流编程式</a></td>
+  </tr>
+    <tr>
+    <td rowspan="1">
+      <a href="https://github.com/zbzbzzz"><img src="https://avatars.githubusercontent.com/u/42697182?v=4" style=" width: 80px; height: 80px;"></a>
+    </td>
+    <td><a href="https://github.com/zongzibinbin/MallChat/pull/82">握手认证</a></td>
+  </tr>
+</table>
 
 ## 公众号
 

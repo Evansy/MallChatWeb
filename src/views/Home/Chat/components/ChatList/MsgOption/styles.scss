@@ -1,0 +1,35 @@
+.msg-option {
+  display: inline-flex;
+  padding: 2px 4px;
+
+  &-item {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 4px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+  &-item:hover {
+    background-color: var(--background-dark);
+  }
+
+  .mallchat {
+    display: inline-block;
+    line-height: 1;
+    color: var(--font-main);
+    border-radius: 50%;
+  }
+
+  .mallchat:hover {
+    color: var(--color-primary);
+  }
+
+  .like-active {
+    color: var(--font-pink) !important;
+  }
+
+  .dislike-active {
+    color: var(--color-light-1) !important;
+  }
+}

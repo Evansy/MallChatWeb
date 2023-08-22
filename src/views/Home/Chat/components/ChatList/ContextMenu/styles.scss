@@ -1,0 +1,33 @@
+.mx-context-menu {
+  padding: 6px;
+  background-color: var(--background-3);
+  border-radius: 6px;
+
+  .mx-context-menu-item {
+    padding: 2px 4px;
+    color: var(--font-light-1);
+    border-radius: 4px;
+
+    .label {
+      padding: 0;
+      font-size: 12px;
+    }
+  }
+
+  .mx-context-menu-item:hover {
+    background-color: var(--background-2);
+  }
+
+  .mx-icon-placeholder {
+    width: auto !important;
+    padding-right: 4px;
+  }
+
+  .mx-context-menu-item-sperator {
+    background-color: var(--background-3);
+  }
+
+  .mx-context-menu-item-sperator::after {
+    background-color: var(--background-2);
+  }
+}

@@ -15,6 +15,8 @@ let reconnectCount = 0
 let timer: null | number = null
 // 重连🔐
 let lockReconnect = false
+// 重连🔐
+let token: null | string = null
 
 // 往 ws 发消息
 const connectionSend = (value: object) => {
@@ -73,6 +75,7 @@ const onConnectError = () => {
 // ws 连接 close
 const onConnectClose = () => {
   onCloseHandler()
+  token = null
   postMsg({ type: 'close' })
 }
 // ws 连接成功
@@ -92,7 +95,7 @@ const initConnection = () => {
   connection?.removeEventListener('error', onConnectError)
   // 建立链接
   // 本地配置到 .env 里面修改。生产配置在 .env.production 里面
-  connection = new WebSocket(import.meta.env.VITE_WS_URL)
+  connection = new WebSocket(`${import.meta.env.VITE_WS_URL}${token ? `?token=${token}` : ''}`)
   // 收到消息
   connection.addEventListener('message', onConnectMsg)
   // 建立链接
@@ -108,6 +111,7 @@ self.onmessage = (e: MessageEvent<string>) => {
   switch (type) {
     case 'initWS': {
       reconnectCount = 0
+      token = value
       initConnection()
       break
     }

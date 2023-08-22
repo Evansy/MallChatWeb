@@ -1,0 +1,131 @@
+@font-face {
+  font-family: mallchat; /* Project id 4142069 */
+  src: url('//at.alicdn.com/t/c/font_4142069_ft47vddlx3.woff2?t=1691936637126') format('woff2'),
+    url('//at.alicdn.com/t/c/font_4142069_ft47vddlx3.woff?t=1691936637126') format('woff'),
+    url('//at.alicdn.com/t/c/font_4142069_ft47vddlx3.ttf?t=1691936637126') format('truetype');
+}
+
+.mallchat {
+  /* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
+  font-family: mallchat !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-more::before {
+  content: '\e83d';
+}
+
+.icon-arrow-down::before {
+  content: '\e687';
+}
+
+.icon-arrow-right::before {
+  content: '\eaf3';
+}
+
+.icon-group::before {
+  content: '\e6ff';
+}
+
+.icon-chat::before {
+  content: '\e69d';
+}
+
+.icon-tianjia::before {
+  content: '\e622';
+}
+
+.icon-aixin::before {
+  content: '\e711';
+}
+
+.icon-biaoqing::before {
+  content: '\e61c';
+}
+
+.icon-bofang::before {
+  content: '\e62a';
+}
+
+.icon-guanbi1::before {
+  content: '\eaf2';
+}
+
+.icon-guanbi::before {
+  content: '\e61e';
+}
+
+.icon-aite::before {
+  content: '\e60c';
+}
+
+.icon-tupian1::before {
+  content: '\e640';
+}
+
+.icon-jianpan::before {
+  content: '\e6d8';
+}
+
+.icon-saying::before {
+  content: '\e62f';
+}
+
+.icon-xiazai::before {
+  content: '\e616';
+}
+
+.icon-dislike::before {
+  content: '\e67c';
+}
+
+.icon-huojian::before {
+  content: '\e68b';
+}
+
+.icon-like::before {
+  content: '\e85c';
+}
+
+.icon-reply::before {
+  content: '\e716';
+}
+
+.icon-totop::before {
+  content: '\e63a';
+}
+
+.icon-zhankai::before {
+  content: '\e657';
+}
+
+.icon-chehui::before {
+  content: '\e665';
+}
+
+.icon-shanchu::before {
+  content: '\e6bb';
+}
+
+.icon-voice::before {
+  content: '\e85e';
+}
+
+.icon-avatar::before {
+  content: '\e648';
+}
+
+.icon-loading::before {
+  content: '\e6de';
+}
+
+.icon-copy::before {
+  content: '\e62d';
+}
+
+.icon-lahei::before {
+  content: '\e651';
+}

@@ -1,107 +1,135 @@
 .side-toolbar {
   display: flex;
-  align-items: center;
-  padding: 16px;
-  padding-bottom: 0;
-  color: var(--font-main);
-
-  &_avatar {
-    cursor: pointer;
-
-    --el-avatar-size: 32px;
-  }
-}
-
-.operate-icons {
-  display: flex;
-  column-gap: 8px;
-  align-items: flex-start;
-  margin-left: 16px;
-  font-size: 0;
-}
-
-.operate-icon {
-  display: inline-block;
-  width: 28px;
-  height: 28px;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-}
-
-.menu-icon {
-  margin-left: auto;
-}
-
-.icon-github {
-  background-image: url('@/assets/icons/icon_github.svg');
-}
-
-.icon-bilibili {
-  background-image: url('@/assets/icons/icon_bilibili.svg');
-}
-
-.icon-tencent-cloud {
-  background-image: url('@/assets/icons/icon_tencent_cloud.svg');
-}
-
-.icon-tiktok {
-  background-image: url('@/assets/icons/icon_tiktok.svg');
-}
-
-.icon-wechat {
-  background-image: url('@/assets/icons/icon_wechat.svg');
-}
-
-.icon-yuque {
-  background-image: url('@/assets/icons/icon_yuque.png');
-}
-
-.operate-icon-text {
-  margin-top: 4px;
-  font-size: 12px;
-}
-
-.operate-icon-link {
-  display: flex;
   flex-direction: column;
   align-items: center;
+  width: 80px;
+  padding: 20px 0;
+  color: var(--font-main);
+  user-select: none;
+
+  .menu {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+
+    &-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 6px 0;
+      line-height: 1.2;
+      text-align: center;
+
+      &-name {
+        margin-top: 4px;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  // 语雀图标不标准，需要特殊处理
+  .icon-yuque {
+    width: 30px;
+    height: 30px;
+    font-size: 23px !important;
+    line-height: 28px;
+    background: #fff;
+    border-radius: 50%;
+  }
+
+  .icon-qcloud {
+    font-size: 23px !important;
+  }
+
+  .icon-zhankai {
+    display: none;
+  }
 }
 
 .icon-wechat-qrcode {
   width: 200px;
 }
 
-@media only screen and (min-width: 640px) {
+@media only screen and (max-width: 640px) {
   .side-toolbar {
-    flex-direction: column;
-    width: 80px;
-    height: 100%;
-    padding: 20px 0;
-  }
+    flex-direction: row;
+    width: 100%;
+    height: 44px;
+    padding: 0 16px;
+    margin-top: 16px;
 
-  .operate-icons {
-    flex-direction: column;
-    row-gap: 16px;
-    align-items: center;
-    margin-top: auto;
-    margin-left: 0;
-  }
+    .menu {
+      flex-direction: row;
+      justify-content: flex-start;
+      margin: 0 8px;
+      overflow-y: auto;
 
-  .operate-icon-text {
-    margin-top: 2px;
-    font-size: 8px;
-  }
+      &-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 8px;
+        line-height: 1.2;
+        text-align: center;
+      }
+    }
 
-  .menu-icon {
-    display: none;
+    .mallchatcolor {
+      display: block;
+      font-size: 23px !important;
+      line-height: 28px;
+    }
+
+    .icon-zhankai {
+      display: block;
+    }
+
+    .icon-yuque {
+      width: 23px;
+      height: 23px;
+      font-size: 18px !important;
+    }
+
+    ::-webkit-scrollbar {
+      width: 1px;
+      height: 1px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: var(--background-2);
+    }
+
+    ::-webkit-scrollbar-track {
+      background-color: var(--background);
+    }
   }
 }
 
-@media only screen and (min-width: 640px) {
-  .side-toolbar {
-    &-avatar {
-      --el-avatar-size: 56px;
-    }
+.tool-icons {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  margin-top: 16px;
+}
+
+.tool-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+}
+
+.tool-icon-active {
+  color: var(--color-primary);
+  background-color: var(--background-secondary);
+  border-radius: 8px;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: var(--background-secondary);
   }
 }

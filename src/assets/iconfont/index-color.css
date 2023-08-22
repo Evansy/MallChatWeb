@@ -1,0 +1,163 @@
+/* stylelint-disable */
+/* eslint-disable */
+/* prettier-ignore */
+@font-face {
+  font-family: "mallchatcolor"; /* Project id 4141022 */
+  /* Color fonts */
+  src:
+       url('//at.alicdn.com/t/c/font_4141022_l6s8lv2vhvi.woff2?t=1688484028839') format('woff2'),
+       url('//at.alicdn.com/t/c/font_4141022_l6s8lv2vhvi.woff?t=1688484028839') format('woff'),
+       url('//at.alicdn.com/t/c/font_4141022_l6s8lv2vhvi.ttf?t=1688484028839') format('truetype');
+}
+
+.mallchatcolor {
+  font-family: 'mallchatcolor' !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-md:before {
+  content: '\e90d';
+}
+
+.icon-sketch:before {
+  content: '\e67f';
+}
+
+.icon-exe:before {
+  content: '\e96f';
+}
+
+.icon-svg:before {
+  content: '\e67c';
+}
+
+.icon-txt:before {
+  content: '\e67b';
+}
+
+.icon-happy1:before {
+  content: '\e620';
+}
+
+.icon-laughing:before {
+  content: '\e62b';
+}
+
+.icon-other:before {
+  content: '\e67a';
+}
+
+.icon-posun:before {
+  content: '\e67e';
+}
+
+.icon-zip:before {
+  content: '\e60c';
+}
+
+.icon-wenjianjia1:before {
+  content: '\e64d';
+}
+
+.icon-at:before {
+  content: '\e629';
+}
+
+.icon-wenjianjia2:before {
+  content: '\e647';
+}
+
+.icon-tupian:before {
+  content: '\e679';
+}
+
+.icon-qcloud:before {
+  content: '\e600';
+}
+
+.icon-yuque:before {
+  content: '\e7c0';
+}
+
+.icon-dazed:before {
+  content: '\e60f';
+}
+
+.icon-happy:before {
+  content: '\e621';
+}
+
+.icon-secret:before {
+  content: '\e63c';
+}
+
+.icon-shocked:before {
+  content: '\e63e';
+}
+
+.icon-smiling:before {
+  content: '\e642';
+}
+
+.icon-yawn:before {
+  content: '\e64e';
+}
+
+.icon-github:before {
+  content: '\e709';
+}
+
+.icon-weixin:before {
+  content: '\e60d';
+}
+
+.icon-bilibili:before {
+  content: '\e60e';
+}
+
+.icon-doc:before {
+  content: '\e601';
+}
+
+.icon-code:before {
+  content: '\e602';
+}
+
+.icon-ppt:before {
+  content: '\e603';
+}
+
+.icon-log:before {
+  content: '\e604';
+}
+
+.icon-log1:before {
+  content: '\e605';
+}
+
+.icon-pdf:before {
+  content: '\e606';
+}
+
+.icon-jpg:before {
+  content: '\e607';
+}
+
+.icon-mp3:before {
+  content: '\e608';
+}
+
+.icon-mp4:before {
+  content: '\e609';
+}
+
+.icon-wenjianjia:before {
+  content: '\e60a';
+}
+
+.icon-xls:before {
+  content: '\e60b';
+}

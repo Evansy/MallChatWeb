@@ -3,7 +3,7 @@ import { useUserStore } from '@/stores/user'
 import { useChatStore } from '@/stores/chat'
 import { useGroupStore } from '@/stores/group'
 import { useCachedStore } from '@/stores/cached'
-import { WsResponseMessageType, WsRequestMsgType } from './wsType'
+import { WsResponseMessageType } from './wsType'
 import type {
   LoginSuccessResType,
   LoginInitResType,
@@ -11,7 +11,7 @@ import type {
   OnStatusChangeType,
 } from './wsType'
 import type { MessageType, MarkItemType, RevokedMsgType } from '@/services/types'
-import { OnlineStatus } from '@/services/types'
+import { OnlineEnum } from '@/enums'
 import { computedToken } from '@/services/request'
 import { worker } from './initWorker'
 import shakeTitle from '@/utils/shakeTitle'
@@ -22,14 +22,14 @@ class WS {
   #connectReady = false
 
   constructor() {
-    worker.postMessage('{"type":"initWS"}')
+    this.initConnect()
     // 收到消息
     worker.addEventListener('message', this.onWorkerMsg)
 
     // 后台重试次数达到上限之后，tab 获取焦点再重试
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden && !this.#connectReady) {
-        worker.postMessage('{"type":"initWS"}')
+        this.initConnect()
       }
 
       // 获得焦点停止消息闪烁
@@ -37,6 +37,11 @@ class WS {
         shakeTitle.clear()
       }
     })
+  }
+
+  initConnect = () => {
+    const token = localStorage.getItem('TOKEN')
+    worker.postMessage(`{"type":"initWS","value":${token ? `"${token}"` : null}}`)
   }
 
   onWorkerMsg = (e: MessageEvent<any>) => {
@@ -63,21 +68,10 @@ class WS {
     this.#connectReady = false
   }
 
-  // 检测登录状态
-  #detectionLoginStatus = () => {
-    const token = localStorage.getItem('TOKEN')
-    if (token) {
-      this.send({ type: WsRequestMsgType.Authorization, data: { token } })
-      // 获取用户详情
-      const userStore = useUserStore()
-      userStore.getUserDetailAction()
-    }
-  }
-
   #dealTasks = () => {
     this.#connectReady = true
     // 先探测登录态
-    this.#detectionLoginStatus()
+    // this.#detectionLoginStatus()
 
     setTimeout(() => {
       const userStore = useUserStore()
@@ -87,6 +81,8 @@ class WS {
         this.#tasks.forEach((task) => {
           this.send(task)
         })
+        // 清空缓存的消息
+        this.#tasks = []
       } else {
         // 如果没登录，而且已经请求了登录二维码，就要更新登录二维码。
         loginStore.loginQrCode && loginStore.getLoginQrCode()
@@ -138,6 +134,8 @@ class WS {
         userStore.userInfo = { ...userStore.userInfo, ...rest }
         localStorage.setItem('USER_INFO', JSON.stringify(rest))
         localStorage.setItem('TOKEN', token)
+        // 获取用户详情
+        userStore.getUserDetailAction()
         // 更新一下请求里面的 token.
         computedToken.clear()
         computedToken.get()
@@ -149,7 +147,7 @@ class WS {
         // 自己更新自己上线
         groupStore.batchUpdateUserStatus([
           {
-            activeStatus: OnlineStatus.Online,
+            activeStatus: OnlineEnum.ONLINE,
             avatar: rest.avatar,
             lastOptTime: Date.now(),
             name: rest.name,
@@ -178,7 +176,7 @@ class WS {
       case WsResponseMessageType.OnOffLine: {
         const data = params.data as OnStatusChangeType
         groupStore.countInfo.onlineNum = data.onlineNum
-        groupStore.countInfo.totalNum = data.totalNum
+        // groupStore.countInfo.totalNum = data.totalNum
         groupStore.batchUpdateUserStatus(data.changeList)
         break
       }
