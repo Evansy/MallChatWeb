@@ -156,6 +156,8 @@ class WS {
         ])
         // 初始化所有用户基本信息
         cachedStore.initAllUserBaseInfo()
+        // 获取用户详情
+        chatStore.getSessionList(true)
         break
       }
       // 用户 token 过期

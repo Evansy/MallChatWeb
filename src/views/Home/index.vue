@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ToolBar from './components/ToolBar/index.vue'
 import { useImgPreviewStore, useVideoPreviewStore } from '@/stores/preview'
+import { useUserStore } from '@/stores/user'
 import { onUnmounted, watch } from 'vue'
 import { RouterView } from 'vue-router'
 import AddFriendModal from '@/components/AddFriendModal/index.vue'
@@ -10,6 +11,7 @@ import { initListener, clearListener } from '@/utils/readCountQueue'
 
 const imageStore = useImgPreviewStore()
 const videoStore = useVideoPreviewStore()
+const userStore = useUserStore()
 
 const handleKeyDown = (event: KeyboardEvent) => {
   if (event.key === 'Escape') {
@@ -28,7 +30,14 @@ watch(
   },
 )
 
-initListener()
+watch(
+  () => userStore.isSign,
+  (newValue) => {
+    if (newValue) {
+      initListener()
+    }
+  },
+)
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyDown)

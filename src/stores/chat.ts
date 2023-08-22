@@ -13,6 +13,8 @@ import notify from '@/utils/notification'
 import { MsgEnum } from '@/enums'
 
 export const pageSize = 20
+// 标识是否第一次请求
+let isFirstInit = false
 
 export const useChatStore = defineStore('chat', () => {
   const cachedStore = useCachedStore()
@@ -191,7 +193,7 @@ export const useChatStore = defineStore('chat', () => {
     const data = await apis
       .getSessionList({
         params: {
-          pageSize: sessionList.length || pageSize,
+          pageSize: sessionList.length > pageSize ? sessionList.length : pageSize,
           cursor: isFresh || !sessionOptions.cursor ? undefined : sessionOptions.cursor,
         },
       })
@@ -207,12 +209,15 @@ export const useChatStore = defineStore('chat', () => {
     sessionOptions.isLast = data.isLast
     sessionOptions.isLoading = false
 
-    globalStore.currentSession.roomId = data.list[0].roomId
-    globalStore.currentSession.type = data.list[0].type
-    // 用会话列表第一个去请求消息列表
-    getMsgList()
-    // 请求第一个群成员列表
-    currentRoomType.value === RoomTypeEnum.Group && groupStore.getGroupUserList(true)
+    if (!isFirstInit) {
+      isFirstInit = true
+      globalStore.currentSession.roomId = data.list[0].roomId
+      globalStore.currentSession.type = data.list[0].type
+      // 用会话列表第一个去请求消息列表
+      getMsgList()
+      // 请求第一个群成员列表
+      currentRoomType.value === RoomTypeEnum.Group && groupStore.getGroupUserList(true)
+    }
   }
 
   const pushMsg = (msg: MessageType) => {

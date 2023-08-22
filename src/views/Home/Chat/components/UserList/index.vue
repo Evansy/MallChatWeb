@@ -4,7 +4,6 @@ import { Plus } from '@element-plus/icons-vue'
 
 import { useGroupStore } from '@/stores/group'
 import { useGlobalStore } from '@/stores/global'
-import { RoleEnum } from '@/enums'
 import UserItem from './UserItem/index.vue'
 
 const groupListLastElRef = ref<HTMLDivElement>()
@@ -39,6 +38,7 @@ onMounted(() => {
 const hiddenGroupListShow = () => (groupStore.showGroupList = false)
 const onAddGroupMember = () => {
   globalStore.createGroupModalInfo.show = true
+  globalStore.createGroupModalInfo.isInvite = true
   // TODO 禁用已经邀请的人
   // globalStore.createGroupModalInfo.selectedUid = true
 }
@@ -54,14 +54,7 @@ const onAddGroupMember = () => {
     <div class="user-list-wrapper" :class="groupStore.showGroupList ? 'show' : ''">
       <div class="user-list-header">
         在线人数：{{ statistic.onlineNum || 0 }}
-        <el-button
-          type="primary"
-          :icon="Plus"
-          circle
-          size="small"
-          @click="onAddGroupMember"
-          v-if="[RoleEnum.LORD, RoleEnum.ADMIN].includes(statistic.role)"
-        />
+        <el-button type="primary" :icon="Plus" circle size="small" @click="onAddGroupMember" />
       </div>
       <TransitionGroup
         v-show="groupUserList?.length"

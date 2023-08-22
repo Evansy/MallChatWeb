@@ -111,7 +111,7 @@ const handleRightClick = (e: MouseEvent) => {
 /** 右键菜单 */
 const handleUserRightClick = (e: MouseEvent) => {
   // perf: 未登录时，禁用右键菜单功能
-  if (!userStore.isSign) {
+  if (!userStore.isSign || isCurrentUser.value) {
     return
   }
 
@@ -124,6 +124,18 @@ const handleUserRightClick = (e: MouseEvent) => {
 }
 
 const msgVisibleEl = ref(null)
+const targetIsVisible = useElementVisibility(msgVisibleEl)
+
+watch(targetIsVisible, (visible) => {
+  console.log(visible)
+  if (isCurrentUser.value) {
+    if (visible) {
+      eventBus.emit('onAddReadCountTask', { msgId: props.msg.message.id })
+    } else {
+      eventBus.emit('onRemoveReadCountTask', { msgId: props.msg.message.id })
+    }
+  }
+})
 
 onMounted(() => {
   nextTick(() => {
@@ -141,18 +153,19 @@ onMounted(() => {
   })
 
   // 自己的消息才监听未读数计算
-  if (isCurrentUser.value) {
-    // 做元素进入退出视口监听，在视口内的自己的消息就做
-    // ~~5分钟内每10s中查询一次已读数~~
-    const targetIsVisible = useElementVisibility(msgVisibleEl)
-    watch(targetIsVisible, (visible) => {
-      if (visible) {
-        eventBus.emit('onAddReadCountTask', { msgId: props.msg.message.id })
-      } else {
-        eventBus.emit('onRemoveReadCountTask', { msgId: props.msg.message.id })
-      }
-    })
-  }
+  // if (isCurrentUser.value && msgVisibleEl) {
+  //   // 做元素进入退出视口监听，在视口内的自己的消息就做
+  //   // ~~5分钟内每10s中查询一次已读数~~
+  //   console.log(msgVisibleEl.value)
+  //   // console.log('targetIsVisible', targetIsVisible.value)
+  //   watch(targetIsVisible, (visible) => {
+  //     if (visible) {
+  //       eventBus.emit('onAddReadCountTask', { msgId: props.msg.message.id })
+  //     } else {
+  //       eventBus.emit('onRemoveReadCountTask', { msgId: props.msg.message.id })
+  //     }
+  //   })
+  // }
 
   // 已读数
   eventBus.on('onGetReadCount', (res) => {
@@ -178,7 +191,7 @@ const currentReadList = (msgId: number) => {
   <transition name="remove">
     <div ref="msgVisibleEl" :class="chatCls" v-if="!isRecall">
       <!-- 用户头像 -->
-      <Avatar :src="userInfo.avatar" />
+      <Avatar :src="userInfo.avatar" @contextmenu.prevent.stop="handleUserRightClick($event)" />
       <div class="chat-item-box" ref="boxRef">
         <div class="chat-item-user-info">
           <!-- 用户徽章悬浮说明 -->

@@ -87,10 +87,10 @@ export default {
   applyFriendRequest: (params: { applyId: number }) =>
     putRequest(urls.sendAddFriendRequest, params),
   /** 同意好友申请 */
-  deleteFriend: (params: { applyId: number }) => deleteRequest(urls.deleteFriend, params),
+  deleteFriend: (params: { targetUid: number }) => deleteRequest(urls.deleteFriend, params),
   /** 会话列表 */
   getSessionList: (params?: any) =>
-    getRequest<ListResponse<SessionItem>>(urls.getSessionList, params),
+    getRequest<ListResponse<SessionItem>>(urls.getSessionList, { localCache: 0, ...params }),
   /** 消息的已读未读列表 */
   getMsgReadList: (params?: any) =>
     getRequest<ListResponse<{ uid: number }>>(urls.getMsgReadList, { localCache: 0, ...params }),
@@ -102,6 +102,12 @@ export default {
   /** 新增群组 */
   createGroup: (params: { uidList: number[] }) =>
     postRequest<{ id: number }>(urls.createGroup, params),
+  /** 邀请群成员 */
+  inviteGroupMember: (params: { roomId: number; uidList: number[] }) =>
+    postRequest(urls.inviteGroupMember, params),
+  /** 删除群成员 */
+  removeGroupMember: (params: { roomId: number; uid: number }) =>
+    deleteRequest(urls.inviteGroupMember, params),
   /** 群组详情 */
   groupDetail: (params: { id: number }) =>
     getRequest<GroupDetailReq>(urls.groupDetail, { localCache: 0, params }),

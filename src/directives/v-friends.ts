@@ -1,9 +1,13 @@
 import type { Directive } from 'vue'
 
 import { useContactStore } from '@/stores/contacts'
+import { useUserStore } from '@/stores/user'
 const isMyFriend = (uid: number) => {
   const contactStore = useContactStore()
-  return contactStore.contactsList.some((item) => item.uid === uid)
+  const userStore = useUserStore()
+  const myUid = userStore.userInfo.uid
+  // 好友和自己不显示添加好友菜单
+  return contactStore.contactsList.some((item) => item.uid === uid) || uid === myUid
 }
 
 const vFriends: Directive = {
