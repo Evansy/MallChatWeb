@@ -5,26 +5,43 @@ import apis from '@/services/apis'
 import { RoomTypeEnum } from '@/enums'
 import { ElMessage } from 'element-plus'
 import { useGlobalStore } from '@/stores/global'
+import { useGroupStore } from '@/stores/group'
 import { judgeClient } from '@/utils/detectDevice'
 import SelectUser from './SelectUser.vue'
 
 const client = judgeClient()
 
 const globalStore = useGlobalStore()
+const groupStore = useGroupStore()
 const selectUser = ref<number[]>([])
 
 const { send, loading } = useRequest(apis.createGroup, { immediate: false })
+const { send: invite, loading: inviteLoading } = useRequest(apis.inviteGroupMember, {
+  immediate: false,
+})
 const show = computed(() => globalStore.createGroupModalInfo.show)
+const isInvite = computed(() => globalStore.createGroupModalInfo.isInvite)
 const close = () => {
   globalStore.createGroupModalInfo.show = false
+  globalStore.createGroupModalInfo.isInvite = false
   globalStore.createGroupModalInfo.selectedUid = []
 }
 const onSend = async () => {
   if (selectUser.value.length === 0) return
-  const { id } = await send({ uidList: selectUser.value })
-  ElMessage.success('群聊创建成功~')
-  globalStore.currentSession.roomId = id
-  globalStore.currentSession.type = RoomTypeEnum.Group
+  if (isInvite.value) {
+    await invite({
+      roomId: globalStore.currentSession.roomId,
+      uidList: selectUser.value,
+    })
+    // 更新群成员列表
+    groupStore.getGroupUserList(true)
+  } else {
+    const { id } = await send({ uidList: selectUser.value })
+    ElMessage.success('群聊创建成功~')
+    globalStore.currentSession.roomId = id
+    globalStore.currentSession.type = RoomTypeEnum.Group
+  }
+
   close()
 }
 const onChecked = (checked: number[]) => {
@@ -49,9 +66,9 @@ const onChecked = (checked: number[]) => {
         <el-button
           type="primary"
           @click="onSend"
-          :loading="loading"
+          :loading="loading || inviteLoading"
           :disabled="selectUser.length === 0"
-          >创建</el-button
+          >{{ isInvite ? '邀请' : '创建' }}</el-button
         >
       </span>
     </template>

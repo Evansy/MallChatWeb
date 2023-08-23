@@ -17,9 +17,12 @@ let request: Method<
   Headers
 > | null = null
 
-const onAddReadCountTask = ({ msgId }: { msgId: number }) => queue.add(msgId)
-const onRemoveReadCountTask = ({ msgId }: { msgId: number }) => queue.delete(msgId)
-
+const onAddReadCountTask = ({ msgId }: { msgId: number }) => {
+  queue.add(msgId)
+}
+const onRemoveReadCountTask = ({ msgId }: { msgId: number }) => {
+  queue.delete(msgId)
+}
 const task = () => {
   // 10s 了上个请求还未完成就中断掉
   request?.abort()
@@ -38,7 +41,7 @@ const task = () => {
 export const initListener = () => {
   eventBus.on('onAddReadCountTask', onAddReadCountTask)
   eventBus.on('onRemoveReadCountTask', onRemoveReadCountTask)
-  readCountQueue()
+  clearQueue()
 }
 
 export const clearListener = () => {
@@ -50,7 +53,6 @@ export const clearListener = () => {
 export const clearQueue = () => {
   queue.clear()
   timer && clearInterval(timer)
-  readCountQueue()
 }
 
 export const readCountQueue = () => {

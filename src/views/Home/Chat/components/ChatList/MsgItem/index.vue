@@ -48,7 +48,7 @@ const globalStore = useGlobalStore()
 const userInfo = useUserInfo(fromUser.value.uid)
 const wearingItemId = computed(() => userInfo?.value?.wearingItemId)
 const badgeInfo = useBadgeInfo(wearingItemId)
-const isCurrentUser = computed(() => props.msg?.fromUser.uid === userStore?.userInfo.uid)
+const isCurrentUser = computed(() => fromUser.value.uid === userStore?.userInfo.uid)
 const chatCls = computed(() => ({
   'chat-item': true,
   'is-me': isCurrentUser.value,
@@ -111,7 +111,7 @@ const handleRightClick = (e: MouseEvent) => {
 /** 右键菜单 */
 const handleUserRightClick = (e: MouseEvent) => {
   // perf: 未登录时，禁用右键菜单功能
-  if (!userStore.isSign) {
+  if (!userStore.isSign || isCurrentUser.value) {
     return
   }
 
@@ -138,21 +138,21 @@ onMounted(() => {
         tooltipPlacement.value = 'bottom-end'
       }
     }
-  })
 
-  // 自己的消息才监听未读数计算
-  if (isCurrentUser.value) {
-    // 做元素进入退出视口监听，在视口内的自己的消息就做
-    // ~~5分钟内每10s中查询一次已读数~~
     const targetIsVisible = useElementVisibility(msgVisibleEl)
-    watch(targetIsVisible, (visible) => {
-      if (visible) {
-        eventBus.emit('onAddReadCountTask', { msgId: props.msg.message.id })
-      } else {
-        eventBus.emit('onRemoveReadCountTask', { msgId: props.msg.message.id })
-      }
-    })
-  }
+    // 自己的消息才监听未读数计算
+    if (isCurrentUser.value && msgVisibleEl) {
+      // 做元素进入退出视口监听，在视口内的自己的消息就做
+      // ~~5分钟内每10s中查询一次已读数~~
+      watch(targetIsVisible, (visible) => {
+        if (visible) {
+          eventBus.emit('onAddReadCountTask', { msgId: props.msg.message.id })
+        } else {
+          eventBus.emit('onRemoveReadCountTask', { msgId: props.msg.message.id })
+        }
+      })
+    }
+  })
 
   // 已读数
   eventBus.on('onGetReadCount', (res) => {
@@ -175,92 +175,121 @@ const currentReadList = (msgId: number) => {
 <template>
   <span v-if="isShowTimeBlock && msg.timeBlock" class="send-time-block">{{ msg.timeBlock }}</span>
   <span v-if="isRecall" class="send-time-block">{{ message.body }}</span>
-  <transition name="remove">
-    <div ref="msgVisibleEl" :class="chatCls" v-if="!isRecall">
-      <!-- 用户头像 -->
-      <Avatar :src="userInfo.avatar" />
-      <div class="chat-item-box" ref="boxRef">
-        <div class="chat-item-user-info">
-          <!-- 用户徽章悬浮说明 -->
+  <div ref="msgVisibleEl">
+    <transition name="remove">
+      <div :class="chatCls" v-if="!isRecall">
+        <!-- 用户头像 -->
+        <Avatar :src="userInfo.avatar" @contextmenu.prevent.stop="handleUserRightClick($event)" />
+        <div class="chat-item-box" ref="boxRef">
+          <div class="chat-item-user-info">
+            {{ fromUser.uid }}
+            <!-- 用户徽章悬浮说明 -->
+            <el-tooltip
+              effect="dark"
+              :content="badgeInfo?.describe"
+              :placement="isCurrentUser ? 'top-end' : 'top-start'"
+              :teleported="false"
+            >
+              <!-- 用户徽章 -->
+              <img v-show="badgeInfo?.img" class="user-badge" :src="badgeInfo?.img" />
+            </el-tooltip>
+            <!-- 用户名 -->
+            <span class="user-name" @contextmenu.prevent.stop="handleUserRightClick($event)">
+              {{ userInfo.name }}
+            </span>
+            <!-- 消息归属地 -->
+            <span class="user-ip">({{ userInfo.locPlace || '未知' }})</span>
+            <!-- 消息发送时间 -->
+            <span class="send-time" v-if="isShowTime">
+              {{ formatTimestamp(msg.message.sendTime) }}
+            </span>
+          </div>
           <el-tooltip
-            effect="dark"
-            :content="badgeInfo?.describe"
-            :placement="isCurrentUser ? 'top-end' : 'top-start'"
+            effect="light"
+            popper-class="option-tooltip"
+            :trigger="tooltipTrigger"
+            :placement="tooltipPlacement || 'bottom-end'"
+            :offset="2"
+            :show-arrow="false"
             :teleported="false"
           >
-            <!-- 用户徽章 -->
-            <img v-show="badgeInfo?.img" class="user-badge" :src="badgeInfo?.img" />
-          </el-tooltip>
-          <!-- 用户名 -->
-          <span class="user-name" @contextmenu.prevent.stop="handleUserRightClick($event)">
-            {{ userInfo.name }}
-          </span>
-          <!-- 消息归属地 -->
-          <span class="user-ip">({{ userInfo.locPlace || '未知' }})</span>
-          <!-- 消息发送时间 -->
-          <span class="send-time" v-if="isShowTime">
-            {{ formatTimestamp(msg.message.sendTime) }}
-          </span>
-        </div>
-        <el-tooltip
-          effect="light"
-          popper-class="option-tooltip"
-          :trigger="tooltipTrigger"
-          :placement="tooltipPlacement || 'bottom-end'"
-          :offset="2"
-          :show-arrow="false"
-          :teleported="false"
-        >
-          <!-- 消息的操作，点赞回复那些 -->
-          <template #content>
-            <MsgOption :msg="msg" />
-          </template>
-          <div
-            ref="renderMsgRef"
-            :class="['chat-item-content', { uploading: msg?.loading }]"
-            @contextmenu.prevent.stop="handleRightClick($event)"
-          >
-            <!-- 这里是未读数计算 -->
+            <!-- 消息的操作，点赞回复那些 -->
+            <template #content>
+              <MsgOption :msg="msg" />
+            </template>
             <div
-              v-if="isCurrentUser"
-              @click="currentReadList(msg.message.id)"
-              class="chat-item-read-count"
-              :class="{
-                'is-gray': readCount.unread === 0,
-              }"
+              ref="renderMsgRef"
+              :class="['chat-item-content', { uploading: msg?.loading }]"
+              @contextmenu.prevent.stop="handleRightClick($event)"
             >
-              <span class="chat-item-read-count-text" v-if="readCount.unread !== 0">
-                {{ readCount.read }}
-              </span>
-              <el-icon v-else><IEpCheck /></el-icon>
+              <!-- 这里是未读数计算 -->
+              <div
+                v-if="isCurrentUser"
+                @click="currentReadList(msg.message.id)"
+                class="chat-item-read-count"
+                :class="{
+                  'is-gray': readCount.unread === 0,
+                }"
+              >
+                <span class="chat-item-read-count-text" v-if="readCount.unread !== 0">
+                  {{ readCount.read }}
+                </span>
+                <el-icon v-else><IEpCheck /></el-icon>
+              </div>
+              <!-- 消息加载中 -->
+              <Icon v-if="msg?.loading" icon="loading" :size="20" spin />
+              <!-- 渲染消息内容体 -->
+              <RenderMessage :message="message" />
             </div>
-            <!-- 消息加载中 -->
-            <Icon v-if="msg?.loading" icon="loading" :size="20" spin />
-            <!-- 渲染消息内容体 -->
-            <RenderMessage :message="message" />
+          </el-tooltip>
+          <!-- 消息回复部分 -->
+          <div
+            v-if="message.body?.reply"
+            class="chat-item-reply"
+            :class="{ pointer: message.body.reply.canCallback }"
+            @click="scrollToMsg(message)"
+          >
+            <Icon icon="totop" v-if="message.body.reply.canCallback" :size="12" />
+            <span class="ellipsis">
+              {{ message.body.reply.username }}: {{ message.body.reply.body }}
+            </span>
           </div>
-        </el-tooltip>
-        <!-- 消息回复部分 -->
-        <div
-          v-if="message.body?.reply"
-          class="chat-item-reply"
-          :class="{ pointer: message.body.reply.canCallback }"
-          @click="scrollToMsg(message)"
-        >
-          <Icon icon="totop" v-if="message.body.reply.canCallback" :size="12" />
-          <span class="ellipsis">
-            {{ message.body.reply.username }}: {{ message.body.reply.body }}
-          </span>
+          <!-- 点赞数量和倒赞数量及动画 -->
+          <div v-if="likeCount + dislikeCount > 0" class="extra">
+            <transition name="fade">
+              <span
+                v-if="likeCount > 0"
+                :class="['extra-item like', { active: isLike }]"
+                v-login="onLike"
+              >
+                <Icon icon="like" />
+                <transition name="count-up" mode="out-in">
+                  <span class="count" :key="likeCount">{{ likeCount }}</span>
+                </transition>
+              </span>
+            </transition>
+            <transition name="fade">
+              <span
+                v-if="dislikeCount > 0"
+                :class="['extra-item dlike', { active: isDisLike }]"
+                v-login="onDisLike"
+              >
+                <Icon icon="dislike" :size="17" />
+                <transition name="count-up" mode="out-in">
+                  <span class="count" :key="dislikeCount">{{ dislikeCount }}</span>
+                </transition>
+              </span>
+            </transition>
+          </div>
         </div>
-        <!-- 点赞数量和倒赞数量及动画 -->
         <div v-if="likeCount + dislikeCount > 0" class="extra">
           <transition name="fade">
             <span
               v-if="likeCount > 0"
               :class="['extra-item like', { active: isLike }]"
-              v-login="onLike"
+              @click="onLike"
             >
-              <Icon icon="like" />
+              <IconLike />
               <transition name="count-up" mode="out-in">
                 <span class="count" :key="likeCount">{{ likeCount }}</span>
               </transition>
@@ -270,9 +299,9 @@ const currentReadList = (msgId: number) => {
             <span
               v-if="dislikeCount > 0"
               :class="['extra-item dlike', { active: isDisLike }]"
-              v-login="onDisLike"
+              @click="onDisLike"
             >
-              <Icon icon="dislike" :size="17" />
+              <IconDislike />
               <transition name="count-up" mode="out-in">
                 <span class="count" :key="dislikeCount">{{ dislikeCount }}</span>
               </transition>
@@ -280,34 +309,8 @@ const currentReadList = (msgId: number) => {
           </transition>
         </div>
       </div>
-      <div v-if="likeCount + dislikeCount > 0" class="extra">
-        <transition name="fade">
-          <span
-            v-if="likeCount > 0"
-            :class="['extra-item like', { active: isLike }]"
-            @click="onLike"
-          >
-            <IconLike />
-            <transition name="count-up" mode="out-in">
-              <span class="count" :key="likeCount">{{ likeCount }}</span>
-            </transition>
-          </span>
-        </transition>
-        <transition name="fade">
-          <span
-            v-if="dislikeCount > 0"
-            :class="['extra-item dlike', { active: isDisLike }]"
-            @click="onDisLike"
-          >
-            <IconDislike />
-            <transition name="count-up" mode="out-in">
-              <span class="count" :key="dislikeCount">{{ dislikeCount }}</span>
-            </transition>
-          </span>
-        </transition>
-      </div>
-    </div>
-  </transition>
+    </transition>
+  </div>
   <ContextMenu v-model:show="isShowMenu" :options="menuOptions" :msg="msg" />
   <UserContextMenu v-model:show="isShowUserMenu" :options="menuOptions" :uid="msg.fromUser.uid" />
 </template>

@@ -4,7 +4,7 @@ export default {
   getMemberStatistic: `${prefix}/capi/chat/public/member/statistic`,
   getUserInfoBatch: `${prefix}/capi/user/public/summary/userInfo/batch`,
   getBadgesBatch: `${prefix}/capi/user/public/badges/batch`,
-  getAllUserBaseInfo: `${prefix}/capi/chat/member/list`, // 房间内的所有群成员列表-@专用
+  getAllUserBaseInfo: `${prefix}/capi/room/group/member/list`, // 房间内的所有群成员列表-@专用
   getMsgList: `${prefix}/capi/chat/public/msg/page`,
   sendMsg: `${prefix}/capi/chat/msg`,
   getUserInfoDetail: `${prefix}/capi/user/userInfo`, // 获取用户信息详情
@@ -31,5 +31,6 @@ export default {
   getMsgReadCount: `${prefix}/capi/chat/msg/read`, // 消息已读未读数
   createGroup: `${prefix}/capi/room/group`, // 新增群组
   getGroupUserList: `${prefix}/capi/room/public/group/member/page`,
+  inviteGroupMember: `${prefix}/capi/room/group/member`, // 邀请群成员
   groupDetail: `${prefix}/capi/room/public/group`, // 群组详情
 }
