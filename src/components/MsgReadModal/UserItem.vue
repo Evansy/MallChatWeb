@@ -1,14 +1,11 @@
 <script setup lang="ts" name="UserItem">
-import { toRefs, watch } from 'vue'
+import { toRefs } from 'vue'
 import { useUserInfo } from '@/hooks/useCached'
 
 const props = defineProps<{ uid: number }>()
 
 const { uid } = toRefs(props)
 const user = useUserInfo(uid)
-watch(user, (val) => {
-  console.log(val)
-})
 </script>
 
 <template>

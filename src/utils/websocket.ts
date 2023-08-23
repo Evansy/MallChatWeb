@@ -2,7 +2,6 @@ import { useWsLoginStore, LoginStatus } from '@/stores/ws'
 import { useUserStore } from '@/stores/user'
 import { useChatStore } from '@/stores/chat'
 import { useGroupStore } from '@/stores/group'
-import { useCachedStore } from '@/stores/cached'
 import { WsResponseMessageType } from './wsType'
 import type {
   LoginSuccessResType,
@@ -113,7 +112,6 @@ class WS {
     const userStore = useUserStore()
     const chatStore = useChatStore()
     const groupStore = useGroupStore()
-    const cachedStore = useCachedStore()
     switch (params.type) {
       // 获取登录二维码
       case WsResponseMessageType.LoginQrCode: {
@@ -154,8 +152,6 @@ class WS {
             uid: rest.uid,
           },
         ])
-        // 初始化所有用户基本信息
-        cachedStore.initAllUserBaseInfo()
         // 获取用户详情
         chatStore.getSessionList(true)
         break
@@ -199,6 +195,12 @@ class WS {
       }
       // 消息撤回通知
       case WsResponseMessageType.WSMsgRecall: {
+        const { data } = params as { data: RevokedMsgType }
+        chatStore.updateRecallStatus(data)
+        break
+      }
+      // 新好友申请
+      case WsResponseMessageType.RequestNewFriend: {
         const { data } = params as { data: RevokedMsgType }
         chatStore.updateRecallStatus(data)
         break

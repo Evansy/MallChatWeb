@@ -124,6 +124,7 @@ export const useChatStore = defineStore('chat', () => {
       if (currentRoomType.value === RoomTypeEnum.Group) {
         groupStore.getGroupUserList(true)
         groupStore.getCountStatistic()
+        cachedStore.getGroupAtUserBaseInfo()
       }
     }
 
@@ -217,6 +218,8 @@ export const useChatStore = defineStore('chat', () => {
       getMsgList()
       // 请求第一个群成员列表
       currentRoomType.value === RoomTypeEnum.Group && groupStore.getGroupUserList(true)
+      // 初始化所有用户基本信息
+      cachedStore.initAllUserBaseInfo()
     }
   }
 

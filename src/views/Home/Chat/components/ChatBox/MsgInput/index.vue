@@ -9,6 +9,7 @@ import {
   onMounted,
   nextTick,
   type StyleValue,
+  computed,
 } from 'vue'
 import type { IMention, INode } from './types'
 import type { CacheUserItem } from '@/services/types'
@@ -20,6 +21,7 @@ import {
   transformNodeListToMentionData,
   insertInputText,
 } from './utils'
+import { useGlobalStore } from '@/stores/global'
 import { useCachedStore } from '@/stores/cached'
 import VirtualList from '@/components/VirtualList'
 import eventBus from '@/utils/eventBus'
@@ -64,6 +66,7 @@ const { modelValue: value, mentions, maxLength, disabled } = toRefs(props)
 const editorRef = ref<HTMLElement | null>()
 const scrollRef = ref()
 const cachedStore = useCachedStore()
+const globalStore = useGlobalStore()
 
 // 是否展示选人弹窗
 const showDialog = ref(false)
@@ -79,6 +82,8 @@ const isInit = ref(false)
 const editorRange = ref<{ range: Range; selection: Selection } | null>(null)
 // 记录input文本内容
 const inputStr = ref('')
+
+const currentRoomId = computed(() => globalStore.currentSession.roomId)
 
 inputStr.value = value.value
 
@@ -138,6 +143,16 @@ watch(
     personList.value = cachedStore.filterUsers(searchKey.value) as CacheUserItem[]
   },
   // { immediate: true },
+)
+watch(
+  currentRoomId,
+  (val, oldVal) => {
+    if (val !== oldVal) {
+      inputStr.value = ''
+      personList.value = cachedStore.currentAtUsersList as CacheUserItem[]
+    }
+  },
+  { immediate: true },
 )
 
 // 关闭选人弹窗时，重置选择的人的位置

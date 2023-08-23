@@ -4,7 +4,7 @@ export default {
   getMemberStatistic: `${prefix}/capi/chat/public/member/statistic`,
   getUserInfoBatch: `${prefix}/capi/user/public/summary/userInfo/batch`,
   getBadgesBatch: `${prefix}/capi/user/public/badges/batch`,
-  getAllUserBaseInfo: `${prefix}/capi/chat/member/list`, // 房间内的所有群成员列表-@专用
+  getAllUserBaseInfo: `${prefix}/capi/room/group/member/list`, // 房间内的所有群成员列表-@专用
   getMsgList: `${prefix}/capi/chat/public/msg/page`,
   sendMsg: `${prefix}/capi/chat/msg`,
   getUserInfoDetail: `${prefix}/capi/user/userInfo`, // 获取用户信息详情

@@ -2,10 +2,13 @@ import { defineStore } from 'pinia'
 import { ref, reactive, watch } from 'vue'
 import { RoomTypeEnum } from '@/enums'
 import type { ContactItem, RequestFriendItem } from '@/services/types'
-import { clearQueue } from '@/utils/readCountQueue'
+import { clearQueue, readCountQueue } from '@/utils/readCountQueue'
 import apis from '@/services/apis'
 
 export const useGlobalStore = defineStore('global', () => {
+  const unReadMark = reactive<{ newFriendUnreadCount: number }>({
+    newFriendUnreadCount: 0,
+  })
   const currentReadUnreadList = reactive<{ show: boolean; msgId: number | null }>({
     show: false,
     msgId: null,
@@ -35,11 +38,13 @@ export const useGlobalStore = defineStore('global', () => {
   watch(currentSession, (val) => {
     // 清理已读数查询
     clearQueue()
+    setTimeout(readCountQueue, 1000)
     // 标记房间最新消息已读
     apis.markMsgRead({ roomId: val.roomId }).send()
   })
 
   return {
+    unReadMark,
     currentSession,
     addFriendModalInfo,
     currentSelectedContact,

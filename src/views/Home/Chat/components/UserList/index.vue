@@ -4,11 +4,13 @@ import { Plus } from '@element-plus/icons-vue'
 
 import { useGroupStore } from '@/stores/group'
 import { useGlobalStore } from '@/stores/global'
+import { useCachedStore } from '@/stores/cached'
 import UserItem from './UserItem/index.vue'
 
 const groupListLastElRef = ref<HTMLDivElement>()
 const groupStore = useGroupStore()
 const globalStore = useGlobalStore()
+const cachedStore = useCachedStore()
 const groupUserList = computed(() => groupStore.userList)
 const statistic = computed(() => groupStore.countInfo)
 
@@ -39,8 +41,11 @@ const hiddenGroupListShow = () => (groupStore.showGroupList = false)
 const onAddGroupMember = () => {
   globalStore.createGroupModalInfo.show = true
   globalStore.createGroupModalInfo.isInvite = true
-  // TODO 禁用已经邀请的人
-  // globalStore.createGroupModalInfo.selectedUid = true
+  // 禁用已经邀请的人
+  console.log('cachedStore.currentAtUsersList', cachedStore.currentAtUsersList)
+  globalStore.createGroupModalInfo.selectedUid = cachedStore.currentAtUsersList.map(
+    (item) => item.uid,
+  )
 }
 </script>
 

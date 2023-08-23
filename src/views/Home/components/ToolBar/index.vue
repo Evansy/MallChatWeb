@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useGroupStore } from '@/stores/group'
+import { useGlobalStore } from '@/stores/global'
 import qrcode from '@/assets/qrcode.jpeg'
 import { judgeClient } from '@/utils/detectDevice'
 
@@ -9,8 +10,10 @@ const client = judgeClient()
 const visible = ref(false)
 const userStore = useUserStore()
 const groupStore = useGroupStore()
+const globalStore = useGlobalStore()
 
 const avatar = computed(() => userStore?.userInfo.avatar)
+const unReadMark = computed(() => globalStore.unReadMark)
 const showSettingBox = () => (visible.value = true)
 const toggleGroupListShow = () => (groupStore.showGroupList = !groupStore.showGroupList)
 // 是否PC端
@@ -68,7 +71,13 @@ const menuList = [
         <Icon class="tool-icon" icon="chat" :size="28" />
       </router-link>
       <router-link exactActiveClass="tool-icon-active" to="/contact">
-        <Icon class="tool-icon" icon="group" :size="28" />
+        <el-badge
+          :value="unReadMark.newFriendUnreadCount"
+          :hidden="unReadMark.newFriendUnreadCount === 0"
+          :max="99"
+        >
+          <Icon class="tool-icon" icon="group" :size="28" />
+        </el-badge>
       </router-link>
     </div>
 

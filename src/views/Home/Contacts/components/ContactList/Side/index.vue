@@ -18,11 +18,9 @@ const onNodeClick = (item: RequestFriendItem | ContactItemType) => {
 }
 
 const onNewFriendLoad = () => {
-  // console.log('onNewFriendLoad')
   contactStore.getRequestFriendsList()
 }
 const onContactsLoad = () => {
-  // console.log('onContactsLoad')
   contactStore.getContactList()
 }
 const onChange = () => {

@@ -20,6 +20,7 @@ const { send: invite, loading: inviteLoading } = useRequest(apis.inviteGroupMemb
   immediate: false,
 })
 const show = computed(() => globalStore.createGroupModalInfo.show)
+const isInvite = computed(() => globalStore.createGroupModalInfo.isInvite)
 const close = () => {
   globalStore.createGroupModalInfo.show = false
   globalStore.createGroupModalInfo.isInvite = false
@@ -27,7 +28,7 @@ const close = () => {
 }
 const onSend = async () => {
   if (selectUser.value.length === 0) return
-  if (globalStore.createGroupModalInfo.isInvite) {
+  if (isInvite.value) {
     await invite({
       roomId: globalStore.currentSession.roomId,
       uidList: selectUser.value,
@@ -67,7 +68,7 @@ const onChecked = (checked: number[]) => {
           @click="onSend"
           :loading="loading || inviteLoading"
           :disabled="selectUser.length === 0"
-          >创建</el-button
+          >{{ isInvite ? '邀请' : '创建' }}</el-button
         >
       </span>
     </template>
