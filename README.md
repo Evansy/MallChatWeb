@@ -50,6 +50,9 @@
 
 - 环境: node 16.18+, 包管理工具 pnpm (安装完 node 执行 `npm i pnpm -g` 即可);
 - 安装依赖: clone 工程之后，执行 `pnpm i`
+  - `npm` 安装报错, 命令后加参数 `npm i --ignore-scripts` 忽略 `scripts` 相关依赖即可解决
+    ![p9211Ag.png](https://s1.ax1x.com/2023/08/25/pPNP6RU.png)
+  - 推荐使用 `pnpm`, 安装依赖不会有 因为网络而失败 的问题
 - 启动: 按 `F5` 即可自动执行 `pnpm run dev` 并且打开浏览器
 - 部署
   - 部署到本地：执行 `pnpm build` 构建完成后把 `dist` 文件夹 放到服务器，并配置 `nginx` 即可
