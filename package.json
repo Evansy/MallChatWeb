@@ -76,6 +76,9 @@
     "vue-tsc": "^1.8.8",
     "xgplayer": "^2.32.3"
   },
+  "resolutions": {
+    "bin-wrapper": "npm:bin-wrapper-china"
+  },
   "browserslist": [
     "defaults",
     "not ie < 11",

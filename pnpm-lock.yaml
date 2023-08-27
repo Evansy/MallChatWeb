@@ -8,6 +8,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  bin-wrapper: npm:bin-wrapper-china
+
 dependencies:
   '@alova/scene-vue':
     specifier: ^1.1.7
@@ -2357,16 +2360,18 @@ packages:
       find-versions: registry.npmmirror.com/find-versions@3.2.0
     dev: true
 
-  registry.npmmirror.com/bin-wrapper@4.1.0:
-    resolution: {integrity: sha512-hfRmo7hWIXPkbpi0ZltboCMVrU+0ClXR/JgbCKKjlDjQf6igXa7OwdqNcFWQZPZTgiY7ZpzE3+LjjkLiTN2T7Q==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/bin-wrapper/-/bin-wrapper-4.1.0.tgz}
-    name: bin-wrapper
-    version: 4.1.0
-    engines: {node: '>=6'}
+  registry.npmmirror.com/bin-wrapper-china@0.1.0:
+    resolution: {integrity: sha512-1UCm17WYEbgry50tup+AQN+JGVEVzoW4f8HMl899k1lvuFxWKGZXl/G2fgxQxAckRjnloO3ijLVVEsv8zescUg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/bin-wrapper-china/-/bin-wrapper-china-0.1.0.tgz}
+    name: bin-wrapper-china
+    version: 0.1.0
+    engines: {node: '>=8.3'}
+    hasBin: true
     dependencies:
       bin-check: registry.npmmirror.com/bin-check@4.1.0
       bin-version-check: registry.npmmirror.com/bin-version-check@4.0.0
+      binary-mirror-config: registry.npmmirror.com/binary-mirror-config@1.41.0
       download: registry.npmmirror.com/download@7.1.0
-      import-lazy: registry.npmmirror.com/import-lazy@3.1.0
+      import-lazy: registry.npmmirror.com/import-lazy@4.0.0
       os-filter-obj: registry.npmmirror.com/os-filter-obj@2.0.0
       pify: registry.npmmirror.com/pify@4.0.1
     dev: true
@@ -2376,6 +2381,12 @@ packages:
     name: binary-extensions
     version: 2.2.0
     engines: {node: '>=8'}
+    dev: true
+
+  registry.npmmirror.com/binary-mirror-config@1.41.0:
+    resolution: {integrity: sha512-ZiIhR1s6Sv1Fv6qCQqfPjx0Cj86BgFlhqNxZgHkQOWcxJcMbO3mj1iqsuVjowYqJqeZL8e52+IEv7IRnSX6T6w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/binary-mirror-config/-/binary-mirror-config-1.41.0.tgz}
+    name: binary-mirror-config
+    version: 1.41.0
     dev: true
 
   registry.npmmirror.com/bl@1.2.3:
@@ -2989,7 +3000,7 @@ packages:
     requiresBuild: true
     dependencies:
       bin-build: registry.npmmirror.com/bin-build@3.0.0
-      bin-wrapper: registry.npmmirror.com/bin-wrapper@4.1.0
+      bin-wrapper: registry.npmmirror.com/bin-wrapper-china@0.1.0
     dev: true
 
   registry.npmmirror.com/d@1.0.1:
@@ -4596,7 +4607,7 @@ packages:
     requiresBuild: true
     dependencies:
       bin-build: registry.npmmirror.com/bin-build@3.0.0
-      bin-wrapper: registry.npmmirror.com/bin-wrapper@4.1.0
+      bin-wrapper: registry.npmmirror.com/bin-wrapper-china@0.1.0
       execa: registry.npmmirror.com/execa@5.1.1
       logalot: registry.npmmirror.com/logalot@2.1.0
     dev: true
@@ -5109,13 +5120,6 @@ packages:
       resolve-from: registry.npmmirror.com/resolve-from@4.0.0
     dev: true
 
-  registry.npmmirror.com/import-lazy@3.1.0:
-    resolution: {integrity: sha512-8/gvXvX2JMn0F+CDlSC4l6kOmVaLOO3XLkksI7CI3Ud95KDYJuYur2b9P/PUt/i/pDAMd/DulQsNbbbmRRsDIQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/import-lazy/-/import-lazy-3.1.0.tgz}
-    name: import-lazy
-    version: 3.1.0
-    engines: {node: '>=6'}
-    dev: true
-
   registry.npmmirror.com/import-lazy@4.0.0:
     resolution: {integrity: sha512-rKtvo6a868b5Hu3heneU+L4yEQ4jYKLtjpnPeUdK7h0yzXGmyBTypknlkCvHFBqfX9YlorEiMM6Dnq/5atfHkw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/import-lazy/-/import-lazy-4.0.0.tgz}
     name: import-lazy
@@ -5563,7 +5567,7 @@ packages:
     requiresBuild: true
     dependencies:
       bin-build: registry.npmmirror.com/bin-build@3.0.0
-      bin-wrapper: registry.npmmirror.com/bin-wrapper@4.1.0
+      bin-wrapper: registry.npmmirror.com/bin-wrapper-china@0.1.0
       logalot: registry.npmmirror.com/logalot@2.1.0
     dev: true
 
@@ -5576,7 +5580,7 @@ packages:
     requiresBuild: true
     dependencies:
       bin-build: registry.npmmirror.com/bin-build@3.0.0
-      bin-wrapper: registry.npmmirror.com/bin-wrapper@4.1.0
+      bin-wrapper: registry.npmmirror.com/bin-wrapper-china@0.1.0
     dev: true
 
   registry.npmmirror.com/js-tokens@4.0.0:
@@ -6295,7 +6299,7 @@ packages:
     requiresBuild: true
     dependencies:
       bin-build: registry.npmmirror.com/bin-build@3.0.0
-      bin-wrapper: registry.npmmirror.com/bin-wrapper@4.1.0
+      bin-wrapper: registry.npmmirror.com/bin-wrapper-china@0.1.0
     dev: true
 
   registry.npmmirror.com/ms@2.1.2:
@@ -6556,7 +6560,7 @@ packages:
     requiresBuild: true
     dependencies:
       bin-build: registry.npmmirror.com/bin-build@3.0.0
-      bin-wrapper: registry.npmmirror.com/bin-wrapper@4.1.0
+      bin-wrapper: registry.npmmirror.com/bin-wrapper-china@0.1.0
     dev: true
 
   registry.npmmirror.com/os-filter-obj@2.0.0:
@@ -6977,7 +6981,7 @@ packages:
     requiresBuild: true
     dependencies:
       bin-build: registry.npmmirror.com/bin-build@3.0.0
-      bin-wrapper: registry.npmmirror.com/bin-wrapper@4.1.0
+      bin-wrapper: registry.npmmirror.com/bin-wrapper-china@0.1.0
       execa: registry.npmmirror.com/execa@4.1.0
     dev: true
 

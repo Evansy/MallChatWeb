@@ -6,8 +6,9 @@ import { clearQueue, readCountQueue } from '@/utils/readCountQueue'
 import apis from '@/services/apis'
 
 export const useGlobalStore = defineStore('global', () => {
-  const unReadMark = reactive<{ newFriendUnreadCount: number }>({
+  const unReadMark = reactive<{ newFriendUnreadCount: number; newMsgUnreadCount: number }>({
     newFriendUnreadCount: 0,
+    newMsgUnreadCount: 0,
   })
   const currentReadUnreadList = reactive<{ show: boolean; msgId: number | null }>({
     show: false,
