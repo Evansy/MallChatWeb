@@ -1,5 +1,6 @@
 import { ref, reactive, computed, watch } from 'vue'
 import { defineStore } from 'pinia'
+import { useRoute } from 'vue-router'
 import apis from '@/services/apis'
 import type { MessageType, MarkItemType, RevokedMsgType, SessionItem } from '@/services/types'
 import { MarkEnum, RoomTypeEnum } from '@/enums'
@@ -21,6 +22,7 @@ export const useChatStore = defineStore('chat', () => {
   const userStore = useUserStore()
   const globalStore = useGlobalStore()
   const groupStore = useGroupStore()
+  const route = useRoute()
   const sessionList = reactive<SessionItem[]>([]) // 会话列表
   const sessionOptions = reactive({ isLast: false, isLoading: false, cursor: '' })
 
@@ -234,7 +236,7 @@ export const useChatStore = defineStore('chat', () => {
     cachedStore.getBatchUserInfo([uid])
 
     // 发完消息就要刷新会话列表，
-    //  FIXME 如果当前会话已经置顶了，可以不用刷新
+    // 如果当前会话已经置顶了，可以不用刷新
     if (globalStore.currentSession.roomId !== msg.message.roomId) {
       getSessionList(true)
     }
@@ -257,6 +259,12 @@ export const useChatStore = defineStore('chat', () => {
       currentNewMsgCount.value.count++
       return
     }
+
+    // 如果当前路由不是聊天，就开始计数
+    if (route.path !== '/') {
+      globalStore.unReadMark.newMsgUnreadCount++
+    }
+
     // 聊天列表滚动到底部
     setTimeout(() => {
       // 如果超过一屏了，不自动滚动到最新消息。

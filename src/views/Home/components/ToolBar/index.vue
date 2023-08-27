@@ -68,7 +68,13 @@ const menuList = [
     <Avatar :src="avatar" :size="isPc ? 50 : 40" v-login="showSettingBox" />
     <div class="tool-icons">
       <router-link exactActiveClass="tool-icon-active" to="/">
-        <Icon class="tool-icon" icon="chat" :size="28" />
+        <el-badge
+          :value="unReadMark.newMsgUnreadCount"
+          :hidden="unReadMark.newMsgUnreadCount === 0"
+          :max="99"
+        >
+          <Icon class="tool-icon" icon="chat" :size="28" />
+        </el-badge>
       </router-link>
       <router-link exactActiveClass="tool-icon-active" to="/contact">
         <el-badge
