@@ -5,7 +5,7 @@ const renderReplyContent = (name?: string, type?: MsgEnum, content?: string) => 
   switch (type) {
     case MsgEnum.SYSTEM:
     case MsgEnum.TEXT: {
-      return `${name}: ${content}`
+      return `${name}:${content}`
     }
     case MsgEnum.IMAGE: {
       return `${name}: [图片]`

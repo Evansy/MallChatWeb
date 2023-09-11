@@ -255,7 +255,11 @@ export const useChatStore = defineStore('chat', () => {
       shakeTitle.start()
     }
 
-    if (currentNewMsgCount.value && currentNewMsgCount.value?.isStart) {
+    if (
+      currentNewMsgCount.value &&
+      currentNewMsgCount.value?.isStart &&
+      typeof currentNewMsgCount.value.count === 'number'
+    ) {
       currentNewMsgCount.value.count++
       return
     }

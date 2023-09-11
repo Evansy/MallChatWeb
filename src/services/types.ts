@@ -357,6 +357,8 @@ export type RequestFriendItem = {
   type: number
   /** 申请人uid */
   uid: number
+  /** 会话 ID */
+  roomId: number
 }
 /** 联系人的列表项 */
 export type ContactItem = {

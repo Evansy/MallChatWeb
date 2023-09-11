@@ -67,6 +67,7 @@ const menuList = [
   <aside class="side-toolbar">
     <Avatar :src="avatar" :size="isPc ? 50 : 40" v-login="showSettingBox" />
     <div class="tool-icons">
+      <!-- 会话 -->
       <router-link exactActiveClass="tool-icon-active" to="/">
         <el-badge
           :value="unReadMark.newMsgUnreadCount"
@@ -76,6 +77,7 @@ const menuList = [
           <Icon class="tool-icon" icon="chat" :size="28" />
         </el-badge>
       </router-link>
+      <!-- 联系人 -->
       <router-link exactActiveClass="tool-icon-active" to="/contact">
         <el-badge
           :value="unReadMark.newFriendUnreadCount"
