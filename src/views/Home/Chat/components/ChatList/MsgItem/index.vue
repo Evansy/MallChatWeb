@@ -182,7 +182,6 @@ const currentReadList = (msgId: number) => {
         <Avatar :src="userInfo.avatar" @contextmenu.prevent.stop="handleUserRightClick($event)" />
         <div class="chat-item-box" ref="boxRef">
           <div class="chat-item-user-info">
-            {{ fromUser.uid }}
             <!-- 用户徽章悬浮说明 -->
             <el-tooltip
               effect="dark"

@@ -6,6 +6,7 @@ import { useGlobalStore } from '@/stores/global'
 import { useUserInfo } from '@/hooks/useCached'
 import { RequestFriendAgreeStatus } from '@/services/types'
 import type { RequestFriendItem } from '@/services/types'
+import { RoomTypeEnum } from '@/enums'
 
 const contactStore = useContactStore()
 const globalStore = useGlobalStore()
@@ -30,6 +31,10 @@ const onDeleteContact = (uid: number) => {
     .catch(() => {
       //
     })
+}
+const onStartSession = (roomId: number) => {
+  globalStore.currentSession.roomId = roomId
+  globalStore.currentSession.type = RoomTypeEnum.Single
 }
 </script>
 
@@ -67,7 +72,7 @@ const onDeleteContact = (uid: number) => {
           >接受</ElButton
         >
         <template v-else>
-          <ElButton type="primary">发消息</ElButton>
+          <ElButton type="primary" @click="onStartSession(selectedContact.roomId)">发消息</ElButton>
           <ElButton type="danger" @click="onDeleteContact(selectedContact.uid)"
             >删除联系人</ElButton
           >

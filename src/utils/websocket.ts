@@ -1,7 +1,9 @@
+import Router from '@/router'
 import { useWsLoginStore, LoginStatus } from '@/stores/ws'
 import { useUserStore } from '@/stores/user'
 import { useChatStore } from '@/stores/chat'
 import { useGroupStore } from '@/stores/group'
+import { useGlobalStore } from '@/stores/global'
 import { WsResponseMessageType } from './wsType'
 import type {
   LoginSuccessResType,
@@ -14,6 +16,7 @@ import { OnlineEnum } from '@/enums'
 import { computedToken } from '@/services/request'
 import { worker } from './initWorker'
 import shakeTitle from '@/utils/shakeTitle'
+import notify from '@/utils/notification'
 
 class WS {
   #tasks: WsReqMsgContentType[] = []
@@ -112,6 +115,7 @@ class WS {
     const userStore = useUserStore()
     const chatStore = useChatStore()
     const groupStore = useGroupStore()
+    const globalStore = useGlobalStore()
     switch (params.type) {
       // 获取登录二维码
       case WsResponseMessageType.LoginQrCode: {
@@ -201,8 +205,15 @@ class WS {
       }
       // 新好友申请
       case WsResponseMessageType.RequestNewFriend: {
-        const { data } = params as { data: RevokedMsgType }
-        chatStore.updateRecallStatus(data)
+        const data = params.data as { uid: number; unreadCount: number }
+        globalStore.unReadMark.newFriendUnreadCount += data.unreadCount
+        notify({
+          name: '新好友',
+          text: '您有一个新好友, 快来看看~',
+          onClick: () => {
+            Router.push('/contact')
+          },
+        })
         break
       }
       default: {
