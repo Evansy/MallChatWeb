@@ -216,12 +216,14 @@ export const useChatStore = defineStore('chat', () => {
       isFirstInit = true
       globalStore.currentSession.roomId = data.list[0].roomId
       globalStore.currentSession.type = data.list[0].type
+      // console.log('unreadCount', sessionList[0])
+      sessionList[0].unreadCount = 0
       // 用会话列表第一个去请求消息列表
       getMsgList()
       // 请求第一个群成员列表
       currentRoomType.value === RoomTypeEnum.Group && groupStore.getGroupUserList(true)
       // 初始化所有用户基本信息
-      cachedStore.initAllUserBaseInfo()
+      userStore.isSign && cachedStore.initAllUserBaseInfo()
     }
   }
 
