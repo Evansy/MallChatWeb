@@ -36,6 +36,7 @@ const cachedStore = useCachedStore()
 const userInfo = computed(() => userStore.userInfo)
 const { send: handlerGetBadgeList, data: badgeList } = useRequest(apis.getBadgeList, {
   initialData: [],
+  immediate: false,
 })
 
 watchEffect(() => {

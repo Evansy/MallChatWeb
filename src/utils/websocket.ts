@@ -4,6 +4,7 @@ import { useUserStore } from '@/stores/user'
 import { useChatStore } from '@/stores/chat'
 import { useGroupStore } from '@/stores/group'
 import { useGlobalStore } from '@/stores/global'
+import { useEmojiStore } from '@/stores/emoji'
 import { WsResponseMessageType } from './wsType'
 import type {
   LoginSuccessResType,
@@ -43,6 +44,11 @@ class WS {
 
   initConnect = () => {
     const token = localStorage.getItem('TOKEN')
+    // 如果token 是 null, 而且 localStorage 的用户信息有值，需要清空用户信息
+    if (token === null && localStorage.getItem('USER_INFO')) {
+      localStorage.removeItem('USER_INFO')
+    }
+    // 初始化 ws
     worker.postMessage(`{"type":"initWS","value":${token ? `"${token}"` : null}}`)
   }
 
@@ -116,6 +122,7 @@ class WS {
     const chatStore = useChatStore()
     const groupStore = useGroupStore()
     const globalStore = useGlobalStore()
+    const emojiStore = useEmojiStore()
     switch (params.type) {
       // 获取登录二维码
       case WsResponseMessageType.LoginQrCode: {
@@ -136,12 +143,12 @@ class WS {
         userStore.userInfo = { ...userStore.userInfo, ...rest }
         localStorage.setItem('USER_INFO', JSON.stringify(rest))
         localStorage.setItem('TOKEN', token)
-        // 获取用户详情
-        userStore.getUserDetailAction()
         // 更新一下请求里面的 token.
         computedToken.clear()
         computedToken.get()
         loginStore.loginStatus = LoginStatus.Success
+        // 获取用户详情
+        userStore.getUserDetailAction()
         // 关闭登录弹窗
         loginStore.showLogin = false
         // 清空登录二维码
@@ -158,6 +165,8 @@ class WS {
         ])
         // 获取用户详情
         chatStore.getSessionList(true)
+        // 自定义表情列表
+        emojiStore.getEmojiList()
         break
       }
       // 用户 token 过期
