@@ -267,7 +267,7 @@ export const useChatStore = defineStore('chat', () => {
     }
 
     // 如果当前路由不是聊天，就开始计数
-    if (route.path !== '/') {
+    if (route?.path !== '/') {
       globalStore.unReadMark.newMsgUnreadCount++
     }
 
@@ -358,6 +358,16 @@ export const useChatStore = defineStore('chat', () => {
     pushMsg(newMessage)
   }
 
+  // 标记已读数为 0
+  const markSessionRead = (roomId: number) => {
+    const session = sessionList.find((item) => item.roomId === roomId)
+    const unreadCount = session?.unreadCount || 0
+    if (session) {
+      session.unreadCount = 0
+    }
+    return unreadCount
+  }
+
   return {
     getMsgIndex,
     chatMessageList,
@@ -380,5 +390,6 @@ export const useChatStore = defineStore('chat', () => {
     sessionList,
     sessionOptions,
     getSessionList,
+    markSessionRead,
   }
 })
