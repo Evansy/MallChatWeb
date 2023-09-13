@@ -1,11 +1,13 @@
 import { defineStore } from 'pinia'
 import { ref, reactive, watch } from 'vue'
 import { RoomTypeEnum } from '@/enums'
+import { useChatStore } from '@/stores/chat'
 import type { ContactItem, RequestFriendItem } from '@/services/types'
 import { clearQueue, readCountQueue } from '@/utils/readCountQueue'
 import apis from '@/services/apis'
 
 export const useGlobalStore = defineStore('global', () => {
+  const chatStore = useChatStore()
   const unReadMark = reactive<{ newFriendUnreadCount: number; newMsgUnreadCount: number }>({
     newFriendUnreadCount: 0,
     newMsgUnreadCount: 0,
@@ -42,6 +44,15 @@ export const useGlobalStore = defineStore('global', () => {
     setTimeout(readCountQueue, 1000)
     // 标记房间最新消息已读
     apis.markMsgRead({ roomId: val.roomId }).send()
+    chatStore.markSessionRead(val.roomId)
+    // console.log(unReadMark.newMsgUnreadCount, unreadCount)
+    // setTimeout(() => {
+    //   if (unReadMark.newMsgUnreadCount !== unReadMark.newMsgUnreadCount - unreadCount) {
+    //     // unReadMark.newMsgUnreadCount = unReadMark.newMsgUnreadCount - unreadCount
+    //   }
+    // })
+    // unReadMark.newMsgUnreadCount = 0
+    // unReadMark.newMsgUnreadCount = unReadMark.newMsgUnreadCount - unreadCount
   })
 
   return {
