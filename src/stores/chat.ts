@@ -111,7 +111,7 @@ export const useChatStore = defineStore('chat', () => {
   })
 
   watch(currentRoomId, (val, oldVal) => {
-    if (val !== oldVal) {
+    if (oldVal !== undefined && val !== oldVal) {
       // 切换会话，滚动到底部
       chatListToBottomAction.value?.()
       // 切换的 rooms是空数据的话就请求消息列表
