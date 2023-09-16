@@ -239,7 +239,7 @@ export const useChatStore = defineStore('chat', () => {
 
     // 发完消息就要刷新会话列表，
     // 如果当前会话已经置顶了，可以不用刷新
-    if (globalStore.currentSession.roomId !== msg.message.roomId) {
+    if (globalStore.currentSession && globalStore.currentSession.roomId !== msg.message.roomId) {
       getSessionList(true)
     }
 
