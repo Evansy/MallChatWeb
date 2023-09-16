@@ -59,7 +59,14 @@ const onAddGroupMember = () => {
     <div class="user-list-wrapper" :class="groupStore.showGroupList ? 'show' : ''">
       <div class="user-list-header">
         在线人数：{{ statistic.onlineNum || 0 }}
-        <el-button type="primary" :icon="Plus" circle size="small" @click="onAddGroupMember" />
+        <el-button
+          v-login-show
+          type="primary"
+          :icon="Plus"
+          circle
+          size="small"
+          @click="onAddGroupMember"
+        />
       </div>
       <TransitionGroup
         v-show="groupUserList?.length"
