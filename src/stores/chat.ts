@@ -26,8 +26,8 @@ export const useChatStore = defineStore('chat', () => {
   const sessionList = reactive<SessionItem[]>([]) // 会话列表
   const sessionOptions = reactive({ isLast: false, isLoading: false, cursor: '' })
 
-  const currentRoomId = computed(() => globalStore.currentSession.roomId)
-  const currentRoomType = computed(() => globalStore.currentSession.type)
+  const currentRoomId = computed(() => globalStore.currentSession?.roomId)
+  const currentRoomType = computed(() => globalStore.currentSession?.type)
 
   const messageMap = reactive<Map<number, Map<number, MessageType>>>(
     new Map([[currentRoomId.value, new Map()]]),
