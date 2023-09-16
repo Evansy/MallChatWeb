@@ -8,7 +8,7 @@ const chatStore = useChatStore()
 const globalStore = useGlobalStore()
 
 // 默认执行一次
-chatStore.getSessionList()
+chatStore.getSessionList(true)
 
 globalStore.unReadMark.newMsgUnreadCount = 0
 </script>
