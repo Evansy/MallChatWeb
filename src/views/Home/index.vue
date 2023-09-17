@@ -7,7 +7,7 @@ import { RouterView } from 'vue-router'
 import AddFriendModal from '@/components/AddFriendModal/index.vue'
 import MsgReadModal from '@/components/MsgReadModal/index.vue'
 import CreateGroupModal from '@/components/CreateGroupModal/index.vue'
-import { initListener, clearListener } from '@/utils/readCountQueue'
+import { initListener, readCountQueue, clearListener } from '@/utils/readCountQueue'
 
 const imageStore = useImgPreviewStore()
 const videoStore = useVideoPreviewStore()
@@ -35,8 +35,10 @@ watch(
   (newValue) => {
     if (newValue) {
       initListener()
+      readCountQueue()
     }
   },
+  { immediate: true },
 )
 
 onUnmounted(() => {
