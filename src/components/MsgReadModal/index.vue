@@ -3,6 +3,7 @@ import { ref, reactive, computed, watch } from 'vue'
 import type { TabsPaneContext } from 'element-plus'
 import { useRequest } from 'alova'
 import cloneDeep from 'lodash/cloneDeep'
+import isEqual from 'lodash/isEqual'
 import apis from '@/services/apis'
 import UserItem from './UserItem.vue'
 import { judgeClient } from '@/utils/detectDevice'
@@ -48,8 +49,11 @@ const list = reactive<
 const curList = computed(() => list[active.value])
 const { send, data } = useRequest(apis.getMsgReadList, { immediate: false })
 
-watch(data, (val) => {
-  list[active.value] = val
+watch(data, (val, oldVal) => {
+  if (!val || isEqual(val, oldVal)) return
+  list[active.value].cursor = val.cursor
+  list[active.value].list.push(...val.list)
+  list[active.value].isLast = val.isLast
 })
 
 // 弹窗打开而且有 msgId 值就发送请求

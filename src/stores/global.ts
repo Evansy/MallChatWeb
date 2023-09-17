@@ -44,15 +44,15 @@ export const useGlobalStore = defineStore('global', () => {
     setTimeout(readCountQueue, 1000)
     // 标记房间最新消息已读
     apis.markMsgRead({ roomId: val.roomId }).send()
-    chatStore.markSessionRead(val.roomId)
+    const unreadCount = chatStore.markSessionRead(val.roomId)
     // console.log(unReadMark.newMsgUnreadCount, unreadCount)
     // setTimeout(() => {
     //   if (unReadMark.newMsgUnreadCount !== unReadMark.newMsgUnreadCount - unreadCount) {
     //     // unReadMark.newMsgUnreadCount = unReadMark.newMsgUnreadCount - unreadCount
     //   }
     // })
-    // unReadMark.newMsgUnreadCount = 0
-    // unReadMark.newMsgUnreadCount = unReadMark.newMsgUnreadCount - unreadCount
+    const resultCount = unReadMark.newMsgUnreadCount - unreadCount
+    unReadMark.newMsgUnreadCount = resultCount > 0 ? resultCount : 0
   })
 
   return {
