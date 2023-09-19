@@ -296,6 +296,14 @@ export const useChatStore = defineStore('chat', () => {
       return
     }
 
+    // 聊天记录计数
+    if (currentRoomId.value !== msg.message.roomId) {
+      const item = sessionList.find((item) => item.roomId === msg.message.roomId)
+      if (item) {
+        item.unreadCount += 1
+      }
+    }
+
     // 如果当前路由不是聊天，就开始计数
     if (route?.path && route?.path !== '/') {
       globalStore.unReadMark.newMsgUnreadCount++
