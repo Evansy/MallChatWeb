@@ -105,4 +105,7 @@ export default {
     deleteRequest(urls.inviteGroupMember, params),
   /** 群组详情 */
   groupDetail: (params: { id: number }) => getRequest<GroupDetailReq>(urls.groupDetail, { params }),
+  /** 会话详情(联系人列表发消息用) */
+  sessionDetail: (params: { uid: number }) =>
+    getRequest<SessionItem>(urls.sessionDetail, { params }),
 }

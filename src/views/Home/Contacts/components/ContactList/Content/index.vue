@@ -1,14 +1,18 @@
 <script setup lang="ts" name="ContactSide">
+import Router from '@/router'
 import { computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useContactStore } from '@/stores/contacts'
+import { useChatStore } from '@/stores/chat'
 import { useGlobalStore } from '@/stores/global'
 import { useUserInfo } from '@/hooks/useCached'
 import { RequestFriendAgreeStatus } from '@/services/types'
 import type { RequestFriendItem } from '@/services/types'
 import { RoomTypeEnum } from '@/enums'
+import apis from '@/services/apis'
 
 const contactStore = useContactStore()
+const chatStore = useChatStore()
 const globalStore = useGlobalStore()
 
 const selectedContact = computed(() => globalStore.currentSelectedContact as RequestFriendItem)
@@ -32,9 +36,12 @@ const onDeleteContact = (uid: number) => {
       //
     })
 }
-const onStartSession = (roomId: number) => {
-  globalStore.currentSession.roomId = roomId
+const onStartSession = async (uid: number) => {
+  const result = await apis.sessionDetail({ uid }).send()
+  globalStore.currentSession.roomId = result.roomId
   globalStore.currentSession.type = RoomTypeEnum.Single
+  chatStore.updateSessionLastActiveTime(result.roomId, result)
+  Router.push('/')
 }
 </script>
 
@@ -72,10 +79,10 @@ const onStartSession = (roomId: number) => {
           >接受</ElButton
         >
         <template v-else>
-          <ElButton type="primary" @click="onStartSession(selectedContact.roomId)">发消息</ElButton>
-          <ElButton type="danger" @click="onDeleteContact(selectedContact.uid)"
-            >删除联系人</ElButton
-          >
+          <ElButton type="primary" @click="onStartSession(selectedContact.uid)">发消息</ElButton>
+          <ElButton type="danger" @click="onDeleteContact(selectedContact.uid)">
+            删除联系人
+          </ElButton>
         </template>
       </div>
     </div>
