@@ -1,5 +1,6 @@
 import { ref, reactive, computed, watch } from 'vue'
 import { defineStore } from 'pinia'
+import cloneDeep from 'lodash/cloneDeep'
 import { useRoute } from 'vue-router'
 import apis from '@/services/apis'
 import type { MessageType, MarkItemType, RevokedMsgType, SessionItem } from '@/services/types'
@@ -196,7 +197,7 @@ export const useChatStore = defineStore('chat', () => {
     const data = await apis
       .getSessionList({
         params: {
-          pageSize: sessionList.length > pageSize ? sessionList.length : pageSize,
+          pageSize: sessionList.length > pageSize ? sessionList.length : 10,
           cursor: isFresh || !sessionOptions.cursor ? undefined : sessionOptions.cursor,
         },
       })
@@ -211,6 +212,8 @@ export const useChatStore = defineStore('chat', () => {
     sessionOptions.cursor = data.cursor
     sessionOptions.isLast = data.isLast
     sessionOptions.isLoading = false
+
+    sortAndUniqueSessionList()
 
     if (!isFirstInit) {
       isFirstInit = true
@@ -227,6 +230,32 @@ export const useChatStore = defineStore('chat', () => {
     }
   }
 
+  /** 会话列表去重并排序 */
+  const sortAndUniqueSessionList = () => {
+    const temp: Record<string, SessionItem> = {}
+    sessionList.forEach((item) => (temp[item.roomId] = item))
+    sessionList.splice(0, sessionList.length, ...Object.values(temp))
+    sessionList.sort((pre, cur) => cur.activeTime - pre.activeTime)
+  }
+
+  const updateSession = (roomId: number, roomProps: Partial<SessionItem>) => {
+    const session = sessionList.find((item) => item.roomId === roomId)
+    session && roomProps && Object.assign(session, roomProps)
+    sortAndUniqueSessionList()
+  }
+
+  const updateSessionLastActiveTime = (roomId: number, room?: SessionItem) => {
+    const session = sessionList.find((item) => item.roomId === roomId)
+    if (session) {
+      Object.assign(session, { activeTime: Date.now() })
+    } else if (room) {
+      const newItem = cloneDeep(room)
+      newItem.activeTime = Date.now()
+      sessionList.unshift(newItem)
+    }
+    sortAndUniqueSessionList()
+  }
+
   const pushMsg = (msg: MessageType) => {
     const current = messageMap.get(msg.message.roomId)
     current?.set(msg.message.id, msg)
@@ -240,7 +269,8 @@ export const useChatStore = defineStore('chat', () => {
     // 发完消息就要刷新会话列表，
     // 如果当前会话已经置顶了，可以不用刷新
     if (globalStore.currentSession && globalStore.currentSession.roomId !== msg.message.roomId) {
-      getSessionList(true)
+      // getSessionList(true)
+      updateSessionLastActiveTime(msg.message.roomId)
     }
 
     // 如果收到的消息里面是艾特自己的就发送系统通知
@@ -267,7 +297,7 @@ export const useChatStore = defineStore('chat', () => {
     }
 
     // 如果当前路由不是聊天，就开始计数
-    if (route?.path !== '/') {
+    if (route?.path && route?.path !== '/') {
       globalStore.unReadMark.newMsgUnreadCount++
     }
 
@@ -390,6 +420,8 @@ export const useChatStore = defineStore('chat', () => {
     sessionList,
     sessionOptions,
     getSessionList,
+    updateSession,
+    updateSessionLastActiveTime,
     markSessionRead,
   }
 })

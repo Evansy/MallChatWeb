@@ -44,11 +44,16 @@ const onSelectSelectSession = (roomId: number, roomType: RoomTypeEnum) => {
   globalStore.currentSession.roomId = roomId
   globalStore.currentSession.type = roomType
 }
+
+// 加载更多
+const load = () => {
+  chatStore.getSessionList()
+}
 </script>
 
 <template>
-  <div class="chat-message">
-    <div
+  <ul class="chat-message" v-infinite-scroll="load">
+    <li
       v-for="(item, index) in sessionList"
       :key="index"
       :class="['chat-message-item ', { active: currentSession.roomId === item.roomId }]"
@@ -65,8 +70,8 @@ const onSelectSelectSession = (roomId: number, roomType: RoomTypeEnum) => {
         <div class="message-message">{{ item.lastMsg }}</div>
       </div>
       <span class="message-time">{{ item.lastMsgTime }}</span>
-    </div>
-  </div>
+    </li>
+  </ul>
 </template>
 
 <style lang="scss" src="./styles.scss" scoped />

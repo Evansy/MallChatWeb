@@ -86,7 +86,7 @@ const send = (msgType: MsgEnum, body: any) => {
 
       // 发完消息就要刷新会话列表，
       //  FIXME 如果当前会话已经置顶了，可以不用刷新
-      chatStore.getSessionList(true)
+      chatStore.updateSessionLastActiveTime(globalStore.currentSession.roomId)
     })
     .finally(() => {
       isSending.value = false
