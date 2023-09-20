@@ -215,12 +215,11 @@ export const useChatStore = defineStore('chat', () => {
 
     sortAndUniqueSessionList()
 
+    sessionList[0].unreadCount = 0
     if (!isFirstInit) {
       isFirstInit = true
       globalStore.currentSession.roomId = data.list[0].roomId
       globalStore.currentSession.type = data.list[0].type
-      // console.log('unreadCount', sessionList[0])
-      sessionList[0].unreadCount = 0
       // 用会话列表第一个去请求消息列表
       getMsgList()
       // 请求第一个群成员列表
