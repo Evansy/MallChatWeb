@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, reactive, provide } from 'vue'
+import { computed, provide, reactive, ref } from 'vue'
 import type { ElInput } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import { useWsLoginStore } from '@/stores/ws'
 import { useUserStore } from '@/stores/user'
 import { useChatStore } from '@/stores/chat'
@@ -20,13 +21,11 @@ import { useRecording } from '@/hooks/useRecording'
 import { MsgEnum } from '@/enums'
 import { useMockMessage } from '@/hooks/useMockMessage'
 import { generateBody } from '@/utils'
-import { ElMessage } from 'element-plus'
 import throttle from 'lodash/throttle'
-
-const client = judgeClient()
-
 import UserList from '../UserList/index.vue'
 import ChatList from '../ChatList/index.vue'
+
+const client = judgeClient()
 
 const chatStore = useChatStore()
 const isSelect = ref(false)
@@ -241,7 +240,9 @@ const sendEmoji = throttle((url: string) => {
   <div class="chat-box">
     <div class="chat-wrapper">
       <template v-if="isSelect">
-        <ElIcon :size="160" color="var(--font-light)"><IEpChatDotRound /></ElIcon>
+        <ElIcon :size="160" color="var(--font-light)">
+          <IEpChatDotRound />
+        </ElIcon>
       </template>
       <div v-else class="chat">
         <ChatList />
