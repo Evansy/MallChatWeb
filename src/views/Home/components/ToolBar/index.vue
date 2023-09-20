@@ -62,7 +62,7 @@ const menuList = [
 
 <template>
   <aside class="side-toolbar">
-    <Avatar :src="avatar" :size="isPc ? 50 : 40" v-login="showSettingBox" />
+    <Avatar :src="userStore.isSign ? avatar : ''" :size="isPc ? 50 : 40" v-login="showSettingBox" />
     <div class="menu">
       <el-tooltip effect="dark" :placement="isPc ? 'right' : 'bottom'">
         <template #content>
