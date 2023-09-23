@@ -56,6 +56,20 @@ watch(data, (val, oldVal) => {
   list[active.value].isLast = val.isLast
 })
 
+// 切换 Tab 也请求
+watch(active, (val, oldVal) => {
+  if (val !== oldVal && msgId.value) {
+    send({
+      params: {
+        searchType: active.value,
+        pageSize: 20,
+        msgId: msgId.value,
+        cursor: curList.value.cursor || undefined,
+      },
+    })
+  }
+})
+
 // 弹窗打开而且有 msgId 值就发送请求
 watch(value, (val) => {
   if (val && msgId.value) {

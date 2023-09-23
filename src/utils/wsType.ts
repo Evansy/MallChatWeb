@@ -22,6 +22,8 @@ export enum WsResponseMessageType {
   WSMsgRecall,
   /** 新好友申请 */
   RequestNewFriend,
+  /** 新好友会话 */
+  NewFriendSession,
 }
 
 /**

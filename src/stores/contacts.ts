@@ -1,11 +1,14 @@
 import { reactive } from 'vue'
 import { defineStore } from 'pinia'
 import apis from '@/services/apis'
+import { useGlobalStore } from '@/stores/global'
+import { RequestFriendAgreeStatus } from '@/services/types'
 import type { ContactItem, RequestFriendItem } from '@/services/types'
 
 export const pageSize = 20
 
 export const useContactStore = defineStore('contact', () => {
+  const globalStore = useGlobalStore()
   const contactsList = reactive<ContactItem[]>([])
   const requestFriendsList = reactive<RequestFriendItem[]>([])
 
@@ -13,7 +16,9 @@ export const useContactStore = defineStore('contact', () => {
   const requestFriendsOptions = reactive({ isLast: false, isLoading: false, cursor: '' })
 
   const getContactList = async (isFresh = false) => {
-    if (contactsOptions.isLast || contactsOptions.isLoading) return
+    if (!isFresh) {
+      if (contactsOptions.isLast || contactsOptions.isLoading) return
+    }
     contactsOptions.isLoading = true
     const data = await apis
       .getContactList({
@@ -35,7 +40,9 @@ export const useContactStore = defineStore('contact', () => {
   }
 
   const getRequestFriendsList = async (isFresh = false) => {
-    if (requestFriendsOptions.isLast || requestFriendsOptions.isLoading) return
+    if (!isFresh) {
+      if (requestFriendsOptions.isLast || requestFriendsOptions.isLoading) return
+    }
     requestFriendsOptions.isLoading = true
     const data = await apis
       .requestFriendList({
@@ -56,8 +63,8 @@ export const useContactStore = defineStore('contact', () => {
   }
 
   // 默认执行一次
-  getContactList()
-  getRequestFriendsList()
+  // getContactList()
+  // getRequestFriendsList()
 
   /** 接受好友请求 */
   const onAcceptFriend = (applyId: number) => {
@@ -70,6 +77,12 @@ export const useContactStore = defineStore('contact', () => {
         getRequestFriendsList(true)
         // 刷新好友列表
         getContactList(true)
+
+        // 标识为可以发消息的人
+        if (globalStore.currentSelectedContact) {
+          // @ts-ignore
+          globalStore.currentSelectedContact.status = RequestFriendAgreeStatus.Agree
+        }
       })
   }
 

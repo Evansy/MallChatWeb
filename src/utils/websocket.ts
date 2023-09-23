@@ -13,7 +13,7 @@ import type {
   OnStatusChangeType,
 } from './wsType'
 import type { MessageType, MarkItemType, RevokedMsgType } from '@/services/types'
-import { OnlineEnum } from '@/enums'
+import { OnlineEnum, ChangeTypeEnum, RoomTypeEnum } from '@/enums'
 import { computedToken } from '@/services/request'
 import { worker } from './initWorker'
 import shakeTitle from '@/utils/shakeTitle'
@@ -169,15 +169,6 @@ class WS {
         emojiStore.getEmojiList()
         break
       }
-      // 用户 token 过期
-      case WsResponseMessageType.TokenExpired: {
-        userStore.isSign = false
-        userStore.userInfo = {}
-        localStorage.removeItem('USER_INFO')
-        localStorage.removeItem('TOKEN')
-        loginStore.loginStatus = LoginStatus.Init
-        break
-      }
       // 收到消息
       case WsResponseMessageType.ReceiveMessage: {
         chatStore.pushMsg(params.data as MessageType)
@@ -189,6 +180,15 @@ class WS {
         groupStore.countInfo.onlineNum = data.onlineNum
         // groupStore.countInfo.totalNum = data.totalNum
         groupStore.batchUpdateUserStatus(data.changeList)
+        break
+      }
+      // 用户 token 过期
+      case WsResponseMessageType.TokenExpired: {
+        userStore.isSign = false
+        userStore.userInfo = {}
+        localStorage.removeItem('USER_INFO')
+        localStorage.removeItem('TOKEN')
+        loginStore.loginStatus = LoginStatus.Init
         break
       }
       // 小黑子的发言在禁用后，要删除他的发言
@@ -223,6 +223,31 @@ class WS {
             Router.push('/contact')
           },
         })
+        break
+      }
+      // 新好友申请
+      case WsResponseMessageType.NewFriendSession: {
+        // changeType 1 加入群组，2： 移除群组
+        const data = params.data as {
+          roomId: number
+          uid: number
+          changeType: ChangeTypeEnum
+          activeStatus: OnlineEnum
+          lastOptTime: number
+        }
+        if (
+          data.roomId === globalStore.currentSession.roomId &&
+          globalStore.currentSession.type === RoomTypeEnum.Group
+        ) {
+          if (data.changeType === ChangeTypeEnum.REMOVE) {
+            // 移除群成员
+            groupStore.filterUser(data.uid)
+            // TODO 添加一条退出群聊的消息
+          } else {
+            // TODO 添加群成员
+            // TODO 添加一条入群的消息
+          }
+        }
         break
       }
       default: {

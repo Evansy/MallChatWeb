@@ -1,5 +1,6 @@
 <script setup lang="ts" name="ContactItem">
 import { toRefs, computed } from 'vue'
+import { OnlineEnum } from '@/enums'
 import { useUserInfo } from '@/hooks/useCached'
 import type { ContactItem } from '@/services/types'
 
@@ -13,7 +14,13 @@ const currentUser = useUserInfo(currentUid.value)
 
 <template>
   <div class="item-info contact-item">
-    <Avatar class="avatar" :src="currentUser.avatar" :size="40" />
+    <Avatar
+      class="avatar"
+      :src="currentUser.avatar"
+      :size="40"
+      showStatus
+      :online="item.activeStatus === OnlineEnum.ONLINE"
+    />
     <div class="item-info-right">
       <span class="item-info-name"> {{ currentUser.name }}</span>
     </div>

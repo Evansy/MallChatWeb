@@ -1,11 +1,14 @@
 <script setup lang="ts">
-// import { useContactStore } from '@/stores/contacts'
+import { onBeforeMount } from 'vue'
+import { useContactStore } from '@/stores/contacts'
 import ContactList from './components/ContactList/index.vue'
 
-// const contactStore = useContactStore()
-// 默认执行一次
-// contactStore.getContactList()
-// contactStore.getRequestFriendsList()
+const contactStore = useContactStore()
+onBeforeMount(() => {
+  // 默认执行一次
+  contactStore.getContactList(true)
+  contactStore.getRequestFriendsList(true)
+})
 </script>
 
 <template><ContactList /></template>

@@ -33,5 +33,6 @@ export default {
   getGroupUserList: `${prefix}/capi/room/public/group/member/page`,
   inviteGroupMember: `${prefix}/capi/room/group/member`, // 邀请群成员
   groupDetail: `${prefix}/capi/room/public/group`, // 群组详情
-  sessionDetail: `${prefix}/capi/chat/public/contact/detail/friend`, // 会话详情(联系人列表发消息用)
+  sessionDetail: `${prefix}/capi/chat/public/contact/detail`, // 会话详情
+  sessionDetailWithFriends: `${prefix}/capi/chat/public/contact/detail/friend`, // 会话详情(联系人列表发消息用)
 }

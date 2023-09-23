@@ -37,7 +37,7 @@ const onDeleteContact = (uid: number) => {
     })
 }
 const onStartSession = async (uid: number) => {
-  const result = await apis.sessionDetail({ uid }).send()
+  const result = await apis.sessionDetailWithFriends({ uid }).send()
   globalStore.currentSession.roomId = result.roomId
   globalStore.currentSession.type = RoomTypeEnum.Single
   chatStore.updateSessionLastActiveTime(result.roomId, result)

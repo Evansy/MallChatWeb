@@ -90,3 +90,11 @@ export enum RoomTypeEnum {
   /** 2单聊 */
   Single,
 }
+
+/** 变更类型 1 加入群组，2： 移除群组 */
+export enum ChangeTypeEnum {
+  /** 1 加入群组 */
+  JOIN = 1,
+  /** 2 移除群组 */
+  REMOVE,
+}

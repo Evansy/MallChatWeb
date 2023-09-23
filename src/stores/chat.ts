@@ -2,6 +2,7 @@ import { ref, reactive, computed, watch } from 'vue'
 import { defineStore } from 'pinia'
 import cloneDeep from 'lodash/cloneDeep'
 import { useRoute } from 'vue-router'
+import Router from '@/router'
 import apis from '@/services/apis'
 import type { MessageType, MarkItemType, RevokedMsgType, SessionItem } from '@/services/types'
 import { MarkEnum, RoomTypeEnum } from '@/enums'
@@ -19,11 +20,11 @@ export const pageSize = 20
 let isFirstInit = false
 
 export const useChatStore = defineStore('chat', () => {
+  const route = useRoute()
   const cachedStore = useCachedStore()
   const userStore = useUserStore()
   const globalStore = useGlobalStore()
   const groupStore = useGroupStore()
-  const route = useRoute()
   const sessionList = reactive<SessionItem[]>([]) // 会话列表
   const sessionOptions = reactive({ isLast: false, isLoading: false, cursor: '' })
 
@@ -255,7 +256,7 @@ export const useChatStore = defineStore('chat', () => {
     sortAndUniqueSessionList()
   }
 
-  const pushMsg = (msg: MessageType) => {
+  const pushMsg = async (msg: MessageType) => {
     const current = messageMap.get(msg.message.roomId)
     current?.set(msg.message.id, msg)
 
@@ -268,8 +269,17 @@ export const useChatStore = defineStore('chat', () => {
     // 发完消息就要刷新会话列表，
     // 如果当前会话已经置顶了，可以不用刷新
     if (globalStore.currentSession && globalStore.currentSession.roomId !== msg.message.roomId) {
-      // getSessionList(true)
-      updateSessionLastActiveTime(msg.message.roomId)
+      let result = undefined
+      // 如果当前路由不是聊天，就开始拿会话详情，并手动新增一条会话记录
+      if (route?.path && route?.path !== '/') {
+        globalStore.currentSession.roomId = msg.message.roomId
+        globalStore.currentSession.type = RoomTypeEnum.Single
+        if (!current) {
+          result = await apis.sessionDetail({ id: msg.message.roomId }).send()
+        }
+        Router.push('/')
+      }
+      updateSessionLastActiveTime(msg.message.roomId, result)
     }
 
     // 如果收到的消息里面是艾特自己的就发送系统通知
