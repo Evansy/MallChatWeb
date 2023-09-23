@@ -1,0 +1,149 @@
+:global(.setting-box-modal) {
+  border-radius: 8px !important;
+}
+
+:global(.setting-box-modal .el-dialog__header) {
+  padding: 0;
+}
+
+:global(.setting-box-modal .el-dialog__headerbtn) {
+  z-index: 5;
+}
+
+.setting-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.setting-avatar {
+  --el-avatar-size: 100px;
+}
+
+.setting-avatar-box {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+.setting-badge {
+  width: 20px;
+  height: 20px;
+}
+
+.setting-avatar-sex {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  z-index: 10;
+  padding: 2px;
+  background-color: var(--avatar-sex-bg-color);
+  border: 1px solid var(--color-white);
+  border-radius: 50%;
+
+  --avatar-sex-bg-man: var(--color-primary);
+  --avatar-sex-bg-female: pink;
+}
+
+.user-name {
+  display: flex;
+  column-gap: 8px;
+  align-items: center;
+}
+
+.setting-tips {
+  width: fit-content;
+}
+
+.setting-name {
+  display: flex;
+  column-gap: 8px;
+  align-items: center;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  font-size: 16px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.not-allow {
+  cursor: not-allowed;
+}
+
+.badge-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 0;
+  margin: 0;
+  margin-top: 20px;
+  list-style-type: none;
+}
+
+.badge-item-mask {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  background-color: var(--hover-bg-2);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.badge-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30%;
+  background-color: var(--hover-bg-2);
+  border-radius: 50%;
+
+  &:hover {
+    .badge-item-mask {
+      pointer-events: initial;
+      opacity: 1;
+    }
+  }
+}
+
+.badge-item-icon {
+  width: 80%;
+  min-width: 80%;
+  margin-top: 10%;
+  margin-bottom: 10%;
+  filter: grayscale(1);
+
+  &-has {
+    filter: grayscale(0);
+  }
+}
+
+.badge-item-info {
+  margin-left: 4px;
+}
+
+.name-edit-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.name-edit-icon {
+  margin-left: 8px;
+}
+
+@media only screen and (min-width: 640px) {
+  .badge-list {
+    gap: 16px;
+  }
+
+  .badge-item {
+    width: 100px;
+    height: 100px;
+  }
+}

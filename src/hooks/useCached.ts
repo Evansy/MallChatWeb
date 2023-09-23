@@ -1,4 +1,4 @@
-import { computed, toValue } from 'vue'
+import { computed, toValue, type Ref } from 'vue'
 import type { ComputedRef } from 'vue'
 import { useCachedStore } from '@/stores/cached'
 
@@ -7,9 +7,14 @@ import { useCachedStore } from '@/stores/cached'
  * @param uid 用户 ID
  * @description 引入该Hook后，可响应式获取用户信息
  */
-export const useUserInfo = (uid?: number | ComputedRef<number | undefined>) => {
+export const useUserInfo = (uid?: number | ComputedRef<number | undefined> | Ref<number>) => {
   const cachedStore = useCachedStore()
   const userInfo = computed(() => (uid && cachedStore.userCachedList[toValue(uid as number)]) || {})
+  // 如果没有就请求
+  const resultUid = toValue(uid as number)
+  if (resultUid && Object.keys(userInfo.value).length === 0) {
+    cachedStore.getBatchUserInfo([resultUid])
+  }
   return userInfo
 }
 
@@ -23,5 +28,10 @@ export const useBadgeInfo = (itemId?: number | ComputedRef<number | undefined>) 
   const badgeInfo = computed(
     () => (itemId && cachedStore.badgeCachedList[toValue(itemId as number)]) || {},
   )
+  // 如果没有就请求
+  const resultItemId = toValue(itemId as number)
+  if (resultItemId && Object.keys(badgeInfo.value).length === 0) {
+    cachedStore.getBatchBadgeInfo([resultItemId])
+  }
   return badgeInfo
 }

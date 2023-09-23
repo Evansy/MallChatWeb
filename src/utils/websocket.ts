@@ -1,8 +1,10 @@
+import Router from '@/router'
 import { useWsLoginStore, LoginStatus } from '@/stores/ws'
 import { useUserStore } from '@/stores/user'
 import { useChatStore } from '@/stores/chat'
 import { useGroupStore } from '@/stores/group'
-import { useCachedStore } from '@/stores/cached'
+import { useGlobalStore } from '@/stores/global'
+import { useEmojiStore } from '@/stores/emoji'
 import { WsResponseMessageType } from './wsType'
 import type {
   LoginSuccessResType,
@@ -15,6 +17,7 @@ import { OnlineEnum } from '@/enums'
 import { computedToken } from '@/services/request'
 import { worker } from './initWorker'
 import shakeTitle from '@/utils/shakeTitle'
+import notify from '@/utils/notification'
 
 class WS {
   #tasks: WsReqMsgContentType[] = []
@@ -41,6 +44,11 @@ class WS {
 
   initConnect = () => {
     const token = localStorage.getItem('TOKEN')
+    // 如果token 是 null, 而且 localStorage 的用户信息有值，需要清空用户信息
+    if (token === null && localStorage.getItem('USER_INFO')) {
+      localStorage.removeItem('USER_INFO')
+    }
+    // 初始化 ws
     worker.postMessage(`{"type":"initWS","value":${token ? `"${token}"` : null}}`)
   }
 
@@ -113,7 +121,8 @@ class WS {
     const userStore = useUserStore()
     const chatStore = useChatStore()
     const groupStore = useGroupStore()
-    const cachedStore = useCachedStore()
+    const globalStore = useGlobalStore()
+    const emojiStore = useEmojiStore()
     switch (params.type) {
       // 获取登录二维码
       case WsResponseMessageType.LoginQrCode: {
@@ -134,12 +143,12 @@ class WS {
         userStore.userInfo = { ...userStore.userInfo, ...rest }
         localStorage.setItem('USER_INFO', JSON.stringify(rest))
         localStorage.setItem('TOKEN', token)
-        // 获取用户详情
-        userStore.getUserDetailAction()
         // 更新一下请求里面的 token.
         computedToken.clear()
         computedToken.get()
         loginStore.loginStatus = LoginStatus.Success
+        // 获取用户详情
+        userStore.getUserDetailAction()
         // 关闭登录弹窗
         loginStore.showLogin = false
         // 清空登录二维码
@@ -154,8 +163,10 @@ class WS {
             uid: rest.uid,
           },
         ])
-        // 初始化所有用户基本信息
-        cachedStore.initAllUserBaseInfo()
+        // 获取用户详情
+        chatStore.getSessionList(true)
+        // 自定义表情列表
+        emojiStore.getEmojiList()
         break
       }
       // 用户 token 过期
@@ -176,7 +187,7 @@ class WS {
       case WsResponseMessageType.OnOffLine: {
         const data = params.data as OnStatusChangeType
         groupStore.countInfo.onlineNum = data.onlineNum
-        groupStore.countInfo.totalNum = data.totalNum
+        // groupStore.countInfo.totalNum = data.totalNum
         groupStore.batchUpdateUserStatus(data.changeList)
         break
       }
@@ -199,6 +210,19 @@ class WS {
       case WsResponseMessageType.WSMsgRecall: {
         const { data } = params as { data: RevokedMsgType }
         chatStore.updateRecallStatus(data)
+        break
+      }
+      // 新好友申请
+      case WsResponseMessageType.RequestNewFriend: {
+        const data = params.data as { uid: number; unreadCount: number }
+        globalStore.unReadMark.newFriendUnreadCount += data.unreadCount
+        notify({
+          name: '新好友',
+          text: '您有一个新好友, 快来看看~',
+          onClick: () => {
+            Router.push('/contact')
+          },
+        })
         break
       }
       default: {

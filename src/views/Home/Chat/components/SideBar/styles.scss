@@ -1,0 +1,82 @@
+.chat-message {
+  display: none;
+  padding: 0;
+  margin: 20px 10px;
+  overflow-y: auto;
+
+  &-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 280px;
+    height: 60px;
+    padding: 12px 10px;
+    color: var(--color-light-3);
+    cursor: pointer;
+    background-color: var(--background-secondary);
+    border-radius: 8px;
+
+    .el-avatar {
+      flex: none;
+    }
+
+    .message-info {
+      padding: 0 10px;
+      margin-right: auto;
+
+      .person {
+        font-size: 14px;
+      }
+
+      .tag {
+        display: inline-block;
+        padding: 1px 4px;
+        margin-left: 4px;
+        font-size: 12px;
+        font-weight: bold;
+        color: var(--color-gold);
+        background-color: var(--background-4);
+        border-radius: 4px;
+        transform: scale(0.8);
+      }
+
+      .message-message {
+        display: -webkit-box;
+        width: 100%;
+        overflow: hidden;
+        font-size: 12px;
+        color: var(--font-light);
+        text-overflow: ellipsis;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        word-break: break-word;
+      }
+    }
+
+    .message-time {
+      font-size: 12px;
+      color: var(--font-light);
+      white-space: nowrap;
+    }
+
+    &:hover {
+      background-color: var(--hover-bg-1);
+      transition: 0.3s;
+    }
+
+    &:not(:first-child) {
+      margin-top: 4px;
+    }
+
+    &.active {
+      background-color: var(--background-indigo);
+    }
+  }
+}
+
+@media only screen and (min-width: 1400px) {
+  .chat-message {
+    display: block;
+  }
+}
