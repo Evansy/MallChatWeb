@@ -1,0 +1,63 @@
+:global(.msg-read-modal) {
+  border-radius: 8px !important;
+}
+
+:global(.msg-read-modal .el-dialog__header) {
+  padding: 0;
+}
+
+:global(.msg-read-modal .el-dialog__headerbtn) {
+  z-index: 5;
+}
+
+:global(.msg-read-modal .el-dialog__body) {
+  padding-top: 50px;
+}
+
+.msg-read-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.read-unread-list {
+  height: 250px;
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+.read-unread-no-data {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.person-item {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  height: 34px; // 方便计算所以写死
+  padding: 4px 6px;
+  margin-bottom: 2px;
+  cursor: pointer;
+  border-radius: 8px;
+
+  .avatar {
+    margin-right: 8px;
+  }
+
+  &:hover {
+    background-color: rgba(13, 132, 255, 10%);
+  }
+
+  &__name {
+    font-size: 14px;
+
+    span {
+      font-size: 12px;
+      color: var(--font-placeholder);
+    }
+  }
+}

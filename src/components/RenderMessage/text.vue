@@ -21,6 +21,11 @@ const openUrl = (url: string) => {
   // 当没有协议时，自动添加协议
   window.open(url.startsWith('http') ? url : '//' + url, '_blank')
 }
+function onImageLoadError(e: Event) {
+  const target = e.target as HTMLImageElement
+  if (!target) return
+  target.style.opacity = '0'
+}
 </script>
 
 <template>
@@ -42,15 +47,13 @@ const openUrl = (url: string) => {
         class="text-card"
         @click="openUrl(item.trim())"
       >
-        <div
-          v-if="urlMap[item].image"
-          class="text-card-image"
-          :style="{ backgroundImage: `url(${urlMap[item].image})` }"
-        />
+        <div v-if="urlMap[item].image" class="text-card-image-wrapper">
+          <img class="text-card-image" :src="urlMap[item].image" @error="onImageLoadError" />
+        </div>
         <div class="text-card-link-content">
-          <span class="text-card-link ellipsis-1"> {{ item.trim() }}</span>
-          <span class="text-card-title ellipsis-2"> {{ urlMap[item].title }}</span>
-          <span class="text-card-desc ellipsis-1">{{ urlMap[item].description }}</span>
+          <!-- <span class="text-card-link ellipsis-1"> {{ item.trim() }}</span> -->
+          <span class="text-card-title ellipsis-1"> {{ urlMap[item].title }}</span>
+          <span class="text-card-desc ellipsis-2">{{ urlMap[item].description }}</span>
         </div>
       </div>
     </template>

@@ -12,11 +12,17 @@ import type {
   CacheUserReq,
   CacheBadgeReq,
   EmojiItem,
+  RequestFriendItem,
+  ContactItem,
+  SessionItem,
+  MsgReadUnReadCountType,
+  GroupDetailReq,
 } from '@/services/types'
 import { alovaIns } from './request'
 import urls from './urls'
 
-const getRequest = <T>(url: string, config?: any) => alovaIns.Get<T>(url, config)
+const getRequest = <T>(url: string, config?: any) =>
+  alovaIns.Get<T>(url, { ...config, localCache: 0 })
 const postRequest = <T>(url: string, params?: any) => alovaIns.Post<T, unknown>(url, params)
 const putRequest = <T>(url: string, params?: any) => alovaIns.Put<T, unknown>(url, params)
 const deleteRequest = <T>(url: string, params?: any) => alovaIns.Delete<T, unknown>(url, params)
@@ -42,9 +48,9 @@ export default {
   /** 标记消息，点赞等 */
   markMsg: (data?: MarkMsgReq) => alovaIns.Put<void>(urls.markMsg, data),
   /** 获取用户详细信息 */
-  getUserDetail: () => getRequest<UserInfoType>(urls.getUserInfoDetail, { localCache: 0 }),
+  getUserDetail: () => getRequest<UserInfoType>(urls.getUserInfoDetail, {}),
   /** 获取勋章列表 */
-  getBadgeList: () => getRequest<BadgeType[]>(urls.getBadgeList, { localCache: 0 }),
+  getBadgeList: () => getRequest<BadgeType[]>(urls.getBadgeList, {}),
   /** 设置用户勋章 */
   setUserBadge: (badgeId: number) => putRequest<void>(urls.setUserBadge, { badgeId }),
   /** 修改用户名 */
@@ -55,16 +61,54 @@ export default {
   blockUser: (data: { uid: number }) => putRequest<void>(urls.blockUser, data),
   /** 获取临时上传链接 */
   getUploadUrl: (params: any) =>
-    getRequest<{ downloadUrl: string; uploadUrl: string }>(urls.fileUpload, {
-      localCache: 0,
-      params,
-    }),
+    getRequest<{ downloadUrl: string; uploadUrl: string }>(urls.fileUpload, { params }),
   /** 新增表情包 */
   addEmoji: (data: { uid: number; expressionUrl: string }) =>
     postRequest<MessageType>(urls.addEmoji, data),
   /** 获取表情 **/
-  getEmoji: (params: { uid: number }) =>
-    getRequest<EmojiItem[]>(urls.getEmoji, { localCache: 0, params }),
+  getEmoji: (params: { uid: number }) => getRequest<EmojiItem[]>(urls.getEmoji, { params }),
   /** 删除id */
   deleteEmoji: (params: { id: number }) => deleteRequest<EmojiItem[]>(urls.deleteEmoji, params),
+  /** 获取联系人列表 */
+  getContactList: (params?: any) =>
+    getRequest<ListResponse<ContactItem>>(urls.getContactList, { params }),
+  /** 获取好友申请列表 */
+  requestFriendList: (params?: any) =>
+    getRequest<ListResponse<RequestFriendItem>>(urls.requestFriendList, { params }),
+  /** 发送添加好友请求 */
+  sendAddFriendRequest: (params: { targetUid: number; msg: string }) =>
+    postRequest<EmojiItem[]>(urls.sendAddFriendRequest, params),
+  /** 同意好友申请 */
+  applyFriendRequest: (params: { applyId: number }) =>
+    putRequest(urls.sendAddFriendRequest, params),
+  /** 同意好友申请 */
+  deleteFriend: (params: { targetUid: number }) => deleteRequest(urls.deleteFriend, params),
+  /** 会话列表 */
+  getSessionList: (params?: any) =>
+    getRequest<ListResponse<SessionItem>>(urls.getSessionList, params),
+  /** 消息的已读未读列表 */
+  getMsgReadList: (params?: any) =>
+    getRequest<ListResponse<{ uid: number }>>(urls.getMsgReadList, params),
+  /** 消息已读未读数 */
+  getMsgReadCount: (params?: any) =>
+    getRequest<MsgReadUnReadCountType[]>(urls.getMsgReadCount, params),
+  /** 消息阅读上报 */
+  markMsgRead: (params?: any) => putRequest<MsgReadUnReadCountType[]>(urls.getMsgReadCount, params),
+  /** 新增群组 */
+  createGroup: (params: { uidList: number[] }) =>
+    postRequest<{ id: number }>(urls.createGroup, params),
+  /** 邀请群成员 */
+  inviteGroupMember: (params: { roomId: number; uidList: number[] }) =>
+    postRequest(urls.inviteGroupMember, params),
+  /** 删除群成员 */
+  removeGroupMember: (params: { roomId: number; uid: number }) =>
+    deleteRequest(urls.inviteGroupMember, params),
+  /** 群组详情 */
+  groupDetail: (params: { id: number }) => getRequest<GroupDetailReq>(urls.groupDetail, { params }),
+  /** 会话详情 */
+  sessionDetail: (params: { id: number }) =>
+    getRequest<SessionItem>(urls.sessionDetail, { params }),
+  /** 会话详情(联系人列表发消息用) */
+  sessionDetailWithFriends: (params: { uid: number }) =>
+    getRequest<SessionItem>(urls.sessionDetailWithFriends, { params }),
 }

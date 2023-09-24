@@ -107,3 +107,29 @@
     }
   }
 }
+
+.tool-icons {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  margin-top: 16px;
+}
+
+.tool-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+}
+
+.tool-icon-active {
+  color: var(--color-primary);
+  background-color: var(--background-secondary);
+  border-radius: 8px;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: var(--background-secondary);
+  }
+}

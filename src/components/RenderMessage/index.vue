@@ -12,6 +12,7 @@ const componentMap = {
   [MsgEnum.UNKNOWN]: '',
   [MsgEnum.TEXT]: Text,
   [MsgEnum.RECALL]: '',
+  [MsgEnum.SYSTEM]: '',
   [MsgEnum.IMAGE]: Image,
   [MsgEnum.VOICE]: Voice,
   [MsgEnum.FILE]: File,

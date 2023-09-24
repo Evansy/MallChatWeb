@@ -45,8 +45,6 @@ export const useEmojiStore = defineStore('emoji', () => {
     await getEmojiList()
   }
 
-  getEmojiList()
-
   return {
     emojiList,
     addEmoji,
