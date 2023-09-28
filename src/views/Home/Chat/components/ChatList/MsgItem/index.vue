@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, toRefs, type Ref, inject, watch, reactive } from 'vue'
+import { computed, nextTick, onMounted, ref, type Ref, inject, watch, reactive } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useChatStore, pageSize } from '@/stores/chat'
 import { formatTimestamp } from '@/utils/computedTime'
@@ -40,7 +40,9 @@ const props = withDefaults(
 // 多根元素的时候，不加这个透传属性会报 warning
 defineOptions({ inheritAttrs: false })
 
-const { message, fromUser } = toRefs(props.msg)
+// 只能对一级 props 进行 toRefs 结构，否则会丢失响应
+const message = computed(() => props.msg.message)
+const fromUser = computed(() => props.msg.fromUser)
 
 const userStore = useUserStore()
 const chatStore = useChatStore()
@@ -140,8 +142,13 @@ onMounted(() => {
     }
 
     const targetIsVisible = useElementVisibility(msgVisibleEl)
-    // 自己的消息才监听未读数计算
-    if (isCurrentUser.value && msgVisibleEl) {
+    const msg = props.msg.message
+    // 自己的消息, 且不是撤回/系统消息，才监听未读数计算
+    if (
+      isCurrentUser.value &&
+      msgVisibleEl &&
+      ![MsgEnum.RECALL, MsgEnum.SYSTEM].includes(msg.type)
+    ) {
       // 做元素进入退出视口监听，在视口内的自己的消息就做
       // ~~5分钟内每10s中查询一次已读数~~
       watch(targetIsVisible, (visible) => {

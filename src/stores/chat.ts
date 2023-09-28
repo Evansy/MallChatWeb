@@ -140,9 +140,7 @@ export const useChatStore = defineStore('chat', () => {
   const currentMsgReply = ref<Partial<MessageType>>({})
 
   // 将消息列表转换为数组
-  const chatMessageList = computed(() =>
-    currentMessageMap.value ? Array.from(currentMessageMap.value.values()) : [],
-  )
+  const chatMessageList = computed(() => [...(currentMessageMap.value?.values() || [])])
 
   const getMsgList = async (size = pageSize) => {
     currentMessageOptions.value && (currentMessageOptions.value.isLoading = true)
@@ -372,18 +370,15 @@ export const useChatStore = defineStore('chat', () => {
   const updateRecallStatus = (data: RevokedMsgType) => {
     const { msgId } = data
     const message = currentMessageMap.value?.get(msgId)
-    if (message) {
+    if (message && typeof data.recallUid === 'number') {
       message.message.type = MsgEnum.RECALL
-
-      if (typeof data.recallUid === 'number') {
-        const cacheUser = cachedStore.userCachedList[data.recallUid]
-        // 如果撤回者的 id 不等于消息发送人的 id, 或者你本人就是管理员，那么显示管理员撤回的。
-        if (data.recallUid !== message.fromUser.uid) {
-          message.message.body = `管理员"${cacheUser.name}"撤回了一条成员消息` // 后期根据本地用户数据修改
-        } else {
-          // 如果被撤回的消息是消息发送者撤回，正常显示
-          message.message.body = `"${cacheUser.name}"撤回了一条消息` // 后期根据本地用户数据修改
-        }
+      const cacheUser = cachedStore.userCachedList[data.recallUid]
+      // 如果撤回者的 id 不等于消息发送人的 id, 或者你本人就是管理员，那么显示管理员撤回的。
+      if (data.recallUid !== message.fromUser.uid) {
+        message.message.body = `管理员"${cacheUser.name}"撤回了一条成员消息` // 后期根据本地用户数据修改
+      } else {
+        // 如果被撤回的消息是消息发送者撤回，正常显示
+        message.message.body = `"${cacheUser.name}"撤回了一条消息` // 后期根据本地用户数据修改
       }
     }
     // 更新与这条撤回消息有关的消息
