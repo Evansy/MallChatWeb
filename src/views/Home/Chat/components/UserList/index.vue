@@ -5,6 +5,7 @@ import { Plus } from '@element-plus/icons-vue'
 import { useGroupStore } from '@/stores/group'
 import { useGlobalStore } from '@/stores/global'
 import { useCachedStore } from '@/stores/cached'
+import { RoleEnum } from '@/enums'
 import UserItem from './UserItem/index.vue'
 
 const groupListLastElRef = ref<HTMLDivElement>()
@@ -42,7 +43,6 @@ const onAddGroupMember = () => {
   globalStore.createGroupModalInfo.show = true
   globalStore.createGroupModalInfo.isInvite = true
   // 禁用已经邀请的人
-  console.log('cachedStore.currentAtUsersList', cachedStore.currentAtUsersList)
   globalStore.createGroupModalInfo.selectedUid = cachedStore.currentAtUsersList.map(
     (item) => item.uid,
   )
@@ -64,6 +64,7 @@ const onAddGroupMember = () => {
           type="primary"
           :icon="Plus"
           circle
+          :disabled="statistic.role === RoleEnum.REMOVED"
           size="small"
           @click="onAddGroupMember"
         />

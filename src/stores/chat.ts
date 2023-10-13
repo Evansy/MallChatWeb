@@ -11,6 +11,7 @@ import { useCachedStore } from '@/stores/cached'
 import { useUserStore } from '@/stores/user'
 import { useGlobalStore } from '@/stores/global'
 import { useGroupStore } from '@/stores/group'
+import { useContactStore } from '@/stores/contacts'
 import shakeTitle from '@/utils/shakeTitle'
 import notify from '@/utils/notification'
 import { MsgEnum } from '@/enums'
@@ -25,6 +26,7 @@ export const useChatStore = defineStore('chat', () => {
   const userStore = useUserStore()
   const globalStore = useGlobalStore()
   const groupStore = useGroupStore()
+  const contactStore = useContactStore()
   const sessionList = reactive<SessionItem[]>([]) // 会话列表
   const sessionOptions = reactive({ isLast: false, isLoading: false, cursor: '' })
 
@@ -225,6 +227,8 @@ export const useChatStore = defineStore('chat', () => {
       currentRoomType.value === RoomTypeEnum.Group && groupStore.getGroupUserList(true)
       // 初始化所有用户基本信息
       userStore.isSign && cachedStore.initAllUserBaseInfo()
+      // 联系人列表
+      contactStore.getContactList(true)
     }
   }
 

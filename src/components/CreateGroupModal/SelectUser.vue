@@ -1,5 +1,5 @@
 <script setup lang="ts" name="CreateGroupModal">
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { useContactStore } from '@/stores/contacts'
 import Avatar from '@/components/Avatar/index.vue'
 import { useGlobalStore } from '@/stores/global'
@@ -20,6 +20,7 @@ const data = ref<
     disabled: boolean
   }[]
 >([])
+
 // const data = computed(() =>
 //   contactStore.contactsList.map((item) => ({
 //     label: item.uid,
@@ -27,8 +28,10 @@ const data = ref<
 //     initial: item.uid,
 //   })),
 // )
+const contactsList = computed(() => contactStore.contactsList)
+const selectedUid = computed(() => globalStore.createGroupModalInfo.selectedUid)
 watch(
-  () => contactStore.contactsList,
+  contactsList,
   (val) => {
     data.value = val.map((item) => ({
       label: item.uid,
@@ -36,12 +39,11 @@ watch(
       initial: item.uid,
       disabled: false,
     }))
-    console.log(data.value)
   },
-  { immediate: true },
+  { immediate: true, deep: true },
 )
 watch(
-  () => globalStore.createGroupModalInfo.selectedUid,
+  selectedUid,
   (val) => {
     val.forEach((item) => {
       const dataItem = data.value.find((i) => i.key === item)
@@ -49,8 +51,8 @@ watch(
         dataItem.disabled = true
       }
     })
-    console.log('selectedUid', val, data.value)
   },
+  { immediate: true },
 )
 // const defaultChecked = computed(() => globalStore.createGroupModalInfo.selectedUid)
 const selected = ref([])
