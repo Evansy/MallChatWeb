@@ -10,6 +10,10 @@
   z-index: 5;
 }
 
+:global(.el-transfer-panel__list .is-disabled) {
+  opacity: 0.4;
+}
+
 .setting-box {
   display: flex;
   flex-direction: column;

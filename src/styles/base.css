@@ -93,7 +93,6 @@ a:active {
   overflow: hidden;
   text-overflow: ellipsis;
   -webkit-line-clamp: 1;
-  line-clamp: 1;
 }
 
 .ellipsis-2 {
@@ -102,7 +101,6 @@ a:active {
   overflow: hidden;
   text-overflow: ellipsis;
   -webkit-line-clamp: 2;
-  line-clamp: 2;
 }
 
 .icon-spin {

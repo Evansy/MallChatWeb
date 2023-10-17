@@ -68,8 +68,9 @@ const onChecked = (checked: number[]) => {
           @click="onSend"
           :loading="loading || inviteLoading"
           :disabled="selectUser.length === 0"
-          >{{ isInvite ? '邀请' : '创建' }}</el-button
         >
+          {{ isInvite ? '邀请' : '创建' }}
+        </el-button>
       </span>
     </template>
   </ElDialog>
