@@ -5,6 +5,7 @@ import type { UserItem } from '@/services/types'
 import { useUserInfo } from '@/hooks/useCached'
 import { useUserStore } from '@/stores/user'
 import ContextMenu from '../ContextMenu/index.vue'
+import { GROUP_ROLE_MAP } from '@/enums/group'
 const props = defineProps<{ user: UserItem }>()
 const user = toRef(props.user)
 const userInfo = useUserInfo(user.value?.uid)
@@ -41,7 +42,14 @@ const handleRightClick = (e: MouseEvent) => {
       showStatus
       :online="user.activeStatus === OnlineEnum.ONLINE"
     />
-    {{ userInfo.name }}
+      {{ userInfo.name }}
+      <div
+          v-if="GROUP_ROLE_MAP[user.roleId as number]"
+          class="badge flex-center"
+          :class="GROUP_ROLE_MAP[user.roleId as number].class"
+      >
+          {{ GROUP_ROLE_MAP[user.roleId as number].text }}
+      </div>
     <ContextMenu v-model:show="isShowMenu" :options="menuOptions" :uid="(user?.uid as number)" />
   </li>
 </template>
