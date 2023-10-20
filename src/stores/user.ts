@@ -26,11 +26,11 @@ export const useUserStore = defineStore('user', () => {
       .then((data) => {
         userInfo.value = { ...userInfo.value, ...data }
       })
-      .catch(() => {
-        // 删除缓存
-        localStorage.removeItem('TOKEN')
-        localStorage.removeItem('USER_INFO')
-      })
+		.catch(()=> {
+			// 删除缓存
+			localStorage.removeItem("TOKEN")
+			localStorage.removeItem("USER_INFO")
+		})
   }
 
   return { userInfo, isSign, getUserDetailAction }
