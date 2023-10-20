@@ -84,16 +84,18 @@ export type CacheUserItem = {
 }
 
 export type UserItem = {
-  /** 在线状态 */
-  activeStatus: OnlineEnum
-  /** 头像 */
-  avatar: string
-  /** 最后一次上下线时间 */
-  lastOptTime: number
-  /** 用户名称 */
-  name: string
-  /** uid */
-  uid: number
+	/** 在线状态 */
+	activeStatus: OnlineEnum
+	/** 头像 */
+	avatar: string
+	/** 最后一次上下线时间 */
+	lastOptTime: number
+	/** 用户名称 */
+	name: string
+	/** 角色ID */
+	roleId?: number
+	/** uid */
+	uid: number
 }
 
 export type GroupStatisticType = {

@@ -1,16 +1,18 @@
 <script setup lang="ts">
-import { toRef, ref } from 'vue'
-import { OnlineEnum } from '@/enums'
-import type { UserItem } from '@/services/types'
-import { useUserInfo } from '@/hooks/useCached'
-import { useUserStore } from '@/stores/user'
+import {ref, toRef} from 'vue'
+import {OnlineEnum} from '@/enums'
+import type {UserItem} from '@/services/types'
+import {useUserInfo} from '@/hooks/useCached'
+import {useUserStore} from '@/stores/user'
 import ContextMenu from '../ContextMenu/index.vue'
+import {GROUP_ROLE_MAP} from "src/enums/group";
+
 const props = defineProps<{ user: UserItem }>()
 const user = toRef(props.user)
 const userInfo = useUserInfo(user.value?.uid)
 const isShowMenu = ref(false) // 是否显示菜单
 // 弹出定位
-const menuOptions = ref({ x: 0, y: 0 })
+const menuOptions = ref({x: 0, y: 0})
 
 /** 右键菜单 */
 const handleRightClick = (e: MouseEvent) => {
@@ -21,7 +23,7 @@ const handleRightClick = (e: MouseEvent) => {
 
   // TODO：看它源码里提供了一个transformMenuPosition函数可以控制在容器范围内弹窗 我试验了一下报错
   // https://github.com/imengyu/vue3-context-menu/blob/f91a4140b4a425fa2770449a8be3570836cdfc23/examples/views/ChangeContainer.vue#LL242C5-L242C5
-  const { x, y } = e
+  const {x, y} = e
   menuOptions.value.x = x
   menuOptions.value.y = y
   isShowMenu.value = true
@@ -42,8 +44,15 @@ const handleRightClick = (e: MouseEvent) => {
       :online="user.activeStatus === OnlineEnum.ONLINE"
     />
     {{ userInfo.name }}
-    <ContextMenu v-model:show="isShowMenu" :options="menuOptions" :uid="(user?.uid as number)" />
+    <div
+      v-if="GROUP_ROLE_MAP[user.roleId as number]"
+      class="badge flex-center"
+      :class="GROUP_ROLE_MAP[user.roleId as number].class"
+    >
+      {{ GROUP_ROLE_MAP[user?.roleId as number].text }}
+    </div>
+    <ContextMenu v-model:show="isShowMenu" :options="menuOptions" :uid="(user?.uid as number)"/>
   </li>
 </template>
 
-<style lang="scss" src="./styles.scss" scoped />
+<style lang="scss" src="./styles.scss" scoped/>
