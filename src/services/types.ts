@@ -4,13 +4,13 @@
  * @see TSDoc规范https://tsdoc.org/
  **/
 import type {
-  OnlineEnum,
-  MsgEnum,
   ActEnum,
-  SexEnum,
   IsYetEnum,
   MarkEnum,
+  MsgEnum,
+  OnlineEnum,
   RoomTypeEnum,
+  SexEnum,
 } from '@/enums'
 
 /***/
@@ -92,6 +92,8 @@ export type UserItem = {
   lastOptTime: number
   /** 用户名称 */
   name: string
+  /** 角色ID */
+  roleId?: number
   /** uid */
   uid: number
 }
@@ -345,6 +347,7 @@ export enum RequestFriendAgreeStatus {
   /** 2同意 */
   Agree,
 }
+
 /** 请求添加好友的列表项 */
 export type RequestFriendItem = {
   /** 申请id */
