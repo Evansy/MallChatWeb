@@ -107,6 +107,12 @@ a:active {
   animation: icon-loading 1s infinite cubic-bezier(0, 0, 1, 1);
 }
 
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 @keyframes icon-loading {
   0% {
     transform: rotate(0);
