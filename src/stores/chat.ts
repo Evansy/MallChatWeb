@@ -313,6 +313,12 @@ export const useChatStore = defineStore('chat', () => {
       if (item) {
         item.unreadCount += 1
       }
+      // 如果新消息的 roomId 和 当前显示的 room 的 Id 一致，就更新已读
+    } else {
+      // 且当前路由在 聊天 内
+      if (route?.path && route?.path === '/') {
+        apis.markMsgRead({ roomId: currentRoomId.value }).send()
+      }
     }
 
     // 如果当前路由不是聊天，就开始计数
