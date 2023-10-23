@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, toRef } from 'vue'
+import { computed, ref, toRef } from 'vue'
 import { OnlineEnum } from '@/enums'
 import type { UserItem } from '@/services/types'
 import { useUserInfo } from '@/hooks/useCached'
@@ -28,6 +28,13 @@ const handleRightClick = (e: MouseEvent) => {
   menuOptions.value.y = y
   isShowMenu.value = true
 }
+
+const computedRole = computed(() => {
+  if (props.user.roleId) {
+    return GROUP_ROLE_MAP[props.user.roleId]
+  }
+  return ''
+})
 </script>
 
 <template>
@@ -43,13 +50,11 @@ const handleRightClick = (e: MouseEvent) => {
       showStatus
       :online="user.activeStatus === OnlineEnum.ONLINE"
     />
-    {{ userInfo.name }}
-    <div
-      v-if="GROUP_ROLE_MAP[user.roleId as number]"
-      class="badge flex-center"
-      :class="GROUP_ROLE_MAP[user.roleId as number].class"
-    >
-      {{ GROUP_ROLE_MAP[user?.roleId as number].text }}
+    <div class="user-name">
+      <div class="text">{{ userInfo.name }}</div>
+      <div v-if="computedRole" class="badge flex-center" :class="computedRole.class">
+        {{ computedRole.text }}
+      </div>
     </div>
     <ContextMenu v-model:show="isShowMenu" :options="menuOptions" :uid="(user?.uid as number)" />
   </li>
