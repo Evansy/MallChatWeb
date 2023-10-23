@@ -19,19 +19,33 @@
     }
   }
 
-  .badge {
-    padding: 2px 4px;
-    border: 1px solid #fff;
-    border-radius: 3px;
-  }
+  .user-name {
+    display: flex;
 
-  .lord {
-    color: #777;
-    background-color: #f2c55c;
-  }
+    .text {
+      max-width: 90px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
-  .admin {
-    color: #fff;
-    background-color: #aa6d4b;
+    .badge {
+      padding: 2px 4px;
+      margin-left: 5px;
+      font-size: 10px;
+      border-radius: 3px;
+    }
+
+    .lord {
+      color: #777;
+      background-color: #f2c55c;
+      border: 1px solid #fff;
+    }
+
+    .admin {
+      color: #fff;
+      background-color: #aa6d4b;
+      border: 1px solid #fff;
+    }
   }
 }
