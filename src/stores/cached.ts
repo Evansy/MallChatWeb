@@ -5,7 +5,7 @@ import { useGlobalStore } from '@/stores/global'
 import type { CacheUserItem, CacheBadgeItem } from '@/services/types'
 import { isDiffNow10Min } from '@/utils/computedTime'
 
-type BaseUserItem = Pick<CacheUserItem, 'uid' | 'avatar' | 'name'>
+export type BaseUserItem = Pick<CacheUserItem, 'uid' | 'avatar' | 'name'>
 
 export const useCachedStore = defineStore(
   'cached',
@@ -110,6 +110,14 @@ export const useCachedStore = defineStore(
       return currentAtUsersList.value?.filter((item) => item.name?.startsWith(searchKey))
     }
 
+    /**
+     * 通过用户ID列表获取用户基本信息
+     * @param uidList
+     */
+    const filterUsersByUidList = (uidList: number[]) => {
+      return currentAtUsersList.value.filter((user) => uidList.includes(user.uid))
+    }
+
     return {
       userCachedList,
       badgeCachedList,
@@ -119,6 +127,7 @@ export const useCachedStore = defineStore(
       filterUsers,
       getGroupAtUserBaseInfo,
       currentAtUsersList,
+      filterUsersByUidList,
     }
   },
   { persist: true },

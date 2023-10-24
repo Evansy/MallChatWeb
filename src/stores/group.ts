@@ -1,13 +1,13 @@
-import { ref, reactive, computed } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import apis from '@/services/apis'
 import { defineStore } from 'pinia'
-import { useCachedStore } from '@/stores/cached'
 import { useGlobalStore } from '@/stores/global'
-import type { UserItem, GroupDetailReq } from '@/services/types'
+import type { GroupDetailReq, UserItem } from '@/services/types'
 import { pageSize } from './chat'
 import cloneDeep from 'lodash/cloneDeep'
-import { OnlineEnum } from '@/enums'
+import { OnlineEnum, RoleEnum } from '@/enums'
 import { uniqueUserList } from '@/utils/unique'
+import { useCachedStore } from '@/stores/cached'
 
 const sorAction = (pre: UserItem, next: UserItem) => {
   if (pre.activeStatus === OnlineEnum.ONLINE && next.activeStatus === OnlineEnum.ONLINE) {
@@ -30,6 +30,50 @@ export const useGroupStore = defineStore('group', () => {
   const userList = ref<UserItem[]>([])
   const userListOptions = reactive({ isLast: false, loading: true, cursor: '' })
   const currentRoomId = computed(() => globalStore.currentSession.roomId)
+  /**
+   * 获取当前群主ID
+   */
+  const currentLordId = computed(() => {
+    const list = userList.value.filter((member) => member.roleId === RoleEnum.LORD)
+    if (list.length) {
+      return list[0]?.uid
+    }
+    return -99
+  })
+  /**
+   * 获取当前管理员ID列表
+   */
+  const adminUidList = computed(() => {
+    return userList.value
+      .filter((member) => member.roleId === RoleEnum.ADMIN)
+      .map((member) => member.uid)
+  })
+  /**
+   * 获取管理员基本信息列表
+   */
+  const adminList = computed(() => {
+    return cachedStore.filterUsersByUidList(adminUidList.value)
+  })
+  /**
+   * 获取管理员基本信息列表
+   */
+  const memberList = computed(() => {
+    const memberInfoList = cachedStore.filterUsersByUidList(userList.value.map((item) => item.uid))
+    return memberInfoList.map((member) => {
+      if (adminUidList.value.includes(member.uid)) {
+        return {
+          ...member,
+          roleId: RoleEnum.ADMIN,
+        }
+      } else if (member.uid === currentLordId.value) {
+        return {
+          ...member,
+          roleId: RoleEnum.LORD,
+        }
+      }
+      return member
+    })
+  })
   const countInfo = ref<GroupDetailReq>({
     avatar: '',
     groupName: '',
@@ -99,15 +143,34 @@ export const useGroupStore = defineStore('group', () => {
     userList.value = userList.value.filter((item) => item.uid !== uid)
   }
 
+  /**
+   * 添加管理员
+   * @param uidList
+   */
+  const addAdmin = async (uidList: number[]) => {
+    await apis.addAdmin({ roomId: currentRoomId.value, uidList }).send()
+
+    // 更新群成员列表
+    userList.value.forEach((user) => {
+      if (uidList.includes(user.uid)) {
+        user.roleId = RoleEnum.ADMIN
+      }
+    })
+  }
+
   return {
     userList,
     userListOptions,
     loadMore,
     getGroupUserList,
     getCountStatistic,
+    currentLordId,
     countInfo,
     batchUpdateUserStatus,
     showGroupList,
     filterUser,
+    adminList,
+    memberList,
+    addAdmin,
   }
 })

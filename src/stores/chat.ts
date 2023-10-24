@@ -82,6 +82,13 @@ export const useChatStore = defineStore('chat', () => {
       replyMapping.set(currentRoomId.value, val as Map<number, number[]>)
     },
   })
+  const isGroup = computed(() => currentRoomType.value === RoomTypeEnum.Group)
+  /**
+   * 获取当前会话信息
+   */
+  const currentSessionInfo = computed(() =>
+    sessionList.find((session) => session.roomId === globalStore.currentSession.roomId),
+  )
 
   const chatListToBottomAction = ref<() => void>() // 外部提供消息列表滚动到底部事件
 
@@ -445,5 +452,7 @@ export const useChatStore = defineStore('chat', () => {
     updateSession,
     updateSessionLastActiveTime,
     markSessionRead,
+    isGroup,
+    currentSessionInfo,
   }
 })

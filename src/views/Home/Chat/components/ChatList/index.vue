@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted, nextTick, provide, computed } from 'vue'
+import { computed, nextTick, onMounted, provide, ref } from 'vue'
 import throttle from 'lodash/throttle'
 import { useChatStore } from '@/stores/chat'
 import type { MessageType } from '@/services/types'
 import VirtualList from '@/components/VirtualList'
 import MsgItem from './MsgItem/index.vue'
+import RoomName from './RoomName/index.vue'
 
 const chatStore = useChatStore()
 const virtualListRef = ref()
@@ -69,8 +70,10 @@ const getKey = (item: MessageType) => item.message.id
 
 <template>
   <div class="chat-msg-list" @contextmenu.prevent>
+    <RoomName />
     <el-icon v-if="messageOptions?.isLoading" :size="14" class="loading">
-      <IEpLoading />消息加载中
+      <IEpLoading />
+      消息加载中
     </el-icon>
     <VirtualList
       v-if="chatMessageList?.length"
