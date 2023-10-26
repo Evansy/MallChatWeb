@@ -1,0 +1,24 @@
+.setting-box {
+  .advanced {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #777;
+    border-radius: 5px;
+
+    .set-admin {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .admin-avatar {
+        margin: 0 3px;
+      }
+
+      .add-admin-transfer {
+        .add-admin-btn {
+          margin-top: 5px;
+        }
+      }
+    }
+  }
+}

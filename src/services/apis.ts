@@ -111,4 +111,10 @@ export default {
   /** 会话详情(联系人列表发消息用) */
   sessionDetailWithFriends: (params: { uid: number }) =>
     getRequest<SessionItem>(urls.sessionDetailWithFriends, { params }),
+  /** 添加群管理 */
+  addAdmin: ({ roomId, uidList }: { roomId: number; uidList: number[] }) =>
+    putRequest<Boolean>(urls.addAdmin, {
+      roomId,
+      uidList,
+    }),
 }
