@@ -72,6 +72,7 @@ const addAdmin = async () => {
               :props="{
                 key: 'uid',
                 label: 'name',
+                disabled: 'disabled',
               }"
               class="add-admin-transfer flex-center"
               :titles="['未设置', '已设置']"
