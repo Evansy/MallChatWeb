@@ -39,6 +39,19 @@ export const useContactStore = defineStore('contact', () => {
     contactsOptions.isLoading = false
   }
 
+  /** 好友申请未读数 */
+  const getNewFriendCount = async () => {
+    const data = await apis
+      .newFriendCount()
+      .send()
+      .catch(() => {
+        //
+      })
+    if (typeof data?.unReadCount === 'number') {
+      globalStore.unReadMark.newFriendUnreadCount = data.unReadCount
+    }
+  }
+
   const getRequestFriendsList = async (isFresh = false) => {
     if (!isFresh) {
       if (requestFriendsOptions.isLast || requestFriendsOptions.isLoading) return
@@ -53,6 +66,8 @@ export const useContactStore = defineStore('contact', () => {
       .catch(() => {
         requestFriendsOptions.isLoading = false
       })
+    // 每次加载完新的好友邀请列表都要更新申请未读数
+    getNewFriendCount()
     if (!data) return
     isFresh
       ? requestFriendsList.splice(0, requestFriendsList.length, ...data.list)

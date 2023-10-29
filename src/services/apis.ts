@@ -83,6 +83,8 @@ export default {
     putRequest(urls.sendAddFriendRequest, params),
   /** 同意好友申请 */
   deleteFriend: (params: { targetUid: number }) => deleteRequest(urls.deleteFriend, params),
+  /** 好友申请未读数 */
+  newFriendCount: () => getRequest<{ unReadCount: number }>(urls.newFriendCount),
   /** 会话列表 */
   getSessionList: (params?: any) =>
     getRequest<ListResponse<SessionItem>>(urls.getSessionList, params),
