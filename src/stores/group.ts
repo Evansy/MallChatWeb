@@ -169,6 +169,7 @@ export const useGroupStore = defineStore('group', () => {
     batchUpdateUserStatus,
     showGroupList,
     filterUser,
+    adminUidList,
     adminList,
     memberList,
     addAdmin,

@@ -5,8 +5,10 @@ import { useGroupStore } from '@/stores/group'
 import type { TransferKey } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import type { BaseUserItem } from '@/stores/cached'
+import { useUserStore } from '@/stores/user'
 
 const groupStore = useGroupStore()
+const userStore = useUserStore()
 
 const isShowSetAdmin = ref<boolean>(false)
 const selectedUidList = ref<number[]>([])
@@ -50,7 +52,11 @@ const addAdmin = async () => {
             type="primary"
             size="small"
             @click="isShowSetAdmin = true"
-            :disabled="groupStore.adminList.length >= MAX_ADMIN_COUNT"
+            :disabled="
+              !groupStore.adminUidList.includes(userStore.userInfo.uid as number) ||
+              groupStore.currentLordId !== (userStore.userInfo.uid as number) ||
+              groupStore.adminList.length >= MAX_ADMIN_COUNT
+            "
           >
             设置管理员
           </el-button>
