@@ -8,8 +8,8 @@ import ContextMenu from '../ContextMenu/index.vue'
 import { GROUP_ROLE_MAP } from '@/enums/group'
 
 const props = defineProps<{ user: UserItem }>()
-const user = toRef(props.user)
-const userInfo = useUserInfo(user.value?.uid)
+const propUser = toRef(props.user)
+const userInfo = useUserInfo(propUser.value?.uid)
 const isShowMenu = ref(false) // 是否显示菜单
 // 弹出定位
 const menuOptions = ref({ x: 0, y: 0 })

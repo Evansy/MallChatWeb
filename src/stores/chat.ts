@@ -1,11 +1,10 @@
-import { ref, reactive, computed, watch } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { defineStore } from 'pinia'
 import cloneDeep from 'lodash/cloneDeep'
 import { useRoute } from 'vue-router'
-import Router from '@/router'
 import apis from '@/services/apis'
-import type { MessageType, MarkItemType, RevokedMsgType, SessionItem } from '@/services/types'
-import { MarkEnum, RoomTypeEnum } from '@/enums'
+import type { MarkItemType, MessageType, RevokedMsgType, SessionItem } from '@/services/types'
+import { MarkEnum, MsgEnum, RoomTypeEnum } from '@/enums'
 import { computedTimeBlock } from '@/utils/computedTime'
 import { useCachedStore } from '@/stores/cached'
 import { useUserStore } from '@/stores/user'
@@ -14,7 +13,6 @@ import { useGroupStore } from '@/stores/group'
 import { useContactStore } from '@/stores/contacts'
 import shakeTitle from '@/utils/shakeTitle'
 import notify from '@/utils/notification'
-import { MsgEnum } from '@/enums'
 
 export const pageSize = 20
 // 标识是否第一次请求
@@ -280,14 +278,14 @@ export const useChatStore = defineStore('chat', () => {
     if (globalStore.currentSession && globalStore.currentSession.roomId !== msg.message.roomId) {
       let result = undefined
       // 如果当前路由不是聊天，就开始拿会话详情，并手动新增一条会话记录
-      if (route?.path && route?.path !== '/') {
-        globalStore.currentSession.roomId = msg.message.roomId
-        globalStore.currentSession.type = RoomTypeEnum.Single
-        if (!current) {
-          result = await apis.sessionDetail({ id: msg.message.roomId }).send()
-        }
-        Router.push('/')
+      // if (route?.path && route?.path !== '/') {
+      //   globalStore.currentSession.roomId = msg.message.roomId
+      //   globalStore.currentSession.type = RoomTypeEnum.Single
+      if (!current) {
+        result = await apis.sessionDetail({ id: msg.message.roomId }).send()
       }
+      //   Router.push('/')
+      // }
       updateSessionLastActiveTime(msg.message.roomId, result)
     }
 
