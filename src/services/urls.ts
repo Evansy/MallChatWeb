@@ -24,6 +24,7 @@ export default {
   requestFriendList: `${prefix}/capi/user/friend/apply/page`, // 好友申请列表
   sendAddFriendRequest: `${prefix}/capi/user/friend/apply`, // 申请好友
   deleteFriend: `${prefix}/capi/user/friend`, // 删除好友
+  newFriendCount: `${prefix}/capi/user/friend/apply/unread`, // 申请未读数
 
   // -------------- 聊天室相关 ---------------
   getSessionList: `${prefix}/capi/chat/public/contact/page`, // 会话列表
