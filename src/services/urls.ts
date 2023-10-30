@@ -32,7 +32,9 @@ export default {
   createGroup: `${prefix}/capi/room/group`, // 新增群组
   getGroupUserList: `${prefix}/capi/room/public/group/member/page`,
   inviteGroupMember: `${prefix}/capi/room/group/member`, // 邀请群成员
+  exitGroup: `${prefix}/capi/room/group/member`, // 退群
   addAdmin: `${prefix}/capi/room/group/admin`, // 添加管理员
+  revokeAdmin: `${prefix}/capi/room/group/admin`, // 添加管理员
   groupDetail: `${prefix}/capi/room/public/group`, // 群组详情
   sessionDetail: `${prefix}/capi/chat/public/contact/detail`, // 会话详情
   sessionDetailWithFriends: `${prefix}/capi/chat/public/contact/detail/friend`, // 会话详情(联系人列表发消息用)
