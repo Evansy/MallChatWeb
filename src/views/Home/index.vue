@@ -2,16 +2,28 @@
 import ToolBar from './components/ToolBar/index.vue'
 import { useImgPreviewStore, useVideoPreviewStore } from '@/stores/preview'
 import { useUserStore } from '@/stores/user'
-import { onUnmounted, watch } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { RouterView } from 'vue-router'
 import AddFriendModal from '@/components/AddFriendModal/index.vue'
 import MsgReadModal from '@/components/MsgReadModal/index.vue'
 import CreateGroupModal from '@/components/CreateGroupModal/index.vue'
-import { initListener, readCountQueue, clearListener } from '@/utils/readCountQueue'
+import { clearListener, initListener, readCountQueue } from '@/utils/readCountQueue'
+import { useChatStore } from '@/stores/chat'
+import { ElMessageBox } from 'element-plus'
+import apis from '@/services/apis'
+
+type TContainerDListener = {
+  messageId: number | null
+  dragStart: (e: DragEvent) => any
+  dragOver: (e: DragEvent) => any
+  drop: (e: DragEvent) => any
+}
 
 const imageStore = useImgPreviewStore()
 const videoStore = useVideoPreviewStore()
 const userStore = useUserStore()
+const chatStore = useChatStore()
+const container = ref<HTMLDivElement>()
 
 const handleKeyDown = (event: KeyboardEvent) => {
   if (event.key === 'Escape') {
@@ -41,15 +53,75 @@ watch(
   { immediate: true },
 )
 
+chatStore.getMessage(917)
+
+const containerDragListener: TContainerDListener = {
+  messageId: null,
+  dragStart(e) {
+    const target = e.target as HTMLDivElement
+    this.messageId = Number(target.dataset.messageid)
+  },
+  dragOver(e) {
+    e.preventDefault()
+  },
+  drop(e) {
+    const target = e.target as HTMLDivElement
+    if (target.dataset.roomid && this.messageId) {
+      // 获取消息体
+      const message = chatStore.getMessage(Number(this.messageId))
+      if (message) {
+        // 发送消息
+        ElMessageBox.confirm('是否发送该消息？', '消息', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'success',
+        }).then(() => {
+          // 发送消息
+          apis
+            .sendMsg({
+              roomId: Number(target.dataset.roomid),
+              msgType: message.message.type,
+              body: message.message.body,
+            })
+            .send()
+            .then((res) => {
+              chatStore.pushMsg(res)
+              //
+              // // 发完消息就要刷新会话列表，
+              // //  FIXME 如果当前会话已经置顶了，可以不用刷新
+              chatStore.updateSessionLastActiveTime(Number(target.dataset.roomid))
+            })
+        })
+      }
+    }
+  },
+}
+
+const initListeners = () => {
+  container.value?.addEventListener('dragstart', containerDragListener.dragStart)
+  container.value?.addEventListener('dragover', containerDragListener.dragOver)
+  container.value?.addEventListener('drop', containerDragListener.drop)
+}
+const removeListeners = () => {
+  container.value?.removeEventListener('dragstart', containerDragListener.dragStart)
+  container.value?.removeEventListener('dragover', containerDragListener.dragOver)
+  container.value?.removeEventListener('drop', containerDragListener.drop)
+}
+
+onMounted(() => {
+  initListeners()
+})
+
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyDown)
+  removeListeners()
   clearListener()
 })
 </script>
 
 <template>
   <main class="home">
-    <div class="wrapper">
+    <div class="wrapper" ref="container">
       <ToolBar />
       <RouterView />
     </div>

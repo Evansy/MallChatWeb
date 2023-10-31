@@ -24,5 +24,5 @@ defineProps<{ message: MsgType }>()
 </script>
 
 <template>
-  <component :is="componentMap[message.type]" :body="message.body" />
+  <component :is="componentMap[message.type]" :body="message.body" :id="message.id" />
 </template>

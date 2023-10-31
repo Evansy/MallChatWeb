@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import AdvancedSetting from '@/views/Home/Chat/components/ChatList/RoomName/components/SettingBox/components/AdvancedSetting/AdvancedSetting.vue'
-import DeadZoneSetting from '@/views/Home/Chat/components/ChatList/RoomName/components/SettingBox/components/DeadZoneSetting/DeadZoneSetting.vue'
+import AdvancedSetting from './components/AdvancedSetting/AdvancedSetting.vue'
+import DeadZoneSetting from './components/DeadZoneSetting/DeadZoneSetting.vue'
 </script>
 
 <template>
