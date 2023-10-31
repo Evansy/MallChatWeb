@@ -53,20 +53,19 @@ watch(
   { immediate: true },
 )
 
-chatStore.getMessage(917)
-
 const containerDragListener: TContainerDListener = {
   messageId: null,
   dragStart(e) {
     const target = e.target as HTMLDivElement
-    this.messageId = Number(target.dataset.messageid)
+    this.messageId = Number(target.dataset.messageId)
   },
   dragOver(e) {
     e.preventDefault()
   },
   drop(e) {
     const target = e.target as HTMLDivElement
-    if (target.dataset.roomid && this.messageId) {
+    console.log(target.dataset.roomId, this.messageId)
+    if (target.dataset.roomId && this.messageId) {
       // 获取消息体
       const message = chatStore.getMessage(Number(this.messageId))
       if (message) {
@@ -79,7 +78,7 @@ const containerDragListener: TContainerDListener = {
           // 发送消息
           apis
             .sendMsg({
-              roomId: Number(target.dataset.roomid),
+              roomId: Number(target.dataset.roomId),
               msgType: message.message.type,
               body: message.message.body,
             })
@@ -89,7 +88,7 @@ const containerDragListener: TContainerDListener = {
               //
               // // 发完消息就要刷新会话列表，
               // //  FIXME 如果当前会话已经置顶了，可以不用刷新
-              chatStore.updateSessionLastActiveTime(Number(target.dataset.roomid))
+              chatStore.updateSessionLastActiveTime(Number(target.dataset.roomId))
             })
         })
       }

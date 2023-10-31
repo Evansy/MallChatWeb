@@ -59,7 +59,7 @@ const load = () => {
     <li
       v-for="(item, index) in sessionList"
       :key="index"
-      :data-roomid="item.roomId"
+      :data-room-id="item.roomId"
       :class="['chat-message-item ', { active: currentSession.roomId === item.roomId }]"
       @click="onSelectSelectSession(item.roomId, item.type)"
     >

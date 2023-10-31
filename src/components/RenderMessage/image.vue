@@ -48,9 +48,8 @@ const handleError = () => {
       <img
         v-if="body?.url"
         :src="body?.url"
-        ref="img"
         :draggable="userStore.isSign ? 'true' : 'false'"
-        :data-messageid="id"
+        :data-message-id="id"
         @click="imageStore.show(body?.url as string)"
         @error="handleError"
         :alt="body?.url"

@@ -427,11 +427,7 @@ export const useChatStore = defineStore('chat', () => {
 
   // 根据消息id获取消息体
   const getMessage = (messageId: number) => {
-    for (const map of messageMap) {
-      if (map[0] === currentRoomId.value) {
-        return map[1].get(messageId)
-      }
-    }
+    return currentMessageMap.value?.get(messageId)
   }
 
   return {
