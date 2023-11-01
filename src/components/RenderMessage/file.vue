@@ -4,13 +4,10 @@ import { Close } from '@element-plus/icons-vue'
 import { formatBytes, getFileSuffix } from '@/utils'
 import type { FileBody } from '@/services/types'
 import useDownloadQuenuStore from '@/stores/downloadQuenu'
-import { useUserStore } from '@/stores/user'
 
 const { downloadObjMap, download, quenu, cancelDownload } = useDownloadQuenuStore()
 
-const props = defineProps<{ body: FileBody; id: number }>()
-
-const userStore = useUserStore()
+const props = defineProps<{ body: FileBody; id: number; draggable: boolean }>()
 
 // 下载文件
 const downloadFile = () => {
@@ -38,7 +35,7 @@ const isQuenu = computed(() => {
 </script>
 
 <template>
-  <div class="file" :draggable="userStore.isSign ? 'true' : 'false'" :data-message-id="id">
+  <div class="file" :draggable="draggable" :data-message-id="id">
     <Icon :icon="getFileSuffix(body?.fileName)" :size="32" colorful />
     <div class="file-desc">
       <span class="file-name">{{ body?.fileName || '未知文件' }}</span>

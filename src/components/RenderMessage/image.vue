@@ -3,12 +3,10 @@ import { computed, ref } from 'vue'
 import type { ImageBody } from '@/services/types'
 import { useImgPreviewStore } from '@/stores/preview'
 import { formatImage } from '@/utils'
-import { useUserStore } from '@/stores/user'
 
-const props = defineProps<{ body: ImageBody; id: number }>()
+const props = defineProps<{ body: ImageBody; id: number; draggable: boolean }>()
 
 const imageStore = useImgPreviewStore()
-const userStore = useUserStore()
 const hasLoadError = ref(false)
 const isLoading = ref(true)
 
@@ -48,7 +46,7 @@ const handleError = () => {
       <img
         v-if="body?.url"
         :src="body?.url"
-        :draggable="userStore.isSign ? 'true' : 'false'"
+        :draggable="draggable"
         :data-message-id="id"
         @click="imageStore.show(body?.url as string)"
         @error="handleError"

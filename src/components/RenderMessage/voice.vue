@@ -2,11 +2,9 @@
 import { computed } from 'vue'
 import type { VoiceBody } from '@/services/types'
 import { useVoicePreviewStore } from '@/stores/preview'
-import { useUserStore } from '@/stores/user'
 
-const props = defineProps<{ body: VoiceBody; id: number }>()
+const props = defineProps<{ body: VoiceBody; id: number; draggable: boolean }>()
 const voiceStore = useVoicePreviewStore()
-const userStore = useUserStore()
 
 // 判断当前这个消息组件是否正在播放
 const isPlay = computed(() => voiceStore.previewUrl === props.body.url && voiceStore.isPlaying)
@@ -16,7 +14,7 @@ const isPlay = computed(() => voiceStore.previewUrl === props.body.url && voiceS
   <div
     class="voice"
     @click="voiceStore.open(body.url)"
-    :draggable="userStore.isSign ? 'true' : 'false'"
+    :draggable="draggable"
     :data-message-id="id"
   >
     <div class="saying">

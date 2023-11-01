@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import type { TextBody } from '@/services/types'
 
-const props = defineProps<{ body: TextBody }>()
+const props = defineProps<{ body: TextBody; draggable: boolean }>()
 
 // 获取所有匹配的字符串
 const urlMap = props.body.urlContentMap || {}
@@ -21,6 +21,7 @@ const openUrl = (url: string) => {
   // 当没有协议时，自动添加协议
   window.open(url.startsWith('http') ? url : '//' + url, '_blank')
 }
+
 function onImageLoadError(e: Event) {
   const target = e.target as HTMLImageElement
   if (!target) return
@@ -29,7 +30,7 @@ function onImageLoadError(e: Event) {
 </script>
 
 <template>
-  <div class="text">
+  <div class="text" :draggable="draggable">
     <template v-for="(item, index) in fragments">
       <span
         v-if="item.startsWith('@') && item.trim() !== '' && item.trim() !== '@'"
