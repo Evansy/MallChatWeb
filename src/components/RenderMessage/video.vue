@@ -3,7 +3,7 @@ import type { VideoBody } from '@/services/types'
 import { useVideoPreviewStore } from '@/stores/preview'
 import { formatImage } from '@/utils'
 
-const props = defineProps<{ body: VideoBody; id: number; draggable: boolean }>()
+const props = defineProps<{ body: VideoBody; id: number }>()
 
 const videoStore = useVideoPreviewStore()
 const getImageHeight = () => {
@@ -18,7 +18,6 @@ const getImageHeight = () => {
     class="video"
     :style="`height:${getImageHeight()}px`"
     @click="videoStore.open(body?.url)"
-    :draggable="draggable"
     :data-message-id="id"
   >
     <Icon icon="bofang" :size="30" />

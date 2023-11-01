@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import type { TextBody } from '@/services/types'
 
-const props = defineProps<{ body: TextBody; draggable: boolean }>()
+const props = defineProps<{ body: TextBody; id: number }>()
 
 // 获取所有匹配的字符串
 const urlMap = props.body.urlContentMap || {}
@@ -30,7 +30,7 @@ function onImageLoadError(e: Event) {
 </script>
 
 <template>
-  <div class="text" :draggable="draggable">
+  <div class="text" :data-message-id="id">
     <template v-for="(item, index) in fragments">
       <span
         v-if="item.startsWith('@') && item.trim() !== '' && item.trim() !== '@'"
