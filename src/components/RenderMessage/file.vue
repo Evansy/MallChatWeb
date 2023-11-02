@@ -7,7 +7,7 @@ import useDownloadQuenuStore from '@/stores/downloadQuenu'
 
 const { downloadObjMap, download, quenu, cancelDownload } = useDownloadQuenuStore()
 
-const props = defineProps<{ body: FileBody; id: number }>()
+const props = defineProps<{ body: FileBody }>()
 
 // 下载文件
 const downloadFile = () => {
@@ -35,7 +35,7 @@ const isQuenu = computed(() => {
 </script>
 
 <template>
-  <div class="file" :data-message-id="id">
+  <div class="file">
     <Icon :icon="getFileSuffix(body?.fileName)" :size="32" colorful />
     <div class="file-desc">
       <span class="file-name">{{ body?.fileName || '未知文件' }}</span>

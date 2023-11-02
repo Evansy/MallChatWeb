@@ -4,7 +4,7 @@ import type { ImageBody } from '@/services/types'
 import { useImgPreviewStore } from '@/stores/preview'
 import { formatImage } from '@/utils'
 
-const props = defineProps<{ body: ImageBody; id: number }>()
+const props = defineProps<{ body: ImageBody }>()
 
 const imageStore = useImgPreviewStore()
 const hasLoadError = ref(false)
@@ -46,7 +46,6 @@ const handleError = () => {
       <img
         v-if="body?.url"
         :src="body?.url"
-        :data-message-id="id"
         @click="imageStore.show(body?.url as string)"
         @error="handleError"
         :alt="body?.url"

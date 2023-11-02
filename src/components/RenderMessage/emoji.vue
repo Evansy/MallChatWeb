@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import type { EmojiBody } from '@/services/types'
 
-defineProps<{ body: EmojiBody; id: number }>()
+defineProps<{ body: EmojiBody }>()
 
 const hasLoadError = ref(false)
 const isLoading = ref(true)
@@ -14,7 +14,7 @@ const handleError = () => {
 </script>
 
 <template>
-  <div class="image emoji" :data-message-id="id">
+  <div class="image emoji">
     <div v-if="hasLoadError" class="image-slot">
       <Icon icon="dazed" :size="36" colorful />
       加载失败
