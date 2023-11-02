@@ -21,6 +21,7 @@ const openUrl = (url: string) => {
   // 当没有协议时，自动添加协议
   window.open(url.startsWith('http') ? url : '//' + url, '_blank')
 }
+
 function onImageLoadError(e: Event) {
   const target = e.target as HTMLImageElement
   if (!target) return

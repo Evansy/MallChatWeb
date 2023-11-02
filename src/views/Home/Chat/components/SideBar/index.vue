@@ -10,6 +10,7 @@ import renderReplyContent from '@/utils/renderReplyContent'
 
 const chatStore = useChatStore()
 const globalStore = useGlobalStore()
+
 // 选中的聊天对话
 const currentSession = computed(() => globalStore.currentSession)
 
@@ -56,6 +57,7 @@ const load = () => {
     <li
       v-for="(item, index) in sessionList"
       :key="index"
+      :data-room-id="item.roomId"
       :class="['chat-message-item ', { active: currentSession.roomId === item.roomId }]"
       @click="onSelectSelectSession(item.roomId, item.type)"
     >

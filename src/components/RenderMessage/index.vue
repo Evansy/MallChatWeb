@@ -7,6 +7,7 @@ import File from './file.vue'
 import Video from './video.vue'
 import Text from './text.vue'
 import Emoji from './emoji.vue'
+import { useUserStore } from '@/stores/user'
 
 const componentMap = {
   [MsgEnum.UNKNOWN]: '',
@@ -20,9 +21,16 @@ const componentMap = {
   [MsgEnum.EMOJI]: Emoji,
 }
 
+const userStore = useUserStore()
+
 defineProps<{ message: MsgType }>()
 </script>
 
 <template>
-  <component :is="componentMap[message.type]" :body="message.body" />
+  <component
+    :is="componentMap[message.type]"
+    :body="message.body"
+    :data-messasge-id="message.id"
+    :draggable="userStore.isSign ? 'true' : 'false'"
+  />
 </template>

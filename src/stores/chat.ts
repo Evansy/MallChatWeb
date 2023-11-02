@@ -1,11 +1,10 @@
-import { ref, reactive, computed, watch } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { defineStore } from 'pinia'
 import cloneDeep from 'lodash/cloneDeep'
 import { useRoute } from 'vue-router'
-// import Router from '@/router'
 import apis from '@/services/apis'
-import type { MessageType, MarkItemType, RevokedMsgType, SessionItem } from '@/services/types'
-import { MarkEnum, RoomTypeEnum } from '@/enums'
+import type { MarkItemType, MessageType, RevokedMsgType, SessionItem } from '@/services/types'
+import { MarkEnum, MsgEnum, RoomTypeEnum } from '@/enums'
 import { computedTimeBlock } from '@/utils/computedTime'
 import { useCachedStore } from '@/stores/cached'
 import { useUserStore } from '@/stores/user'
@@ -14,7 +13,6 @@ import { useGroupStore } from '@/stores/group'
 import { useContactStore } from '@/stores/contacts'
 import shakeTitle from '@/utils/shakeTitle'
 import notify from '@/utils/notification'
-import { MsgEnum } from '@/enums'
 
 export const pageSize = 20
 // 标识是否第一次请求
@@ -286,7 +284,7 @@ export const useChatStore = defineStore('chat', () => {
       if (!current) {
         result = await apis.sessionDetail({ id: msg.message.roomId }).send()
       }
-      // Router.push('/')
+      //   Router.push('/')
       // }
       updateSessionLastActiveTime(msg.message.roomId, result)
     }
@@ -427,6 +425,11 @@ export const useChatStore = defineStore('chat', () => {
     return unreadCount
   }
 
+  // 根据消息id获取消息体
+  const getMessage = (messageId: number) => {
+    return currentMessageMap.value?.get(messageId)
+  }
+
   return {
     getMsgIndex,
     chatMessageList,
@@ -454,5 +457,6 @@ export const useChatStore = defineStore('chat', () => {
     markSessionRead,
     isGroup,
     currentSessionInfo,
+    getMessage,
   }
 })

@@ -8,6 +8,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import { OnlineEnum, RoleEnum } from '@/enums'
 import { uniqueUserList } from '@/utils/unique'
 import { useCachedStore } from '@/stores/cached'
+import { useUserStore } from '@/stores/user'
 
 const sorAction = (pre: UserItem, next: UserItem) => {
   if (pre.activeStatus === OnlineEnum.ONLINE && next.activeStatus === OnlineEnum.ONLINE) {
@@ -26,6 +27,7 @@ const sorAction = (pre: UserItem, next: UserItem) => {
 export const useGroupStore = defineStore('group', () => {
   const cachedStore = useCachedStore()
   const globalStore = useGlobalStore()
+  const userStore = useUserStore()
   // 消息列表
   const userList = ref<UserItem[]>([])
   const userListOptions = reactive({ isLast: false, loading: true, cursor: '' })
@@ -158,6 +160,32 @@ export const useGroupStore = defineStore('group', () => {
     })
   }
 
+  /**
+   * 撤销管理员
+   * @param uidList
+   */
+  const revokeAdmin = async (uidList: number[]) => {
+    await apis.revokeAdmin({ roomId: currentRoomId.value, uidList }).send()
+
+    // 更新群成员列表
+    userList.value.forEach((user) => {
+      if (uidList.includes(user.uid)) {
+        user.roleId = RoleEnum.NORMAL
+      }
+    })
+  }
+
+  /**
+   * 退出群聊
+   */
+  const exitGroup = async () => {
+    await apis.exitGroup({ roomId: currentRoomId.value }).send()
+
+    // 更新群成员列表
+    const index = userList.value.findIndex((user) => user.uid === userStore.userInfo.uid)
+    userList.value.splice(index, 1)
+  }
+
   return {
     userList,
     userListOptions,
@@ -169,8 +197,11 @@ export const useGroupStore = defineStore('group', () => {
     batchUpdateUserStatus,
     showGroupList,
     filterUser,
+    adminUidList,
     adminList,
     memberList,
     addAdmin,
+    revokeAdmin,
+    exitGroup,
   }
 })

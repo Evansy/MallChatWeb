@@ -20,7 +20,7 @@ const handleError = () => {
       加载失败
     </div>
     <template v-else>
-      <img v-if="body?.url" :src="body?.url" @error="handleError" />
+      <img v-if="body?.url" :src="body?.url" @error="handleError" :alt="body.url" />
     </template>
   </div>
 </template>

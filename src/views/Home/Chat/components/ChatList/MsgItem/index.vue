@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, type Ref, inject, watch, reactive } from 'vue'
+import { computed, inject, nextTick, onMounted, reactive, ref, type Ref, watch } from 'vue'
 import { useUserStore } from '@/stores/user'
-import { useChatStore, pageSize } from '@/stores/chat'
+import { pageSize, useChatStore } from '@/stores/chat'
 import { formatTimestamp } from '@/utils/computedTime'
-import { useUserInfo, useBadgeInfo } from '@/hooks/useCached'
+import { useBadgeInfo, useUserInfo } from '@/hooks/useCached'
 import type { MessageType, MsgType } from '@/services/types'
 import { useElementVisibility } from '@vueuse/core'
 import type { TooltipTriggerType } from 'element-plus/es/components/tooltip/src/trigger'
@@ -240,7 +240,9 @@ const currentReadList = (msgId: number) => {
                 <span class="chat-item-read-count-text" v-if="readCount.unread !== 0">
                   {{ readCount.read }}
                 </span>
-                <el-icon v-else><IEpCheck /></el-icon>
+                <el-icon v-else>
+                  <IEpCheck />
+                </el-icon>
               </div>
               <!-- 消息加载中 -->
               <Icon v-if="msg?.loading" icon="loading" :size="20" spin />

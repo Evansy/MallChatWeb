@@ -2,19 +2,16 @@ import { reactive } from 'vue'
 import { defineStore } from 'pinia'
 import apis from '@/services/apis'
 import { useGlobalStore } from '@/stores/global'
-import { RequestFriendAgreeStatus } from '@/services/types'
 import type { ContactItem, RequestFriendItem } from '@/services/types'
+import { RequestFriendAgreeStatus } from '@/services/types'
 
 export const pageSize = 20
-
 export const useContactStore = defineStore('contact', () => {
   const globalStore = useGlobalStore()
   const contactsList = reactive<ContactItem[]>([])
   const requestFriendsList = reactive<RequestFriendItem[]>([])
-
   const contactsOptions = reactive({ isLast: false, isLoading: false, cursor: '' })
   const requestFriendsOptions = reactive({ isLast: false, isLoading: false, cursor: '' })
-
   const getContactList = async (isFresh = false) => {
     if (!isFresh) {
       if (contactsOptions.isLast || contactsOptions.isLoading) return
@@ -76,11 +73,9 @@ export const useContactStore = defineStore('contact', () => {
     requestFriendsOptions.isLast = data.isLast
     requestFriendsOptions.isLoading = false
   }
-
   // 默认执行一次
   // getContactList()
   // getRequestFriendsList()
-
   /** 接受好友请求 */
   const onAcceptFriend = (applyId: number) => {
     // 同意好友申请
@@ -92,7 +87,6 @@ export const useContactStore = defineStore('contact', () => {
         getRequestFriendsList(true)
         // 刷新好友列表
         getContactList(true)
-
         // 标识为可以发消息的人
         if (globalStore.currentSelectedContact) {
           // @ts-ignore
@@ -100,7 +94,6 @@ export const useContactStore = defineStore('contact', () => {
         }
       })
   }
-
   /** 删除好友 */
   const onDeleteContact = async (uid: number) => {
     if (!uid) return
@@ -111,7 +104,6 @@ export const useContactStore = defineStore('contact', () => {
     // 刷新好友列表
     getContactList(true)
   }
-
   return {
     getContactList,
     getRequestFriendsList,

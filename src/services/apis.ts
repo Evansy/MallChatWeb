@@ -1,22 +1,22 @@
 import type {
-  ListResponse,
-  UserItem,
-  GroupStatisticType,
-  MessageType,
-  MarkMsgReq,
-  UserInfoType,
   BadgeType,
-  MessageReq,
-  CacheUserItem,
   CacheBadgeItem,
-  CacheUserReq,
   CacheBadgeReq,
-  EmojiItem,
-  RequestFriendItem,
+  CacheUserItem,
+  CacheUserReq,
   ContactItem,
-  SessionItem,
-  MsgReadUnReadCountType,
+  EmojiItem,
   GroupDetailReq,
+  GroupStatisticType,
+  ListResponse,
+  MarkMsgReq,
+  MessageReq,
+  MessageType,
+  MsgReadUnReadCountType,
+  RequestFriendItem,
+  SessionItem,
+  UserInfoType,
+  UserItem,
 } from '@/services/types'
 import { alovaIns } from './request'
 import urls from './urls'
@@ -118,5 +118,16 @@ export default {
     putRequest<Boolean>(urls.addAdmin, {
       roomId,
       uidList,
+    }),
+  /** 撤销群管理 */
+  revokeAdmin: ({ roomId, uidList }: { roomId: number; uidList: number[] }) =>
+    deleteRequest<Boolean>(urls.revokeAdmin, {
+      roomId,
+      uidList,
+    }),
+  /** 退群 */
+  exitGroup: ({ roomId }: { roomId: number }) =>
+    deleteRequest<Boolean>(urls.exitGroup, {
+      roomId,
     }),
 }
