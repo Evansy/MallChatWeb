@@ -33,7 +33,7 @@ export default {
   createGroup: `${prefix}/capi/room/group`, // 新增群组
   getGroupUserList: `${prefix}/capi/room/public/group/member/page`,
   inviteGroupMember: `${prefix}/capi/room/group/member`, // 邀请群成员
-  exitGroup: `${prefix}/capi/room/group/member`, // 退群
+  exitGroup: `${prefix}/capi/room/group/member/exit`, // 退群
   addAdmin: `${prefix}/capi/room/group/admin`, // 添加管理员
   revokeAdmin: `${prefix}/capi/room/group/admin`, // 添加管理员
   groupDetail: `${prefix}/capi/room/public/group`, // 群组详情
