@@ -30,7 +30,7 @@ defineProps<{ message: MsgType }>()
   <component
     :is="componentMap[message.type]"
     :body="message.body"
-    :data-messasge-id="message.id"
+    :data-message-id="message.id"
     :draggable="userStore.isSign ? 'true' : 'false'"
   />
 </template>
