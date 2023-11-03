@@ -64,7 +64,6 @@ const containerDragListener: TContainerDListener = {
   },
   drop(e) {
     const target = e.target as HTMLDivElement
-    console.log(target.dataset.roomId, this.messageId)
     if (target.dataset.roomId && this.messageId) {
       // 获取消息体
       const message = chatStore.getMessage(Number(this.messageId))
