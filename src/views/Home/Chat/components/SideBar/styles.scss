@@ -5,10 +5,6 @@
   overflow-y: auto;
 
   &-item {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     width: 280px;
     height: 60px;
     padding: 12px 10px;
@@ -16,6 +12,15 @@
     cursor: pointer;
     background-color: var(--background-secondary);
     border-radius: 8px;
+
+    .item-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+      pointer-events: none;
+    }
 
     .el-avatar {
       flex: none;
