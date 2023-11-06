@@ -64,7 +64,6 @@ const containerDragListener: TContainerDListener = {
   },
   drop(e) {
     const target = e.target as HTMLDivElement
-    console.log(target.dataset.roomId, this.messageId)
     if (target.dataset.roomId && this.messageId) {
       // 获取消息体
       const message = chatStore.getMessage(Number(this.messageId))
@@ -85,7 +84,6 @@ const containerDragListener: TContainerDListener = {
             .send()
             .then((res) => {
               chatStore.pushMsg(res)
-              //
               // // 发完消息就要刷新会话列表，
               // //  FIXME 如果当前会话已经置顶了，可以不用刷新
               chatStore.updateSessionLastActiveTime(Number(target.dataset.roomId))

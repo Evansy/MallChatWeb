@@ -46,6 +46,7 @@ const handleError = () => {
       <img
         v-if="body?.url"
         :src="body?.url"
+        draggable="false"
         @click="imageStore.show(body?.url as string)"
         @error="handleError"
         :alt="body?.url"

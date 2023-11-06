@@ -569,6 +569,7 @@ const getKey = (item: CacheUserItem) => item.uid
       @focus="onInputFocus"
       @mouseup="checkIsShowSelectDialog"
       @paste="onPaste"
+      :data-room-id="globalStore.currentSession?.roomId"
     />
 
     <!-- 人员选择浮层 -->

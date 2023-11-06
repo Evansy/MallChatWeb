@@ -58,20 +58,22 @@ const load = () => {
       v-for="(item, index) in sessionList"
       :key="index"
       :data-room-id="item.roomId"
-      :class="['chat-message-item ', { active: currentSession.roomId === item.roomId }]"
+      :class="['chat-message-item', { active: currentSession.roomId === item.roomId }]"
       @click="onSelectSelectSession(item.roomId, item.type)"
     >
-      <el-badge :value="item.unreadCount" :max="999" :hidden="item.unreadCount < 1" class="item">
-        <el-avatar shape="circle" :size="38" :src="item.avatar" />
-      </el-badge>
-      <div class="message-info">
-        <div style="white-space: nowrap">
-          <span class="person">{{ item.name }}</span>
-          <span v-if="item.tag" class="tag">{{ item.tag }}</span>
+      <div class="item-wrapper">
+        <el-badge :value="item.unreadCount" :max="999" :hidden="item.unreadCount < 1" class="item">
+          <el-avatar shape="circle" :size="38" :src="item.avatar" />
+        </el-badge>
+        <div class="message-info">
+          <div style="white-space: nowrap">
+            <span class="person">{{ item.name }}</span>
+            <span v-if="item.tag" class="tag">{{ item.tag }}</span>
+          </div>
+          <div class="message-message">{{ item.lastMsg }}</div>
         </div>
-        <div class="message-message">{{ item.lastMsg }}</div>
+        <span class="message-time">{{ item.lastMsgTime }}</span>
       </div>
-      <span class="message-time">{{ item.lastMsgTime }}</span>
     </li>
   </ul>
 </template>
