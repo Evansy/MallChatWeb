@@ -263,6 +263,11 @@ export const useChatStore = defineStore('chat', () => {
     sortAndUniqueSessionList()
   }
 
+  // 通过房间ID获取会话信息
+  const getSession = (roomId: number): SessionItem => {
+    return (sessionList.find((item) => item.roomId === roomId) ?? {}) as SessionItem
+  }
+
   const pushMsg = async (msg: MessageType) => {
     const current = messageMap.get(msg.message.roomId)
     current?.set(msg.message.id, msg)
@@ -430,6 +435,12 @@ export const useChatStore = defineStore('chat', () => {
     return currentMessageMap.value?.get(messageId)
   }
 
+  // 删除会话
+  const removeContact = (roomId: number) => {
+    const index = sessionList.findIndex((session) => session.roomId === roomId)
+    sessionList.splice(index, 1)
+  }
+
   return {
     getMsgIndex,
     chatMessageList,
@@ -455,8 +466,10 @@ export const useChatStore = defineStore('chat', () => {
     updateSession,
     updateSessionLastActiveTime,
     markSessionRead,
+    getSession,
     isGroup,
     currentSessionInfo,
     getMessage,
+    removeContact,
   }
 })
