@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onBeforeMount } from 'vue'
 import { useChatStore } from '@/stores/chat'
 import { useGlobalStore } from '@/stores/global'
 import { IsAllUserEnum } from '@/services/types'
@@ -10,6 +10,11 @@ import renderReplyContent from '@/utils/renderReplyContent'
 
 const chatStore = useChatStore()
 const globalStore = useGlobalStore()
+
+onBeforeMount(() => {
+  // 请求回话列表
+  chatStore.getSessionList()
+})
 
 // 选中的聊天对话
 const currentSession = computed(() => globalStore.currentSession)
@@ -53,7 +58,7 @@ const load = () => {
 </script>
 
 <template>
-  <ul class="chat-message" v-infinite-scroll="load">
+  <ul class="chat-message" v-infinite-scroll="load" :infinite-scroll-immediate="false">
     <li
       v-for="(item, index) in sessionList"
       :key="index"
