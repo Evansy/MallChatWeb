@@ -58,7 +58,7 @@ watch(data, (val, oldVal) => {
 
 // 切换 Tab 也请求
 watch(active, (val, oldVal) => {
-  if (val !== oldVal && msgId.value) {
+  if (val !== oldVal && msgId.value && curList.value.cursor === '') {
     send({
       params: {
         searchType: active.value,
