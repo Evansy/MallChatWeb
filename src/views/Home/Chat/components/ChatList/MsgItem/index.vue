@@ -178,24 +178,6 @@ const currentReadList = (msgId: number) => {
   globalStore.currentReadUnreadList.msgId = msgId
   globalStore.currentReadUnreadList.show = true
 }
-
-const isShowUserCard = ref<boolean>(false)
-const userCardOptions = ref<{
-  x: number
-  y: number
-}>({
-  x: 0,
-  y: 0,
-})
-
-const showCard = (e: MouseEvent) => {
-  isShowUserCard.value = true
-  userCardOptions.value = {
-    x: e.x,
-    y: e.y,
-  }
-  console.log(e.x, e.y)
-}
 </script>
 
 <template>
@@ -204,12 +186,16 @@ const showCard = (e: MouseEvent) => {
   <div ref="msgVisibleEl">
     <transition name="remove">
       <div :class="chatCls" v-if="!isRecall">
-        <!-- 用户头像 -->
-        <Avatar
-          :src="userInfo.avatar"
-          @click="showCard"
-          @contextmenu.prevent.stop="handleUserRightClick($event)"
-        />
+        <el-popover placement="right" trigger="hover">
+          <template #reference>
+            <!-- 用户头像 -->
+            <Avatar
+              :src="userInfo.avatar"
+              @contextmenu.prevent.stop="handleUserRightClick($event)"
+            />
+          </template>
+          <UserCard :user="userInfo as CacheUserItem" />
+        </el-popover>
         <div class="chat-item-box" ref="boxRef">
           <div class="chat-item-user-info">
             <!-- 用户徽章悬浮说明 -->
@@ -318,11 +304,6 @@ const showCard = (e: MouseEvent) => {
   </div>
   <ContextMenu v-model:show="isShowMenu" :options="menuOptions" :msg="msg" />
   <UserContextMenu v-model:show="isShowUserMenu" :options="menuOptions" :uid="msg.fromUser.uid" />
-  <UserCard
-    v-model:show="isShowUserCard"
-    :options="userCardOptions"
-    :user="userInfo as CacheUserItem"
-  />
 </template>
 
 <style lang="scss" src="./styles.scss" />
