@@ -265,7 +265,7 @@ export const useChatStore = defineStore('chat', () => {
 
   // 通过房间ID获取会话信息
   const getSession = (roomId: number): SessionItem => {
-    return (sessionList.find((item) => item.roomId === roomId) ?? {}) as SessionItem
+    return sessionList.find((item) => item.roomId === roomId) as SessionItem
   }
 
   const pushMsg = async (msg: MessageType) => {
