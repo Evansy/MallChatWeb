@@ -11,7 +11,7 @@ import { clearListener, initListener, readCountQueue } from '@/utils/readCountQu
 import { useChatStore } from '@/stores/chat'
 import { ElMessageBox } from 'element-plus'
 import apis from '@/services/apis'
-import { MSG_REPLY_TEXT_MAP } from '@/constant/message'
+import PostCard from './components/PostCard/PostCard.vue'
 
 type TContainerDListener = {
   messageId: number | null
@@ -84,45 +84,12 @@ const containerDragListener: TContainerDListener = {
       const session = chatStore.getSession(Number(target.dataset.roomId))
       if (message && session) {
         // 发送消息
-        ElMessageBox.confirm(
-          h(
-            'div',
-            {
-              class: 'post-confirm_box',
-            },
-            [
-              h(
-                'div',
-                {
-                  class: 'contact-info',
-                },
-                [
-                  h('img', {
-                    src: session.avatar,
-                    alt: session.avatar,
-                    title: session.name,
-                    class: 'session-avatar',
-                  }),
-                  h('span', session.name),
-                ],
-              ),
-              h(
-                'div',
-                {
-                  class: 'msg-body',
-                },
-                MSG_REPLY_TEXT_MAP[message.message.type] ?? message.message.body.content,
-              ),
-            ],
-          ),
-          '发送给: ',
-          {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            draggable: true,
-            dangerouslyUseHTMLString: true,
-          },
-        ).then(() => {
+        ElMessageBox.confirm(h(PostCard, { session, message }), '发送给: ', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          draggable: true,
+          dangerouslyUseHTMLString: true,
+        }).then(() => {
           // 发送消息
           apis
             .sendMsg({
@@ -197,5 +164,3 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" src="./styles.scss" scoped />
-
-<style lang="scss" src="./confirmStyles.scss" />
