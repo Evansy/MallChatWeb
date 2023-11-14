@@ -1,0 +1,60 @@
+.user-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200px;
+  padding: 10px;
+  background-color: var(--background-wrapper);
+  border-radius: 8px;
+  box-shadow: 1px 1px 5px 1px var(--background-2);
+
+  &_top {
+    display: flex;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--background-secondary);
+
+    &-avatar {
+      width: 35%;
+    }
+
+    &-info {
+      width: 65%;
+      font-size: 13px;
+
+      &_name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  &_badge {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+
+    &-item {
+      width: 25px;
+      height: 25px;
+    }
+  }
+
+  &_other {
+    display: flex;
+    align-items: center;
+
+    &-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 60px;
+      font-size: 10px;
+      cursor: pointer;
+
+      &:hover {
+        color: var(--hover-primary);
+      }
+    }
+  }
+}

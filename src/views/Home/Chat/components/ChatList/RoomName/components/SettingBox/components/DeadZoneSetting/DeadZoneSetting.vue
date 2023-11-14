@@ -19,7 +19,17 @@ const exitGroup = async () => {
       <span>退出群聊</span>
     </h5>
     <div class="flex-center">
-      <el-button type="danger" size="small" @click="exitGroup">退出群聊</el-button>
+      <el-popconfirm
+        title="是否退出该群聊？"
+        confirm-button-text="确认"
+        cancel-button-text="取消"
+        width="200"
+        @confirm="exitGroup"
+      >
+        <template #reference>
+          <el-button type="danger" size="small">退出群聊</el-button>
+        </template>
+      </el-popconfirm>
     </div>
   </div>
 </template>

@@ -3,7 +3,7 @@ import apis from '@/services/apis'
 import { defineStore } from 'pinia'
 import { useGlobalStore } from '@/stores/global'
 import type { GroupDetailReq, UserItem } from '@/services/types'
-import { pageSize } from './chat'
+import { pageSize, useChatStore } from './chat'
 import cloneDeep from 'lodash/cloneDeep'
 import { OnlineEnum, RoleEnum } from '@/enums'
 import { uniqueUserList } from '@/utils/unique'
@@ -28,6 +28,7 @@ export const useGroupStore = defineStore('group', () => {
   const cachedStore = useCachedStore()
   const globalStore = useGlobalStore()
   const userStore = useUserStore()
+  const chatStore = useChatStore()
   // 消息列表
   const userList = ref<UserItem[]>([])
   const userListOptions = reactive({ isLast: false, loading: true, cursor: '' })
@@ -184,6 +185,12 @@ export const useGroupStore = defineStore('group', () => {
     // 更新群成员列表
     const index = userList.value.findIndex((user) => user.uid === userStore.userInfo.uid)
     userList.value.splice(index, 1)
+
+    // 更新会话列表
+    chatStore.removeContact(currentRoomId.value)
+
+    // 切换为第一个会话
+    globalStore.currentSession.roomId = chatStore.sessionList[0].roomId
   }
 
   return {

@@ -2,7 +2,7 @@
 import ToolBar from './components/ToolBar/index.vue'
 import { useImgPreviewStore, useVideoPreviewStore } from '@/stores/preview'
 import { useUserStore } from '@/stores/user'
-import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { h, onMounted, onUnmounted, ref, watch } from 'vue'
 import { RouterView } from 'vue-router'
 import AddFriendModal from '@/components/AddFriendModal/index.vue'
 import MsgReadModal from '@/components/MsgReadModal/index.vue'
@@ -11,11 +11,13 @@ import { clearListener, initListener, readCountQueue } from '@/utils/readCountQu
 import { useChatStore } from '@/stores/chat'
 import { ElMessageBox } from 'element-plus'
 import apis from '@/services/apis'
+import PostCard from './components/PostCard/PostCard.vue'
 
 type TContainerDListener = {
   messageId: number | null
   dragStart: (e: DragEvent) => any
   dragOver: (e: DragEvent) => any
+  dragLeave: (e: DragEvent) => any
   drop: (e: DragEvent) => any
 }
 
@@ -61,18 +63,32 @@ const containerDragListener: TContainerDListener = {
   },
   dragOver(e) {
     e.preventDefault()
+    const target = e.target as HTMLDivElement
+    if (target.dataset.roomId) {
+      target.style.backgroundColor = 'var(--hover-bg-1)'
+    }
+  },
+  dragLeave(e) {
+    e.preventDefault()
+    const target = e.target as HTMLDivElement
+    if (target.dataset.roomId) {
+      target.style.backgroundColor = ''
+    }
   },
   drop(e) {
     const target = e.target as HTMLDivElement
     if (target.dataset.roomId && this.messageId) {
+      target.style.backgroundColor = ''
       // 获取消息体
       const message = chatStore.getMessage(Number(this.messageId))
-      if (message) {
+      const session = chatStore.getSession(Number(target.dataset.roomId))
+      if (message && session) {
         // 发送消息
-        ElMessageBox.confirm('是否发送该消息？', '消息', {
+        ElMessageBox.confirm(h(PostCard, { session, message }), '发送给: ', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          type: 'success',
+          draggable: true,
+          dangerouslyUseHTMLString: true,
         }).then(() => {
           // 发送消息
           apis
@@ -97,11 +113,13 @@ const containerDragListener: TContainerDListener = {
 const initListeners = () => {
   container.value?.addEventListener('dragstart', containerDragListener.dragStart)
   container.value?.addEventListener('dragover', containerDragListener.dragOver)
+  container.value?.addEventListener('dragleave', containerDragListener.dragLeave)
   container.value?.addEventListener('drop', containerDragListener.drop)
 }
 const removeListeners = () => {
   container.value?.removeEventListener('dragstart', containerDragListener.dragStart)
   container.value?.removeEventListener('dragover', containerDragListener.dragOver)
+  container.value?.removeEventListener('dragleave', containerDragListener.dragLeave)
   container.value?.removeEventListener('drop', containerDragListener.drop)
 }
 

@@ -4,7 +4,7 @@ import { useUserStore } from '@/stores/user'
 import { pageSize, useChatStore } from '@/stores/chat'
 import { formatTimestamp } from '@/utils/computedTime'
 import { useBadgeInfo, useUserInfo } from '@/hooks/useCached'
-import type { MessageType, MsgType } from '@/services/types'
+import type { CacheUserItem, MessageType, MsgType } from '@/services/types'
 import { useElementVisibility } from '@vueuse/core'
 import type { TooltipTriggerType } from 'element-plus/es/components/tooltip/src/trigger'
 import { useLikeToggle } from '@/hooks/useLikeToggle'
@@ -15,6 +15,7 @@ import { useGlobalStore } from '@/stores/global'
 import MsgOption from '../MsgOption/index.vue'
 import ContextMenu from '../ContextMenu/index.vue'
 import UserContextMenu from '../UserContextMenu/index.vue'
+import UserCard from '@/views/Home/Chat/components/ChatList/MsgItem/components/UserCard/UserCard.vue'
 
 const props = withDefaults(
   defineProps<{
@@ -185,8 +186,16 @@ const currentReadList = (msgId: number) => {
   <div ref="msgVisibleEl">
     <transition name="remove">
       <div :class="chatCls" v-if="!isRecall">
-        <!-- 用户头像 -->
-        <Avatar :src="userInfo.avatar" @contextmenu.prevent.stop="handleUserRightClick($event)" />
+        <el-popover placement="right" trigger="hover">
+          <template #reference>
+            <!-- 用户头像 -->
+            <Avatar
+              :src="userInfo.avatar"
+              @contextmenu.prevent.stop="handleUserRightClick($event)"
+            />
+          </template>
+          <UserCard :user="userInfo as CacheUserItem" />
+        </el-popover>
         <div class="chat-item-box" ref="boxRef">
           <div class="chat-item-user-info">
             <!-- 用户徽章悬浮说明 -->
