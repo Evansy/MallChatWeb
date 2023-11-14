@@ -45,7 +45,7 @@ onMounted(() => {
         <div class="user-card_top-info_place">地区：{{ user.locPlace }}</div>
       </div>
     </div>
-    <div class="user-card_badge" v-if="user.itemIds.length">
+    <div class="user-card_badge" v-if="user.itemIds?.length">
       <div class="user-card_badge-item" v-for="itemId in user.itemIds" :key="itemId">
         <el-badge v-if="user.wearingItemId === itemId" is-dot>
           <img

@@ -2,7 +2,7 @@
 import ToolBar from './components/ToolBar/index.vue'
 import { useImgPreviewStore, useVideoPreviewStore } from '@/stores/preview'
 import { useUserStore } from '@/stores/user'
-import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { h, onMounted, onUnmounted, ref, watch } from 'vue'
 import { RouterView } from 'vue-router'
 import AddFriendModal from '@/components/AddFriendModal/index.vue'
 import MsgReadModal from '@/components/MsgReadModal/index.vue'
@@ -62,18 +62,18 @@ const containerDragListener: TContainerDListener = {
     this.messageId = Number(target.dataset.messageId)
   },
   dragOver(e) {
+    e.preventDefault()
     const target = e.target as HTMLDivElement
     if (target.dataset.roomId) {
       target.style.backgroundColor = 'var(--hover-bg-1)'
     }
-    e.preventDefault()
   },
   dragLeave(e) {
+    e.preventDefault()
     const target = e.target as HTMLDivElement
     if (target.dataset.roomId) {
       target.style.backgroundColor = ''
     }
-    e.preventDefault()
   },
   drop(e) {
     const target = e.target as HTMLDivElement
@@ -82,22 +82,39 @@ const containerDragListener: TContainerDListener = {
       // 获取消息体
       const message = chatStore.getMessage(Number(this.messageId))
       const session = chatStore.getSession(Number(target.dataset.roomId))
-      if (message) {
+      if (message && session) {
         // 发送消息
         ElMessageBox.confirm(
-          `
-            <div style="padding: 10px;">
-              <div class="contact-info" style="display: flex; align-items: center">
-                <img src="${session.avatar}" alt="${session.avatar}" :title="${
-            session.name
-          }" style="width: 40px; height: 40px">
-                <span style="margin-left: 12px">${session.name}</span>
-              </div>
-              <div style=" width: 100%; height: 80px; background-color: var(--background-dark); margin-top: 10px; padding: 5px 10px; -webkit-line-clamp: 3; -webkit-box-orient: vertical; display: -webkit-box; overflow: hidden; text-overflow: ellipsis; word-break: break-word;">
-                ${MSG_REPLY_TEXT_MAP[message.message.type] ?? message.message.body?.content}
-              </div>
-            </div>
-          `,
+          h(
+            'div',
+            {
+              class: 'post-confirm_box',
+            },
+            [
+              h(
+                'div',
+                {
+                  class: 'contact-info',
+                },
+                [
+                  h('img', {
+                    src: session.avatar,
+                    alt: session.avatar,
+                    title: session.name,
+                    class: 'session-avatar',
+                  }),
+                  h('span', session.name),
+                ],
+              ),
+              h(
+                'div',
+                {
+                  class: 'msg-body',
+                },
+                MSG_REPLY_TEXT_MAP[message.message.type] ?? message.message.body.content,
+              ),
+            ],
+          ),
           '发送给: ',
           {
             confirmButtonText: '确定',
@@ -180,3 +197,5 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" src="./styles.scss" scoped />
+
+<style lang="scss" src="./confirmStyles.scss" />
