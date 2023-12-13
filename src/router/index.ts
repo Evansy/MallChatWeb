@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import createGuard from './guard'
+
 const HomeView = () => import(/* webpackChunkName: "Home" */ '@/views/Home/index.vue')
 const HomeChatView = () => import(/* webpackChunkName: "Home" */ '@/views/Home/Chat/index.vue')
 const HomeContactsView = () =>
@@ -30,5 +32,7 @@ const router = createRouter({
     },
   ],
 })
+
+createGuard(router)
 
 export default router
