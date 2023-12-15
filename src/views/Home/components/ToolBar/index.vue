@@ -18,21 +18,6 @@ const showSettingBox = () => (visible.value = true)
 const toggleGroupListShow = () => (groupStore.showGroupList = !groupStore.showGroupList)
 // 是否PC端
 const isPc = computed(() => client === 'PC')
-// 是否已经登录
-const isSign = computed(() => userStore.isSign)
-
-const tools = [
-  {
-    path: '/',
-    icon: 'chat',
-    needLogin: false,
-  },
-  {
-    path: '/contact',
-    icon: 'group',
-    needLogin: true,
-  },
-]
 
 const menuList = [
   {
@@ -82,21 +67,26 @@ const menuList = [
   <aside class="side-toolbar">
     <Avatar :src="userStore.isSign ? avatar : ''" :size="isPc ? 50 : 40" v-login="showSettingBox" />
     <div class="tool-icons">
-      <template v-for="item in tools" :key="item.path">
-        <router-link
-          v-if="item.needLogin ? isSign : true"
-          exactActiveClass="tool-icon-active"
-          :to="item.path"
+      <!-- 会话 -->
+      <router-link exactActiveClass="tool-icon-active" to="/">
+        <el-badge
+          :value="unReadMark.newMsgUnreadCount"
+          :hidden="unReadMark.newMsgUnreadCount === 0"
+          :max="99"
         >
-          <el-badge
-            :value="unReadMark.newMsgUnreadCount"
-            :hidden="unReadMark.newMsgUnreadCount === 0"
-            :max="99"
-          >
-            <Icon class="tool-icon" :icon="item.icon" :size="28" />
-          </el-badge>
-        </router-link>
-      </template>
+          <Icon class="tool-icon" icon="chat" :size="28" />
+        </el-badge>
+      </router-link>
+      <!-- 联系人 -->
+      <router-link v-login-show exactActiveClass="tool-icon-active" to="/contact">
+        <el-badge
+          :value="unReadMark.newFriendUnreadCount"
+          :hidden="unReadMark.newFriendUnreadCount === 0"
+          :max="99"
+        >
+          <Icon class="tool-icon" icon="group" :size="28" />
+        </el-badge>
+      </router-link>
     </div>
     <div class="menu">
       <el-tooltip effect="dark" :placement="isPc ? 'right' : 'bottom'">

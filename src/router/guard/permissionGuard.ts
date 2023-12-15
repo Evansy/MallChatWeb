@@ -1,4 +1,3 @@
-import { computed } from 'vue'
 import type { Router } from 'vue-router'
 
 import { useUserStore } from '@/stores/user'
@@ -20,9 +19,9 @@ const createPermissionGuard = (router: Router) => {
   router.beforeEach(async (to, from, next) => {
     // 是否登录
     const userStore = useUserStore()
-    const isSign = computed(() => userStore.isSign)
+    const isSign = userStore.isSign
 
-    if (whiteListTest(to.path) || isSign.value) {
+    if (whiteListTest(to.path) || isSign) {
       return next()
     } else {
       return next({ path: '/', replace: true })
