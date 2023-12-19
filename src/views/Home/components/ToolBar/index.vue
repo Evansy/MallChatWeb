@@ -78,7 +78,7 @@ const menuList = [
         </el-badge>
       </router-link>
       <!-- 联系人 -->
-      <router-link exactActiveClass="tool-icon-active" to="/contact">
+      <router-link v-login-show exactActiveClass="tool-icon-active" to="/contact">
         <el-badge
           :value="unReadMark.newFriendUnreadCount"
           :hidden="unReadMark.newFriendUnreadCount === 0"
