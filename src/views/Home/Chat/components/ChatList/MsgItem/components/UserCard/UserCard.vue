@@ -27,7 +27,7 @@ const sendMsg = async () => {
 }
 
 onMounted(() => {
-  cacheStore.getBatchBadgeInfo(props.user.itemIds)
+  cacheStore.getBatchBadgeInfo(props.user.itemIds || [])
 })
 </script>
 
