@@ -22,15 +22,16 @@ export const useLikeToggle = (message: MsgType) => {
     const actType = isLike.value ? ActEnum.Cancel : ActEnum.Confirm
     await apis.markMsg({ actType, markType: MarkEnum.LIKE, msgId: message.id }).send()
 
+    // FIXME 不本地加减，取 ws 推送值
     // 根据actType类型去更新本地点赞状态-点赞数
-    const { likeCount } = message.messageMark
+    // const { likeCount } = message.messageMark
     const isConfirm = actType === ActEnum.Confirm
     message.messageMark.userLike = isConfirm ? IsYetEnum.YES : IsYetEnum.NO
-    message.messageMark.likeCount = isConfirm ? likeCount + 1 : likeCount - 1
+    // message.messageMark.likeCount = isConfirm ? likeCount + 1 : likeCount - 1
     // 互斥操作
     if (isDisLike.value) {
       message.messageMark.userDislike = IsYetEnum.NO
-      message.messageMark.dislikeCount = dislikeCount.value - 1
+      // message.messageMark.dislikeCount = dislikeCount.value - 1
     }
   }
 
@@ -42,15 +43,16 @@ export const useLikeToggle = (message: MsgType) => {
     const actType = isDisLike.value ? ActEnum.Cancel : ActEnum.Confirm
     await apis.markMsg({ actType, markType: MarkEnum.DISLIKE, msgId: message.id }).send()
 
+    // FIXME 不本地加减，取 ws 推送值
     // 根据actType类型去更新本地倒赞状态-倒赞数
-    const { dislikeCount } = message.messageMark
+    // const { dislikeCount } = message.messageMark
     const isConfirm = actType === ActEnum.Confirm
     message.messageMark.userDislike = isConfirm ? IsYetEnum.YES : IsYetEnum.NO
-    message.messageMark.dislikeCount = isConfirm ? dislikeCount + 1 : dislikeCount - 1
+    // message.messageMark.dislikeCount = isConfirm ? dislikeCount + 1 : dislikeCount - 1
     // 互斥操作
     if (isLike.value) {
       message.messageMark.userLike = IsYetEnum.NO
-      message.messageMark.likeCount = likeCount.value - 1
+      // message.messageMark.likeCount = likeCount.value - 1
     }
   }
 
