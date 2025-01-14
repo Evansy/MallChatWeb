@@ -81,7 +81,7 @@ const handleChange = () => {
     v-model="selected"
     style="display: inline-block; text-align: left"
     :render-content="renderFunc"
-    :titles="['Source', 'Target']"
+    :titles="['用户列表', '已选用户']"
     :format="{
       noChecked: '${total}',
       hasChecked: '${checked}/${total}',
