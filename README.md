@@ -75,7 +75,7 @@
 |    Pinia     | vue3 官方推荐状态管理框架                 | [https://pinia.vuejs.org](https://pinia.vuejs.org)             |
 |  vue-router  | Vue 的官方路由                            | [https://router.vuejs.org](https://router.vuejs.org)           |
 |  TypeScript  | 让 JS 具备类型声明                        | https://www.typescriptlang.org/                                |
-| Element Plus | 缓基于 vue3 的组件库                      | [https://element-plus.gitee.io](https://element-plus.gitee.io) |
+| Element Plus | 基于 vue3 的组件库                      | https://element-plus.org/|
 |    Alova     | 轻量级的请求策略库，用起来负担比 axios 小 | https://alova.js.org/                                          |
 |     vite     | 极速的前端打包构建工具                    | [https://cn.vitejs.dev](https://cn.vitejs.dev)                 |
 |     pnpm     | 速度快、节省磁盘空间的软件包管理器        | [https://www.pnpm.cn](https://www.pnpm.cn)                     |
