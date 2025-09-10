@@ -26,7 +26,7 @@
     "@imengyu/vue3-context-menu": "^1.3.3",
     "alova": "^2.13.1",
     "dayjs": "^1.11.10",
-    "element-plus": "^2.3.14",
+    "element-plus": "^2.11.0",
     "lodash": "^4.17.21",
     "mitt": "^3.0.1",
     "pinia": "^2.1.6",
