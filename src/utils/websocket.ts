@@ -241,10 +241,12 @@ class WS {
         ) {
           if (data.changeType === ChangeTypeEnum.REMOVE) {
             // 移除群成员
+            // TODO 如果移除是自己 需要删除会话而不是删除成员
             groupStore.filterUser(data.uid)
             // TODO 添加一条退出群聊的消息
           } else {
-            // TODO 添加群成员
+            // 更新群成员列表
+            groupStore.getGroupUserList(true)
             // TODO 添加一条入群的消息
           }
         }
