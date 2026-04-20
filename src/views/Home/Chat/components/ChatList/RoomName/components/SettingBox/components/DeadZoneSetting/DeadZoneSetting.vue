@@ -1,33 +1,37 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useGroupStore } from '@/stores/group'
+import { RoleEnum } from '@/enums'
 import { ElMessage } from 'element-plus'
 
 const groupStore = useGroupStore()
+
+const isAdmin = computed(() => groupStore.countInfo.role === RoleEnum.LORD)
 
 /**
  * 删除管理员
  */
 const exitGroup = async () => {
   await groupStore.exitGroup()
-  ElMessage.success('退出群聊成功')
+  ElMessage.success(isAdmin.value ? '解散群聊成功' : '退出群聊成功')
 }
 </script>
 
 <template>
   <div class="dead-zone">
     <h5>
-      <span>退出群聊</span>
+      <span>{{ isAdmin ? '解散群聊' : '退出群聊' }}</span>
     </h5>
     <div class="flex-center">
       <el-popconfirm
-        title="是否退出该群聊？"
+        :title="isAdmin ? '是否解散该群聊？' : '是否退出该群聊？'"
         confirm-button-text="确认"
         cancel-button-text="取消"
         width="200"
         @confirm="exitGroup"
       >
         <template #reference>
-          <el-button type="danger" size="small">退出群聊</el-button>
+          <el-button type="danger" size="small">{{ isAdmin ? '解散群聊' : '退出群聊' }}</el-button>
         </template>
       </el-popconfirm>
     </div>
