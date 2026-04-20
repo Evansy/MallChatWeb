@@ -11,7 +11,7 @@ const contactStore = useContactStore()
 const globalStore = useGlobalStore()
 
 const active = ref('1')
-const onFrozen = ref(true)
+const onFrozen = ref(false)
 
 const onNodeClick = (item: RequestFriendItem | ContactItemType) => {
   globalStore.currentSelectedContact = item
