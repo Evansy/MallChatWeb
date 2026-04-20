@@ -233,7 +233,7 @@ export const useChatStore = defineStore('chat', () => {
       // 初始化所有用户基本信息
       userStore.isSign && cachedStore.initAllUserBaseInfo()
       // 联系人列表
-      contactStore.getContactList(true)
+      userStore.isSign && contactStore.getContactList(true)
     }
   }
 
