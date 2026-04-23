@@ -66,7 +66,7 @@ const onRemoveMember = async () => {
     <ContextMenuItem
       vLoginShow
       v-if="[RoleEnum.LORD, RoleEnum.ADMIN].includes(statistic.role) && !isMe"
-      label="剔出群聊"
+      label="踢出群聊"
       @click="onRemoveMember"
     >
       <template #icon>
