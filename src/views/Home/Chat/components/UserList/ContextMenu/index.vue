@@ -52,7 +52,7 @@ const onRemoveMember = async () => {
     <ContextMenuItem label="艾特Ta" @click="onAtUser?.(props.uid, true)" v-login-show>
       <template #icon> <span class="icon">@</span> </template>
     </ContextMenuItem>
-    <ContextMenuItem v-if="isAdmin" label="拉黑(管理)" @click="onBlockUser">
+    <ContextMenuItem v-if="isAdmin && !isMe" label="拉黑(管理)" @click="onBlockUser">
       <template #icon>
         <Icon icon="lahei" :size="13" />
       </template>
