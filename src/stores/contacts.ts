@@ -4,9 +4,11 @@ import apis from '@/services/apis'
 import { useGlobalStore } from '@/stores/global'
 import type { ContactItem, RequestFriendItem } from '@/services/types'
 import { RequestFriendAgreeStatus } from '@/services/types'
+import { useChatStore }  from './chat'
 
 export const pageSize = 20
 export const useContactStore = defineStore('contact', () => {
+  const chatStore = useChatStore()
   const globalStore = useGlobalStore()
   const contactsList = reactive<ContactItem[]>([])
   const requestFriendsList = reactive<RequestFriendItem[]>([])
@@ -103,6 +105,11 @@ export const useContactStore = defineStore('contact', () => {
     // getRequestFriendsList(true)
     // 刷新好友列表
     getContactList(true)
+    // 更新会话列表
+    chatStore.removeContact(data.roomId)
+    // 切换为第一个会话
+    globalStore.currentSession.roomId = chatStore.sessionList[0].roomId
+    globalStore.currentSession.type = chatStore.sessionList[0].type
   }
   return {
     getContactList,
